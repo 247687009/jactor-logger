@@ -1,4 +1,4 @@
 jactor-logger
 =============
 
-Demo logger use jactor
+logback appender use jactor,another Async appender
