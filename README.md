@@ -7,5 +7,5 @@ easy to use,such as add append in logback.xml
 ```html
 <appender name="ASYNC" class="championshang.wordpress.com.JactorAppender">
 		<appender-ref ref="STDOUT" />
-	</appender>
+</appender>
 ```
