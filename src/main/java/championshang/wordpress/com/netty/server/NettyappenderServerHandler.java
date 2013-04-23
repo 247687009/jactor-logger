@@ -12,9 +12,9 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.spi.LoggingEventVO;
 
-public class EchoServerHandler extends SimpleChannelHandler {
+public class NettyappenderServerHandler extends SimpleChannelHandler {
 
-	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(EchoServerHandler.class);
+	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(NettyappenderServerHandler.class);
 	private static final LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 	private final AtomicLong transferredBytes = new AtomicLong();
 	

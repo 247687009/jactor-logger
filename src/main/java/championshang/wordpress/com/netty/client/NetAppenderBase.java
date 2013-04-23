@@ -1,14 +1,19 @@
 package championshang.wordpress.com.netty.client;
 
 import java.net.InetAddress;
+import java.util.Iterator;
 
 import javax.net.SocketFactory;
 
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.AppenderBase;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
+import ch.qos.logback.core.spi.AppenderAttachable;
+import ch.qos.logback.core.spi.AppenderAttachableImpl;
 import ch.qos.logback.core.spi.PreSerializationTransformer;
 
-public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> {
+public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> implements AppenderAttachable<E>{
 
 	/**
 	 * The default port number of remote logging server (4560).
@@ -16,9 +21,9 @@ public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> {
 	static final int DEFAULT_PORT = 4560;
 
 	/**
-	 * The default reconnection delay (30000 milliseconds or 30 seconds).
+	 * The default reconnection delay (30 seconds).
 	 */
-	static final int DEFAULT_RECONNECTION_DELAY = 30000;
+	static final int DEFAULT_RECONNECTION_DELAY = 30;
 
 	/**
 	 * We remember host name as String in addition to the resolved InetAddress
@@ -32,7 +37,45 @@ public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> {
 	protected int reconnectionDelay = DEFAULT_RECONNECTION_DELAY;
 
 	protected int counter = 0;
+	AppenderAttachableImpl<E> aai = new AppenderAttachableImpl<E>();
+	int appenderCount = 0;
+	
+	public void addAppender(Appender<E> newAppender) {
+		if (appenderCount == 0) {
+			appenderCount++;
+			addInfo("Attaching appender named [" + newAppender.getName() + "] to AsyncAppender.");
+			aai.addAppender(newAppender);
+		} else {
+			addWarn("One and only one appender may be attached to AsyncAppender.");
+			addWarn("Ignoring additional appender named [" + newAppender.getName() + "]");
+		}
 
+	}
+
+	public Iterator<Appender<E>> iteratorForAppenders() {
+		return aai.iteratorForAppenders();
+	}
+
+	public Appender<E> getAppender(String name) {
+		return aai.getAppender(name);
+	}
+
+	public boolean isAttached(Appender<E> appender) {
+		return aai.isAttached(appender);
+	}
+
+	public void detachAndStopAllAppenders() {
+		aai.detachAndStopAllAppenders();
+
+	}
+
+	public boolean detachAppender(Appender<E> appender) {
+		return aai.detachAppender(appender);
+	}
+
+	public boolean detachAppender(String name) {
+		return aai.detachAppender(name);
+	}
 	/**
 	 * Start this appender.
 	 */

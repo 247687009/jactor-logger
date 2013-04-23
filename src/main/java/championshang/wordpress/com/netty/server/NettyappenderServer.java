@@ -35,11 +35,11 @@ import ch.qos.logback.core.joran.spi.JoranException;
 /**
  * Echoes back any received data from a client.
  */
-public class EchoServer {
+public class NettyappenderServer {
 
 	private final int port;
 
-	public EchoServer(int port) {
+	public NettyappenderServer(int port) {
 		this.port = port;
 	}
 
@@ -50,7 +50,7 @@ public class EchoServer {
 		// Set up the pipeline factory.
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 			public ChannelPipeline getPipeline() throws Exception {
-				return Channels.pipeline(new ObjectDecoder(ClassResolvers.cacheDisabled(this.getClass().getClassLoader())), new EchoServerHandler());
+				return Channels.pipeline(new ObjectDecoder(ClassResolvers.cacheDisabled(this.getClass().getClassLoader())), new NettyappenderServerHandler());
 			}
 		});
 		LoggerFactory.getLogger(this.getClass()).info("start server at" + port);
@@ -61,9 +61,9 @@ public class EchoServer {
 	public static void main(String[] args) throws Exception {
 		int port = 4560;
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-		configureLC(lc, EchoServer.class.getResource("") + File.separator + "logbackserver.xml");
+		configureLC(lc, NettyappenderServer.class.getResource("").getFile() + File.separator + "logbackserver.xml");
 
-		new EchoServer(port).run();
+		new NettyappenderServer(port).run();
 	}
 
 	static public void configureLC(LoggerContext lc, String configFile) throws JoranException {

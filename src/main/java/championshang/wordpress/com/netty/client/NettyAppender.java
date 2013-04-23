@@ -15,6 +15,8 @@ import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.handler.codec.serialization.ObjectEncoder;
+import org.jboss.netty.util.HashedWheelTimer;
+import org.jboss.netty.util.Timer;
 
 import ch.qos.logback.classic.net.LoggingEventPreSerializationTransformer;
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -25,7 +27,8 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 	protected ClientBootstrap bootstrap;
 	protected int channelSize = 10;
 
-	protected AppenderClientHandler appenderClientHandler = new AppenderClientHandler();
+	protected AppenderClientHandler appenderClientHandler;
+	protected static final Timer timer = new HashedWheelTimer();
 	protected final List<Channel> channelList = new ArrayList<Channel>();
 
 	int channelid = 0;
@@ -43,8 +46,13 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 				eventObject.prepareForDeferredProcessing();
 				eventObject.getCallerData();
 				Serializable serEvent = getPST().transform(eventObject);
+				//if connect write to server
+				if (getChannel().isConnected())
+					getChannel().write(serEvent);
+				else 
+					//else write to local
+					aai.appendLoopOnAppenders(eventObject);
 				
-				getChannel().write(serEvent);
 			}
 
 		} catch (Exception e) {
@@ -55,20 +63,27 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 
 	@Override
 	public void cleanUp() {
-		if (bootstrap != null) {
-			for (Channel channel : channelList) {
-				channel.close();
+		try {
+			if (bootstrap != null) {
+				for (Channel channel : channelList) {
+					channel.close();
+				}
+				channelList.clear();
+				bootstrap.releaseExternalResources();
+				bootstrap.shutdown();
 			}
-
-			bootstrap.releaseExternalResources();
+		} catch (Exception e) {
+			addError(e.getMessage());
 		}
 
 	}
 
 	@Override
 	public void connect(InetAddress address, int port) {
-		bootstrap = new ClientBootstrap(new NioClientSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
 
+		bootstrap = new ClientBootstrap(new NioClientSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
+		bootstrap.setOption("remoteAddress", new InetSocketAddress(address, port));
+		appenderClientHandler = new AppenderClientHandler(bootstrap, timer, getReconnectionDelay());
 		// Set up the pipeline factory.
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 
@@ -77,8 +92,9 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 				return Channels.pipeline(new ObjectEncoder(), appenderClientHandler);
 			}
 		});
+
 		for (int i = 0; i < channelSize; i++) {
-			ChannelFuture future = bootstrap.connect(new InetSocketAddress(address, port));
+			ChannelFuture future = bootstrap.connect();
 			Channel channel = future.awaitUninterruptibly().getChannel();
 			channelList.add(channel);
 		}

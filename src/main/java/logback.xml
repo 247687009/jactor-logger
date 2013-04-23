@@ -32,6 +32,7 @@
 		class="championshang.wordpress.com.netty.client.NettyAppender">
 		<remoteHost>localhost</remoteHost>
 		<port>4560</port>
+		<appender-ref ref="STDOUT" />
 	</appender>
 	<appender name="janetty"
 		class="championshang.wordpress.com.netty.client.JactorNettyAppender">
