@@ -116,6 +116,8 @@ public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> i
 			return;
 
 		this.started = false;
+		Iterator<Appender<E>> appender = aai.iteratorForAppenders();
+		if(appender.hasNext())appender.next().stop();
 		cleanUp();
 	}
 

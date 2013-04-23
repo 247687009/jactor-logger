@@ -29,13 +29,7 @@ public class AppenderClientHandler extends SimpleChannelHandler {
 		this.appender=nettyAppender;
 	}
 
-	@Override
-	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) {
-		// Send the first message. Server will not send anything here
-		// because the firstMessage's capacity is 0.
-
-		// this.channel=e.getChannel();
-	}
+	
 	
 
 	@Override

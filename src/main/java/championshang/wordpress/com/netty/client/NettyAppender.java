@@ -46,13 +46,13 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 				eventObject.prepareForDeferredProcessing();
 				eventObject.getCallerData();
 				Serializable serEvent = getPST().transform(eventObject);
-				//if connect write to server
+				// if connect write to server
 				if (getChannel().isConnected())
 					getChannel().write(serEvent);
-				else 
-					//else write to local
+				else
+					// else write to local
 					aai.appendLoopOnAppenders(eventObject);
-				
+
 			}
 
 		} catch (Exception e) {
@@ -83,13 +83,12 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 
 		bootstrap = new ClientBootstrap(new NioClientSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
 		bootstrap.setOption("remoteAddress", new InetSocketAddress(address, port));
-		appenderClientHandler = new AppenderClientHandler(this,bootstrap, timer, getReconnectionDelay());
 		// Set up the pipeline factory.
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 
 			public ChannelPipeline getPipeline() throws Exception {
 
-				return Channels.pipeline(new ObjectEncoder(), appenderClientHandler);
+				return Channels.pipeline(new ObjectEncoder(), new AppenderClientHandler(NettyAppender.this, bootstrap, timer, reconnectionDelay));
 			}
 		});
 
