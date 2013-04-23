@@ -7,7 +7,7 @@
 		<encoder>
 			<pattern>%d{HH:mm:ss.SSS} %p [%t] %c [%F:%L] - %msg%n
 			</pattern>
-		</encoder>chapters.appenders.socket.SocketClient2
+		</encoder>
 	</appender>
 	<appender name="RollingFile"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -18,47 +18,24 @@
 
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>logs/logback-%d{yyyy-MM-dd}.log</fileNamePattern>
+			<fileNamePattern>logs/logback-server-%d{yyyy-MM-dd}.log</fileNamePattern>
 			<maxHistory>10</maxHistory>
 		</rollingPolicy>
 		<append>true</append>
 		<encoder>
-			<pattern>%d %-5p [%t] %c [%F:%L] - %msg%n</pattern>
+			<pattern>%d{HH:mm:ss.SSS} %p [%t] %c [%F:%L] - %msg%n</pattern>
 		</encoder>
 	</appender>
-	
-	
-	<appender name="jasocket"
-		class="championshang.wordpress.com.netty.client.NettyAppender">
-		<remoteHost>localhost</remoteHost>
-		<port>4560</port>
-	</appender>
-	<appender name="janetty"
-		class="championshang.wordpress.com.netty.client.JactorNettyAppender">
-		<remoteHost>localhost</remoteHost>
-		<port>4560</port>
-	</appender>
-	<appender name="jactorplusnetty" class="championshang.wordpress.com.JactorAppender">
-		<appender-ref ref="jasocket" />
-		
-	</appender>
-	<!-- 
 	<appender name="ASYNC" class="championshang.wordpress.com.JactorAppender">
 		<appender-ref ref="STDOUT" />
 	</appender>
 	<appender name="ASYNCFile" class="championshang.wordpress.com.JactorAppender">
 		<appender-ref ref="RollingFile" />
 	</appender>
-	 -->
-
-	<logger name="championshang.wordpress.com.netty.client" level="DEBUG">
-		<appender-ref ref="jactorplusnetty" />
-	</logger>	
-	<root level="ERROR">
-		
-	<!-- 
+	
+	
+	<root level="DEBUG">
 		<appender-ref ref="ASYNC" />
-		<appender-ref ref="ASYNCFile" />
-	 -->	
+		<appender-ref ref="ASYNCFile" />		
 	</root>
 </configuration>

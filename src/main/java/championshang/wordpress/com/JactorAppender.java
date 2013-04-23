@@ -58,6 +58,8 @@ public class JactorAppender extends UnsynchronizedAppenderBase<ILoggingEvent> im
 	@Override
 	public void stop() {
 		mailboxFactory.close();
+		if(aai.iteratorForAppenders().hasNext())
+		aai.iteratorForAppenders().next().stop();
 		super.stop();
 	}
 
