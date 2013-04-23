@@ -1,4 +1,6 @@
-package championshang.wordpress.com.netty.client;
+package github.com.cp149.netty.client;
+
+import github.com.cp149.netty.server.NettyappenderServer;
 
 import java.io.File;
 
@@ -10,7 +12,6 @@ import org.testng.annotations.Test;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
-import championshang.wordpress.com.netty.server.NettyappenderServer;
 
 public class NettyAppenderTest {
 	org.slf4j.Logger logback = LoggerFactory.getLogger(this.getClass());

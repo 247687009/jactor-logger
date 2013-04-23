@@ -1,4 +1,4 @@
-package championshang.wordpress.com.netty.client;
+package github.com.cp149.netty.client;
 
 import java.io.Serializable;
 

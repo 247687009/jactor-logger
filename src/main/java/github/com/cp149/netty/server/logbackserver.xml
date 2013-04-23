@@ -18,26 +18,24 @@
 
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>logs/logback-%d{yyyy-MM-dd}.log</fileNamePattern>
+			<fileNamePattern>logs/logback-server-%d{yyyy-MM-dd}.log</fileNamePattern>
 			<maxHistory>10</maxHistory>
 		</rollingPolicy>
 		<append>true</append>
 		<encoder>
-			<pattern>%d %-5p [%t] %c [%F:%L] - %msg%n</pattern>
+			<pattern>%d{HH:mm:ss.SSS} %p [%t] %c [%F:%L] - %msg%n</pattern>
 		</encoder>
-	</appender>	
-	
-	
-	
-	<appender name="ASYNC" class="championshang.wordpress.com.JactorAppender">
+	</appender>
+	<appender name="ASYNC" class="github.com.cp149.JactorAppender">
 		<appender-ref ref="STDOUT" />
 	</appender>
-	
-	<appender name="ASYNCFile" class="championshang.wordpress.com.JactorAppender">
+	<appender name="ASYNCFile" class="github.com.cp149.JactorAppender">
 		<appender-ref ref="RollingFile" />
 	</appender>
 	
-	<root level="DEBUG">		
-		<appender-ref ref="ASYNCFile" />
+	
+	<root level="DEBUG">
+		<appender-ref ref="ASYNC" />
+		<appender-ref ref="ASYNCFile" />		
 	</root>
 </configuration>

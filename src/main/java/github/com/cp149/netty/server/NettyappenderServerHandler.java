@@ -1,4 +1,4 @@
-package championshang.wordpress.com.netty.server;
+package github.com.cp149.netty.server;
 
 import java.util.concurrent.atomic.AtomicLong;
 

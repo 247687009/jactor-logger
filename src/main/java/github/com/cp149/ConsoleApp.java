@@ -1,4 +1,4 @@
-package championshang.wordpress.com;
+package github.com.cp149;
 
 import java.io.BufferedReader;
 import java.io.Console;

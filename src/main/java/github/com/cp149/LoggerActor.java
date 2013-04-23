@@ -1,4 +1,4 @@
-package championshang.wordpress.com;
+package github.com.cp149;
 
 import org.agilewiki.jactor.lpc.JLPCActor;
 

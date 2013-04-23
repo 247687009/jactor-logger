@@ -1,12 +1,13 @@
-package championshang.wordpress.com.netty.client;
+package github.com.cp149.netty.client;
+
+import github.com.cp149.ActorRequest;
+import github.com.cp149.LoggerActor;
 
 import org.agilewiki.jactor.Actor;
 import org.agilewiki.jactor.RP;
 import org.agilewiki.jactor.lpc.JLPCActor;
 import org.agilewiki.jactor.lpc.Request;
 
-import championshang.wordpress.com.ActorRequest;
-import championshang.wordpress.com.LoggerActor;
 
 public class NettyRequest extends Request<String, NettyActor> {
 

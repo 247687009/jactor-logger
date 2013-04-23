@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package championshang.wordpress.com.netty.server;
+package github.com.cp149.netty.server;
 
 import java.io.File;
 import java.net.InetSocketAddress;
