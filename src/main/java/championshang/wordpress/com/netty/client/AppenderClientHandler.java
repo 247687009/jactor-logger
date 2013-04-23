@@ -13,19 +13,20 @@ import org.slf4j.LoggerFactory;
 
 public class AppenderClientHandler extends SimpleChannelHandler {
 	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AppenderClientHandler.class);
-	// private org.jboss.netty.util.Timer timer=new HashedWheelTimer();
+	
 	private ClientBootstrap bootstrap;
 	private final org.jboss.netty.util.Timer timer;
 	private int reconnectDelay=30000;
+	private final NettyAppender appender;
 
 	// org.jboss.netty.channel.Channel channel;
 
-	public AppenderClientHandler(ClientBootstrap bootstrap2, org.jboss.netty.util.Timer timer,int timeout) {
+	public AppenderClientHandler(NettyAppender nettyAppender, ClientBootstrap bootstrap2, org.jboss.netty.util.Timer timer,int timeout) {
 		super();	
 		this.bootstrap=bootstrap2;
 		this.timer = timer;
 		this.reconnectDelay=timeout;
-		
+		this.appender=nettyAppender;
 	}
 
 	@Override
@@ -41,7 +42,8 @@ public class AppenderClientHandler extends SimpleChannelHandler {
 	public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e) {
 		timer.newTimeout(new TimerTask() {
 
-			public void run(Timeout timeout) throws Exception {				
+			public void run(Timeout timeout) throws Exception {
+				if(appender.isStarted())
 				bootstrap.connect();
 			}
 		}, reconnectDelay, TimeUnit.SECONDS);

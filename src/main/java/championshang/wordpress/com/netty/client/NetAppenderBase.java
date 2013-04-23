@@ -5,14 +5,17 @@ import java.util.Iterator;
 
 import javax.net.SocketFactory;
 
-import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
-import ch.qos.logback.core.AppenderBase;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
 import ch.qos.logback.core.spi.AppenderAttachable;
 import ch.qos.logback.core.spi.AppenderAttachableImpl;
 import ch.qos.logback.core.spi.PreSerializationTransformer;
 
+/**
+ * @author cp149
+ *base appender for network,if network is not available,the log can  write to a local appender 
+ * @param <E>
+ */
 public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> implements AppenderAttachable<E>{
 
 	/**

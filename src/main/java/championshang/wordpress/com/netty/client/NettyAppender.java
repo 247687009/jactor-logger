@@ -83,7 +83,7 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 
 		bootstrap = new ClientBootstrap(new NioClientSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
 		bootstrap.setOption("remoteAddress", new InetSocketAddress(address, port));
-		appenderClientHandler = new AppenderClientHandler(bootstrap, timer, getReconnectionDelay());
+		appenderClientHandler = new AppenderClientHandler(this,bootstrap, timer, getReconnectionDelay());
 		// Set up the pipeline factory.
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 
