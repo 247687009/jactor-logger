@@ -94,9 +94,7 @@ public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> i
 			addError("No remote address was configured for appender" + name + " For more information, please visit https://github.com/cp149/jactor-logger");
 		}
 
-		// First, close the previous connection if any.
-		cleanUp();
-		connect(address, port);
+		
 
 		if (errorCount == 0) {
 			this.started = true;

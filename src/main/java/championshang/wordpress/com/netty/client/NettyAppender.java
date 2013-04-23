@@ -24,7 +24,7 @@ import ch.qos.logback.core.spi.PreSerializationTransformer;
 
 public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 	PreSerializationTransformer<ILoggingEvent> pst = new LoggingEventPreSerializationTransformer();
-	protected ClientBootstrap bootstrap;
+	protected ClientBootstrap bootstrap=null;
 	protected int channelSize = 10;
 
 	protected AppenderClientHandler appenderClientHandler;
@@ -43,6 +43,9 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 	protected void append(ILoggingEvent eventObject) {
 		try {
 			if (isStarted()) {
+				// First, close the previous connection if any.
+				if(bootstrap==null)				
+				connect(address, port);
 				eventObject.prepareForDeferredProcessing();
 				eventObject.getCallerData();
 				Serializable serEvent = getPST().transform(eventObject);

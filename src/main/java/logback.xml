@@ -43,18 +43,21 @@
 		<appender-ref ref="jasocket" />
 		
 	</appender>
-	<!-- 
+	
 	<appender name="ASYNC" class="championshang.wordpress.com.JactorAppender">
 		<appender-ref ref="STDOUT" />
 	</appender>
 	<appender name="ASYNCFile" class="championshang.wordpress.com.JactorAppender">
 		<appender-ref ref="RollingFile" />
 	</appender>
-	 -->
+	
 
 	<logger name="championshang.wordpress.com.netty.client" level="DEBUG">
 		<appender-ref ref="jactorplusnetty" />
 	</logger>	
+	<logger name="championshang.wordpress.com" level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</logger>
 	<root level="ERROR">
 		
 	<!-- 
