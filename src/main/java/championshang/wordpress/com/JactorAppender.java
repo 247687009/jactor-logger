@@ -53,6 +53,13 @@ public class JactorAppender extends UnsynchronizedAppenderBase<ILoggingEvent> im
 	public boolean detachAppender(String name) {
 		return aai.detachAppender(name);
 	}
+	
+
+	@Override
+	public void stop() {
+		mailboxFactory.close();
+		super.stop();
+	}
 
 	@Override
 	protected void append(ILoggingEvent eventObject) {
