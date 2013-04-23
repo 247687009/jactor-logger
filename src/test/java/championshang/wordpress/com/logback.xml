@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder 
+			by default -->
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %p [%t] %c [%F:%L] - %msg%n
+			</pattern>
+		</encoder>chapters.appenders.socket.SocketClient2
+	</appender>
+	<appender name="RollingFile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>TRACE</level>
+		</filter>
+
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>logs/logback-%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<append>true</append>
+		<encoder>
+			<pattern>%d %-5p [%t] %c [%F:%L] - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	
+	
+	
+	<appender name="ASYNC" class="championshang.wordpress.com.JactorAppender">
+		<appender-ref ref="STDOUT" />
+	</appender>
+	<appender name="ASYNCFile" class="championshang.wordpress.com.JactorAppender">
+		<appender-ref ref="RollingFile" />
+	</appender>
+	
+
+	
+	
+	<root level="DEBUG">
+		
+	
+		<appender-ref ref="ASYNC" />
+		<appender-ref ref="ASYNCFile" />
+		
+	</root>
+</configuration>
