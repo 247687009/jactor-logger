@@ -1,16 +1,13 @@
 package github.com.cp149;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.LineNumberReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.io.FileUtils;
-import org.perf4j.LoggingStopWatch;
-import org.perf4j.StopWatch;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -26,7 +23,7 @@ public class AppenderBaseTest {
 	protected org.slf4j.Logger logback = LoggerFactory.getLogger(this.getClass());
 	private LoggerContext lc;
 	private File file;
-	private StopWatch stopWatch;
+	private long starttime;
 	private int sizeBeforTest = 0;
 	private String filename;
 	
@@ -46,8 +43,10 @@ public class AppenderBaseTest {
 		System.out.println(file.getAbsolutePath());
 		lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 		configureLC(lc, this.getClass().getResource("").getFile() + File.separator + LOGBACK_XML);
+		//test log is ok
 		logback.debug("init config" + LOGBACK_XML);
-		stopWatch = new LoggingStopWatch();
+		TimeUnit.SECONDS.sleep(1);
+		starttime =new Date().getTime();
 
 	}
 
@@ -60,7 +59,7 @@ public class AppenderBaseTest {
 
 	@AfterClass()
 	public void afteclass() throws IOException {
-		stopWatch.stop("run success", "Sleep time was " + stopWatch.getElapsedTime());
+		System.out.println("run times"+(new Date().getTime() -starttime));
 
 		file = new File("logs/logback-" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".log");
 		Assert.assertEquals(countlines(filename)-sizeBeforTest, 100 * longlines + 1);
@@ -68,23 +67,9 @@ public class AppenderBaseTest {
 	}
 
 	public int countlines(String filename) throws IOException {
-		InputStream is = new BufferedInputStream(new FileInputStream(filename));
-		try {
-			byte[] c = new byte[1024];
-			int count = 0;
-			int readChars = 0;
-			boolean empty = true;
-			while ((readChars = is.read(c)) != -1) {
-				empty = false;
-				for (int i = 0; i < readChars; ++i) {
-					if (c[i] == '\n') {
-						++count;
-					}
-				}
-			}
-			return (count == 0 && !empty) ? 1 : count;
-		} finally {
-			is.close();
-		}
+		LineNumberReader  lnr = new LineNumberReader(new FileReader(new File(filename)));
+		lnr.skip(Long.MAX_VALUE);
+		lnr.close();
+		return(lnr.getLineNumber());
 	}
 }
