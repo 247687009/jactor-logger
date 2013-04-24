@@ -29,11 +29,9 @@
 	
 	
 	
-	<appender name="ASYNC" class="github.com.cp149.JactorAppender">
-		<appender-ref ref="STDOUT" />
-	</appender>
 	
 	<appender name="ASYNCFile" class="github.com.cp149.JactorAppender">
+		
 		<appender-ref ref="RollingFile" />
 	</appender>
 	

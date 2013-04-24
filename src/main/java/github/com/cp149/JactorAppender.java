@@ -13,19 +13,12 @@ import ch.qos.logback.core.spi.AppenderAttachableImpl;
 
 public class JactorAppender extends UnsynchronizedAppenderBase<ILoggingEvent> implements AppenderAttachable<ILoggingEvent> {
 
-	int appenderCount = 0;
 	AppenderAttachableImpl<ILoggingEvent> aai = new AppenderAttachableImpl<ILoggingEvent>();
 	private final MailboxFactory mailboxFactory = JAMailboxFactory.newMailboxFactory(10);
 
 	public void addAppender(Appender<ILoggingEvent> newAppender) {
-		if (appenderCount == 0) {
-			appenderCount++;
-			addInfo("Attaching appender named [" + newAppender.getName() + "] to AsyncAppender.");
-			aai.addAppender(newAppender);
-		} else {
-			addWarn("One and only one appender may be attached to AsyncAppender.");
-			addWarn("Ignoring additional appender named [" + newAppender.getName() + "]");
-		}
+
+		aai.addAppender(newAppender);
 
 	}
 
@@ -53,13 +46,15 @@ public class JactorAppender extends UnsynchronizedAppenderBase<ILoggingEvent> im
 	public boolean detachAppender(String name) {
 		return aai.detachAppender(name);
 	}
-	
 
 	@Override
 	public void stop() {
 		mailboxFactory.close();
-		if(aai.iteratorForAppenders().hasNext())
-		aai.iteratorForAppenders().next().stop();
+		Iterator<Appender<ILoggingEvent>> iteratorForAppenders = aai.iteratorForAppenders();
+		while (iteratorForAppenders.hasNext()) {
+			iteratorForAppenders.next().stop();
+		}
+
 		super.stop();
 	}
 

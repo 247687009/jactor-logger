@@ -1,8 +1,11 @@
 package github.com.cp149;
 
+import java.util.Iterator;
+
 import org.agilewiki.jactor.lpc.JLPCActor;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.spi.AppenderAttachableImpl;
 
 public class LoggerActor extends JLPCActor {
@@ -19,8 +22,7 @@ public class LoggerActor extends JLPCActor {
 
 
 
-	public void doLogger() throws Exception {
-		
+	public void doLogger() throws Exception {		
 		attachableImpl.appendLoopOnAppenders(event);
 		
 	}
