@@ -18,16 +18,23 @@ import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
 
 public class AppenderBaseTest {
+	//logback config file
 	protected String LOGBACK_XML = "logback.xml";
+	//log out put file
 	protected String Logfile = "logback-";
-	protected org.slf4j.Logger logback = LoggerFactory.getLogger(this.getClass());
-	private LoggerContext lc;
-	private File file;
-	private long starttime;
+	//file size of logfile before test
 	private int sizeBeforTest = 0;
+	
+	protected org.slf4j.Logger logback = LoggerFactory.getLogger(this.getClass());	
+	private LoggerContext lc;
+	
+	//test start time ,
+	private long starttime;
+	//actual full logfile name
 	private String filename;
 	
-	protected  int longlines=2000;
+	//log per thread
+	protected  int loglines=2000;
 
 	public AppenderBaseTest() {
 		super();
@@ -36,7 +43,7 @@ public class AppenderBaseTest {
 	@BeforeClass(alwaysRun = true)
 	public void initLogconfig() throws Exception {
 		filename = "logs/" + Logfile + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".log";
-		file = new File(filename);
+		File file = new File(filename);
 		if (file.exists()) {
 			sizeBeforTest = countlines(filename);
 		}
@@ -61,8 +68,8 @@ public class AppenderBaseTest {
 	public void afteclass() throws IOException {
 		System.out.println("run times"+(new Date().getTime() -starttime));
 
-		file = new File("logs/logback-" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".log");
-		Assert.assertEquals(countlines(filename)-sizeBeforTest, 100 * longlines + 1);
+//		file = new File("logs/logback-" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".log");
+		Assert.assertEquals(countlines(filename)-sizeBeforTest, 100 * loglines + 1);
 
 	}
 

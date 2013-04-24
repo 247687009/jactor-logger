@@ -19,7 +19,7 @@ public class FileAppenderTest extends AppenderBaseTest
 	 */
 	@Test(invocationCount = 100, threadPoolSize = 10)
 	public void testLog() {
-		for (int i = 0; i < longlines; i++)
+		for (int i = 0; i < loglines; i++)
 			logback.debug("logback I am slow " + i + " at thread" + Thread.currentThread().getId());
 
 	}

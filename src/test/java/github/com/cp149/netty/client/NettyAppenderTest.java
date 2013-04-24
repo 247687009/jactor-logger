@@ -18,7 +18,7 @@ public class NettyAppenderTest extends AppenderBaseTest{
 	@Test(invocationCount=100,threadPoolSize=100)
     public void testLog() throws Exception
     {
-    	for (int i = 0; i < longlines; i++)
+    	for (int i = 0; i < loglines; i++)
 			logback.debug("logback test jasocket " + i + " at thread" + Thread.currentThread().getId());
     	
     }
