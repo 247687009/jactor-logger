@@ -11,7 +11,7 @@ public class JactorAppenderTest extends AppenderBaseTest
 	 */
 	@Test(invocationCount = 100, threadPoolSize = 10)
 	public void testLog() {
-		for (int i = 0; i < 1000; i++)
+		for (int i = 0; i < longlines; i++)
 			logback.debug("logback I am faster " + i + " at thread" + Thread.currentThread().getId());
 
 	}

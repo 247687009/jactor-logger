@@ -1,5 +1,6 @@
 package github.com.cp149.netty.client;
 
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -36,7 +37,6 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 	protected final List<Channel> channelList = new ArrayList<Channel>();
 
 	int channelid = 0;
-	
 
 	protected Channel getChannel() {
 		if (channelid >= channelSize)
@@ -53,10 +53,13 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 					connect(address, port);
 				eventObject.prepareForDeferredProcessing();
 				StackTraceElement callerData = null;
-				if(eventObject.hasCallerData()) {
-					 callerData = eventObject.getCallerData()[0];
-				}
-				MyLoggingEventVO serEvent = new MyLoggingEventVO(callerData+eventObject.getFormattedMessage(),eventObject.getLevel().levelInt);
+				// if(eventObject.hasCallerData()) {
+				// callerData =
+				eventObject.getCallerData();
+				// }
+				Serializable serEvent = getPST().transform(eventObject);
+				// MyLoggingEventVO serEvent = new
+				// MyLoggingEventVO(callerData+eventObject.getFormattedMessage(),eventObject.getLevel().levelInt);
 				// if connect write to server
 				if (getChannel().isConnected())
 					getChannel().write(serEvent);
@@ -82,28 +85,28 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 				channelList.clear();
 				bootstrap.releaseExternalResources();
 				bootstrap.shutdown();
-				bootstrap=null;
+				bootstrap = null;
 			}
 		} catch (Exception e) {
 			addError(e.getMessage());
 		}
 
 	}
-	 
-	    protected MarshallerFactory createMarshallerFactory() {
-	        return Marshalling.getProvidedMarshallerFactory("serial");
-	    }
 
-	    
-	    protected MarshallingConfiguration createMarshallingConfig() {
-	        // Create a configuration
-	        final MarshallingConfiguration configuration = new MarshallingConfiguration();
-	        configuration.setVersion(5);
-	        return configuration;
-	    }
-	    protected MarshallerProvider createProvider() {
-	        return new DefaultMarshallerProvider(createMarshallerFactory(), createMarshallingConfig());
-	    }
+	protected MarshallerFactory createMarshallerFactory() {
+		return Marshalling.getProvidedMarshallerFactory("serial");
+	}
+
+	protected MarshallingConfiguration createMarshallingConfig() {
+		// Create a configuration
+		final MarshallingConfiguration configuration = new MarshallingConfiguration();
+		configuration.setVersion(5);
+		return configuration;
+	}
+
+	protected MarshallerProvider createProvider() {
+		return new DefaultMarshallerProvider(createMarshallerFactory(), createMarshallingConfig());
+	}
 
 	@Override
 	public void connect(InetAddress address, int port) {
@@ -113,7 +116,8 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 		bootstrap.setOption("keepAlive", true);
 		bootstrap.setOption("remoteAddress", new InetSocketAddress(address, port));
 		bootstrap.setOption("writeBufferHighWaterMark", 10 * 64 * 1024);
-		bootstrap.setOption("sendBufferSize", 1048576); bootstrap.setOption("receiveBufferSize", 1048576);
+		bootstrap.setOption("sendBufferSize", 1048576);
+		bootstrap.setOption("receiveBufferSize", 1048576);
 		// Set up the pipeline factory.
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 
