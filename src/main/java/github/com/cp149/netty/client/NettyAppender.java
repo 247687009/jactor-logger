@@ -15,6 +15,7 @@ import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.handler.codec.serialization.ObjectEncoder;
+import org.jboss.netty.handler.codec.serialization.kryoEncoder;
 import org.jboss.netty.util.HashedWheelTimer;
 import org.jboss.netty.util.Timer;
 
@@ -24,7 +25,7 @@ import ch.qos.logback.core.spi.PreSerializationTransformer;
 
 public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 	PreSerializationTransformer<ILoggingEvent> pst = new LoggingEventPreSerializationTransformer();
-	protected ClientBootstrap bootstrap=null;
+	protected ClientBootstrap bootstrap = null;
 	protected int channelSize = 10;
 
 	protected AppenderClientHandler appenderClientHandler;
@@ -32,6 +33,7 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 	protected final List<Channel> channelList = new ArrayList<Channel>();
 
 	int channelid = 0;
+	
 
 	protected Channel getChannel() {
 		if (channelid >= channelSize)
@@ -44,11 +46,14 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 		try {
 			if (isStarted()) {
 				// First, close the previous connection if any.
-				if(bootstrap==null)				
-				connect(address, port);
+				if (bootstrap == null)
+					connect(address, port);
 				eventObject.prepareForDeferredProcessing();
-				eventObject.getCallerData();
-				Serializable serEvent = getPST().transform(eventObject);
+				StackTraceElement callerData = null;
+				if(eventObject.hasCallerData()) {
+					 callerData = eventObject.getCallerData()[0];
+				}
+				MyLoggingEventVO serEvent = new MyLoggingEventVO(callerData+eventObject.getFormattedMessage(),eventObject.getLevel().levelInt);
 				// if connect write to server
 				if (getChannel().isConnected())
 					getChannel().write(serEvent);
@@ -74,6 +79,7 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 				channelList.clear();
 				bootstrap.releaseExternalResources();
 				bootstrap.shutdown();
+				bootstrap=null;
 			}
 		} catch (Exception e) {
 			addError(e.getMessage());
@@ -85,7 +91,11 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 	public void connect(InetAddress address, int port) {
 
 		bootstrap = new ClientBootstrap(new NioClientSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
+		bootstrap.setOption("tcpNoDelay", true);
+		bootstrap.setOption("keepAlive", true);
 		bootstrap.setOption("remoteAddress", new InetSocketAddress(address, port));
+		bootstrap.setOption("writeBufferHighWaterMark", 10 * 64 * 1024);
+		bootstrap.setOption("sendBufferSize", 1048576); bootstrap.setOption("receiveBufferSize", 1048576);
 		// Set up the pipeline factory.
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 
@@ -98,6 +108,7 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 		for (int i = 0; i < channelSize; i++) {
 			ChannelFuture future = bootstrap.connect();
 			Channel channel = future.awaitUninterruptibly().getChannel();
+			channel.setReadable(false);
 			channelList.add(channel);
 		}
 

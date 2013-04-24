@@ -1,7 +1,5 @@
 package github.com.cp149.netty.client;
 
-import github.com.cp149.netty.server.NettyappenderServer;
-
 import java.io.File;
 
 import org.slf4j.LoggerFactory;
@@ -36,8 +34,8 @@ public class NettyAppenderTest {
     }
 	@AfterClass
 	public void afterTest(){
-		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();		
-		lc.stop();
+//		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();		
+//		lc.stop();
 	}
 
 }

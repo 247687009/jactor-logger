@@ -29,17 +29,19 @@
 	
 	
 	<appender name="jasocket"
-		class="championshang.wordpress.com.netty.client.NettyAppender">
+		class="github.com.cp149.netty.client.NettyAppender">
 		<remoteHost>localhost</remoteHost>
 		<port>4560</port>
 		<appender-ref ref="STDOUT" />
+		<connectatstart>true</connectatstart>
+		<channelSize>50</channelSize>
 	</appender>
 	<appender name="janetty"
-		class="championshang.wordpress.com.netty.client.JactorNettyAppender">
+		class="github.com.cp149.netty.client.JactorNettyAppender">
 		<remoteHost>localhost</remoteHost>
 		<port>4560</port>
 	</appender>
-	<appender name="jactorplusnetty" class="championshang.wordpress.com.JactorAppender">
+	<appender name="jactorplusnetty" class="github.com.cp149.JactorAppender">
 		<appender-ref ref="jasocket" />
 		
 	</appender>
@@ -47,8 +49,8 @@
 	
 	
 
-	<logger name="championshang.wordpress.com.netty.client" level="DEBUG">
-		<appender-ref ref="jactorplusnetty" />
+	<logger name="github.com.cp149.netty.client" level="DEBUG">
+		<appender-ref ref="jasocket" />
 	</logger>	
 	
 	<root level="ERROR">

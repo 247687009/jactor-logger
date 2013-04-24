@@ -26,6 +26,7 @@ import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.handler.codec.serialization.ClassResolvers;
 import org.jboss.netty.handler.codec.serialization.ObjectDecoder;
+import org.jboss.netty.handler.codec.serialization.kryoDecoder;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.LoggerContext;

@@ -42,6 +42,8 @@ public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> i
 	protected int counter = 0;
 	AppenderAttachableImpl<E> aai = new AppenderAttachableImpl<E>();
 	int appenderCount = 0;
+	//indicate if connect at start,witch will slow down startup
+	boolean connectatstart =false;
 	
 	public void addAppender(Appender<E> newAppender) {
 		if (appenderCount == 0) {
@@ -94,7 +96,10 @@ public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> i
 			addError("No remote address was configured for appender" + name + " For more information, please visit https://github.com/cp149/jactor-logger");
 		}
 
-		
+		if(connectatstart){
+			cleanUp();
+			connect(address, port);
+		}
 
 		if (errorCount == 0) {
 			this.started = true;
@@ -209,6 +214,10 @@ public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> i
 	 */
 	public int getReconnectionDelay() {
 		return reconnectionDelay;
+	}
+
+	public void setConnectatstart(boolean connectatstart) {
+		this.connectatstart = connectatstart;
 	}
 
 }

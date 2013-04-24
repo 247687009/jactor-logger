@@ -1,5 +1,8 @@
 package github.com.cp149.netty.server;
 
+import github.com.cp149.netty.client.MyLoggingEventVO;
+
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.jboss.netty.channel.ChannelHandlerContext;
@@ -25,22 +28,24 @@ public class NettyappenderServerHandler extends SimpleChannelHandler {
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
 		// Send back the received message to the remote peer.
-		LoggingEventVO event = ((LoggingEventVO) e.getMessage());		
+		MyLoggingEventVO event = ((MyLoggingEventVO) e.getMessage());		
 		
 		
-		Logger  remoteLogger = lc.getLogger(event.getLoggerName());
-	        // apply the logger-level filter
-	        if (remoteLogger.isEnabledFor(event.getLevel())) {
-	          // finally log the event as if was generated locally
-	          remoteLogger.callAppenders(event);
-	        }
-		
+//		Logger  remoteLogger = lc.getLogger(event.getLoggerName());
+//	        // apply the logger-level filter
+//	        if (remoteLogger.isEnabledFor(event.getLevel())) {
+//	          // finally log the event as if was generated locally
+//	          remoteLogger.callAppenders(event);
+//	        }
+		logger.debug(event.getMsg());
+//		
 		
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
 		// Close the connection when an exception is raised.
+		if(!(e.getCause() instanceof IOException))
 		logger.warn("Unexpected exception from downstream.", e.getCause());
 		e.getChannel().close();
 	}

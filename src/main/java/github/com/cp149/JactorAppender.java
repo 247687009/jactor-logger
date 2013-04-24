@@ -15,7 +15,7 @@ public class JactorAppender extends UnsynchronizedAppenderBase<ILoggingEvent> im
 
 	int appenderCount = 0;
 	AppenderAttachableImpl<ILoggingEvent> aai = new AppenderAttachableImpl<ILoggingEvent>();
-	private MailboxFactory mailboxFactory = JAMailboxFactory.newMailboxFactory(10);
+	private final MailboxFactory mailboxFactory = JAMailboxFactory.newMailboxFactory(10);
 
 	public void addAppender(Appender<ILoggingEvent> newAppender) {
 		if (appenderCount == 0) {
