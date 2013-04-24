@@ -19,11 +19,19 @@ import java.io.File;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
+import org.jboss.marshalling.MarshallerFactory;
+import org.jboss.marshalling.Marshalling;
+import org.jboss.marshalling.MarshallingConfiguration;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
+import org.jboss.netty.handler.codec.marshalling.DefaultMarshallerProvider;
+import org.jboss.netty.handler.codec.marshalling.DefaultUnmarshallerProvider;
+import org.jboss.netty.handler.codec.marshalling.MarshallerProvider;
+import org.jboss.netty.handler.codec.marshalling.MarshallingDecoder;
+import org.jboss.netty.handler.codec.marshalling.UnmarshallerProvider;
 import org.jboss.netty.handler.codec.serialization.ClassResolvers;
 import org.jboss.netty.handler.codec.serialization.ObjectDecoder;
 import org.jboss.netty.handler.codec.serialization.kryoDecoder;
@@ -43,6 +51,24 @@ public class NettyappenderServer {
 	public NettyappenderServer(int port) {
 		this.port = port;
 	}
+	
+	
+	  protected MarshallerFactory createMarshallerFactory() {
+	        return Marshalling.getProvidedMarshallerFactory("serial");
+	    }
+
+	    
+	    protected MarshallingConfiguration createMarshallingConfig() {
+	        // Create a configuration
+	        final MarshallingConfiguration configuration = new MarshallingConfiguration();
+	        configuration.setVersion(5);
+	        return configuration;
+	    }
+	    protected UnmarshallerProvider createProvider(MarshallerFactory factory, MarshallingConfiguration config) {
+	        return new DefaultUnmarshallerProvider(factory, config);
+
+	    }
+
 
 	public void run() {
 		// Configure the server.
@@ -51,7 +77,7 @@ public class NettyappenderServer {
 		// Set up the pipeline factory.
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 			public ChannelPipeline getPipeline() throws Exception {
-				return Channels.pipeline(new ObjectDecoder(ClassResolvers.cacheDisabled(this.getClass().getClassLoader())), new NettyappenderServerHandler());
+				return Channels.pipeline(new MarshallingDecoder(createProvider(createMarshallerFactory(), createMarshallingConfig())), new NettyappenderServerHandler());
 			}
 		});
 		LoggerFactory.getLogger(this.getClass()).info("start server at" + port);

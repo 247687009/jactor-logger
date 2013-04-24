@@ -1,12 +1,14 @@
 package github.com.cp149.netty.client;
 
-import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 
+import org.jboss.marshalling.MarshallerFactory;
+import org.jboss.marshalling.Marshalling;
+import org.jboss.marshalling.MarshallingConfiguration;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
@@ -14,8 +16,9 @@ import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
-import org.jboss.netty.handler.codec.serialization.ObjectEncoder;
-import org.jboss.netty.handler.codec.serialization.kryoEncoder;
+import org.jboss.netty.handler.codec.marshalling.DefaultMarshallerProvider;
+import org.jboss.netty.handler.codec.marshalling.MarshallerProvider;
+import org.jboss.netty.handler.codec.marshalling.MarshallingEncoder;
 import org.jboss.netty.util.HashedWheelTimer;
 import org.jboss.netty.util.Timer;
 
@@ -86,6 +89,21 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 		}
 
 	}
+	 
+	    protected MarshallerFactory createMarshallerFactory() {
+	        return Marshalling.getProvidedMarshallerFactory("serial");
+	    }
+
+	    
+	    protected MarshallingConfiguration createMarshallingConfig() {
+	        // Create a configuration
+	        final MarshallingConfiguration configuration = new MarshallingConfiguration();
+	        configuration.setVersion(5);
+	        return configuration;
+	    }
+	    protected MarshallerProvider createProvider() {
+	        return new DefaultMarshallerProvider(createMarshallerFactory(), createMarshallingConfig());
+	    }
 
 	@Override
 	public void connect(InetAddress address, int port) {
@@ -101,7 +119,7 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 
 			public ChannelPipeline getPipeline() throws Exception {
 
-				return Channels.pipeline(new ObjectEncoder(), new AppenderClientHandler(NettyAppender.this, bootstrap, timer, reconnectionDelay));
+				return Channels.pipeline(new MarshallingEncoder(createProvider()), new AppenderClientHandler(NettyAppender.this, bootstrap, timer, reconnectionDelay));
 			}
 		});
 
