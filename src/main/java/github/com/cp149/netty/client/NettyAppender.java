@@ -61,8 +61,9 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 				// MyLoggingEventVO serEvent = new
 				// MyLoggingEventVO(callerData+eventObject.getFormattedMessage(),eventObject.getLevel().levelInt);
 				// if connect write to server
-				if (getChannel().isConnected())
-					getChannel().write(serEvent);
+				Channel channel = getChannel();
+				if (channel.isConnected())
+					channel.write(serEvent);
 				else
 					// else write to local
 					aai.appendLoopOnAppenders(eventObject);
@@ -80,6 +81,7 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 		try {
 			if (bootstrap != null) {
 				for (Channel channel : channelList) {
+					channel.disconnect().awaitUninterruptibly();
 					channel.close();
 				}
 				channelList.clear();

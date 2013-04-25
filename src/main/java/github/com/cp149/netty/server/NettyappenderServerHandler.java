@@ -20,7 +20,7 @@ public class NettyappenderServerHandler extends SimpleChannelHandler {
 	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(NettyappenderServerHandler.class);
 	private static final LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 	private final AtomicLong transferredBytes = new AtomicLong();
-	
+
 	public long getTransferredBytes() {
 		return transferredBytes.get();
 	}
@@ -28,25 +28,24 @@ public class NettyappenderServerHandler extends SimpleChannelHandler {
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
 		// Send back the received message to the remote peer.
-		LoggingEventVO event = ((LoggingEventVO) e.getMessage());		
-		
-		
-		Logger  remoteLogger = lc.getLogger(event.getLoggerName());
-	        // apply the logger-level filter
-	        if (remoteLogger.isEnabledFor(event.getLevel())) {
-	          // finally log the event as if was generated locally
-	          remoteLogger.callAppenders(event);
-	        }
-//		logger.debug(event.getMsg());
-//		
-		
+		LoggingEventVO event = ((LoggingEventVO) e.getMessage());
+
+		Logger remoteLogger = lc.getLogger(event.getLoggerName());
+		// apply the logger-level filter
+		if (remoteLogger.isEnabledFor(event.getLevel())) {
+			// finally log the event as if was generated locally
+			remoteLogger.callAppenders(event);
+		}
+		// logger.debug(event.getMsg());
+		//
+
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
 		// Close the connection when an exception is raised.
-		if(!(e.getCause() instanceof IOException))
-		logger.warn("Unexpected exception from downstream.", e.getCause());
+		if (!(e.getCause() instanceof IOException))
+			logger.warn("Unexpected exception from downstream.", e.getCause());
 		e.getChannel().close();
 	}
 }

@@ -46,6 +46,10 @@ public class NettyappenderServer {
 	private ServerBootstrap bootstrap;
 	
 
+	public ServerBootstrap getBootstrap() {
+		return bootstrap;
+	}
+
 	public NettyappenderServer(int port) {
 		this.port = port;
 	}

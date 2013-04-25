@@ -26,7 +26,7 @@ public class NettyActor extends JLPCActor{
 
 	public void doLogger() throws Exception {
 		Serializable serEvent = pst.transform(eventObject);
-		channel.write(eventObject.getLoggerContextVO());
+		channel.write(serEvent);
 		
 	}
 
