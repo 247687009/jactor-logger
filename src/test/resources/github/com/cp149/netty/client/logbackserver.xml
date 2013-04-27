@@ -8,7 +8,7 @@
 			</fileNamePattern>
 			<maxHistory>10</maxHistory>
 		</rollingPolicy>
-		<append>true</append>
+		
 		
 		<encoder>
 			<pattern>%d %-5p [%t] %c [%F:%L] - %msg%n</pattern>
