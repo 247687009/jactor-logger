@@ -27,7 +27,7 @@ public class AppenderBaseTest {
 	private LoggerContext lc;
 
 	// test start time ,
-	private long starttime;
+	protected long starttime;
 	// actual full logfile name
 	private String filename;
 
@@ -51,7 +51,7 @@ public class AppenderBaseTest {
 		// test log is ok
 		logback.debug("init config" + LOGBACK_XML);
 //		TimeUnit.SECONDS.sleep(5);
-		starttime = new Date().getTime();
+		starttime = System.nanoTime();
 
 	}
 
@@ -64,7 +64,7 @@ public class AppenderBaseTest {
 
 	@AfterClass()
 	public void afteclass() throws IOException {
-		System.out.println("run times" + (new Date().getTime() - starttime));
+		System.out.println("run times" + (System.nanoTime() - starttime));
 
 		// file = new File("logs/logback-" + new
 		// SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".log");

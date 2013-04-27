@@ -1,6 +1,6 @@
 package github.com.cp149.netty.server;
 
-import github.com.cp149.netty.client.MyLoggingEventVO;
+import github.com.cp149.CountAppender;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicLong;
@@ -36,8 +36,8 @@ public class NettyappenderServerHandler extends SimpleChannelHandler {
 			// finally log the event as if was generated locally
 			remoteLogger.callAppenders(event);
 		}
-		// logger.debug(event.getMsg());
-		//
+		
+		
 
 	}
 

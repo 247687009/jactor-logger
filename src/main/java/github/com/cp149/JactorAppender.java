@@ -14,7 +14,8 @@ import ch.qos.logback.core.spi.AppenderAttachableImpl;
 public class JactorAppender extends UnsynchronizedAppenderBase<ILoggingEvent> implements AppenderAttachable<ILoggingEvent> {
 
 	AppenderAttachableImpl<ILoggingEvent> aai = new AppenderAttachableImpl<ILoggingEvent>();
-	private final MailboxFactory mailboxFactory = JAMailboxFactory.newMailboxFactory(10);
+	private int threadSize=8;
+	private  MailboxFactory mailboxFactory ;
 
 	public void addAppender(Appender<ILoggingEvent> newAppender) {
 
@@ -47,6 +48,14 @@ public class JactorAppender extends UnsynchronizedAppenderBase<ILoggingEvent> im
 		return aai.detachAppender(name);
 	}
 
+	
+	@Override
+	public void start() {
+		
+		super.start();
+		mailboxFactory= JAMailboxFactory.newMailboxFactory(threadSize);
+	}
+
 	@Override
 	public void stop() {
 		mailboxFactory.close();
@@ -73,6 +82,14 @@ public class JactorAppender extends UnsynchronizedAppenderBase<ILoggingEvent> im
 			addError(e.getMessage());
 		}
 
+	}
+
+	public int getThreadSize() {
+		return threadSize;
+	}
+
+	public void setThreadSize(int threadSize) {
+		this.threadSize = threadSize;
 	}
 
 }

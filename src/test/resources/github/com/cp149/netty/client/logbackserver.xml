@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+	<appender name="Countout" class="github.com.cp149.CountAppender" />
+
+	<appender name="ASYNC" class="github.com.cp149.JactorAppender">
+		<threadSize>1</threadSize>
+		<appender-ref ref="Countout" />
+	</appender>
+
+
+
+	<root level="DEBUG">
+		<appender-ref ref="ASYNC" />
+	</root>
+</configuration>

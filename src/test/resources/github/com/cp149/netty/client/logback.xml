@@ -34,7 +34,7 @@
 		<port>4560</port>
 		<appender-ref ref="STDOUT" />
 		<connectatstart>true</connectatstart>
-		<channelSize>20</channelSize>
+		<channelSize>10</channelSize>
 	</appender>
 	<appender name="janetty"
 		class="github.com.cp149.netty.client.JactorNettyAppender">
