@@ -25,11 +25,9 @@
 		<encoder>
 			<pattern>%d{HH:mm:ss.SSS} %p [%t] %c [%F:%L] - %msg%n</pattern>
 		</encoder>
-	</appender>
-	<appender name="ASYNC" class="github.com.cp149.JactorAppender">
-		<appender-ref ref="STDOUT" />
-	</appender>
+	</appender>	
 	<appender name="ASYNCFile" class="github.com.cp149.JactorAppender">
+		<appender-ref ref="STDOUT" />
 		<appender-ref ref="RollingFile" />
 	</appender>
 	

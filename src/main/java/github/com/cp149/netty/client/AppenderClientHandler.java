@@ -11,34 +11,34 @@ import org.jboss.netty.util.Timeout;
 import org.jboss.netty.util.TimerTask;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author cp149 netty appender client handle,can auto reconnect
+ */
 public class AppenderClientHandler extends SimpleChannelHandler {
 	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AppenderClientHandler.class);
-	
+
 	private ClientBootstrap bootstrap;
 	private final org.jboss.netty.util.Timer timer;
-	private int reconnectDelay=30000;
+	private int reconnectDelay = 30000;
 	private final NettyAppender appender;
 
 	// org.jboss.netty.channel.Channel channel;
 
-	public AppenderClientHandler(NettyAppender nettyAppender, ClientBootstrap bootstrap2, org.jboss.netty.util.Timer timer,int timeout) {
-		super();	
-		this.bootstrap=bootstrap2;
+	public AppenderClientHandler(NettyAppender nettyAppender, ClientBootstrap bootstrap2, org.jboss.netty.util.Timer timer, int timeout) {
+		super();
+		this.bootstrap = bootstrap2;
 		this.timer = timer;
-		this.reconnectDelay=timeout;
-		this.appender=nettyAppender;
+		this.reconnectDelay = timeout;
+		this.appender = nettyAppender;
 	}
-
-	
-	
 
 	@Override
 	public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e) {
 		timer.newTimeout(new TimerTask() {
 
 			public void run(Timeout timeout) throws Exception {
-				if(appender.isStarted())
-				bootstrap.connect();
+				if (appender.isStarted())
+					bootstrap.connect();
 			}
 		}, reconnectDelay, TimeUnit.SECONDS);
 	}
@@ -50,5 +50,4 @@ public class AppenderClientHandler extends SimpleChannelHandler {
 		e.getChannel().close();
 	}
 
-	
 }

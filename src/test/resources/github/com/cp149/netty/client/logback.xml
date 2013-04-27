@@ -11,19 +11,15 @@
 	</appender>
 	<appender name="RollingFile"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-
-		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-			<level>TRACE</level>
-		</filter>
-
-
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>logs/logback-%d{yyyy-MM-dd}.log</fileNamePattern>
 			<maxHistory>10</maxHistory>
 		</rollingPolicy>
 		<append>true</append>
+		
 		<encoder>
 			<pattern>%d %-5p [%t] %c [%F:%L] - %msg%n</pattern>
+			
 		</encoder>
 	</appender>
 	
@@ -42,7 +38,7 @@
 		<port>4560</port>
 		<appender-ref ref="STDOUT" />
 		<connectatstart>true</connectatstart>
-		<channelSize>20</channelSize>
+		<channelSize>10</channelSize>
 	</appender>
 	<appender name="jactorplusnetty" class="github.com.cp149.JactorAppender">
 		<appender-ref ref="jasocket" />

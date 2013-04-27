@@ -43,7 +43,7 @@ public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> i
 	AppenderAttachableImpl<E> aai = new AppenderAttachableImpl<E>();
 	int appenderCount = 0;
 	//indicate if connect at start,witch will slow down startup
-	boolean connectatstart =false;
+	protected boolean connectatstart =false;
 	
 	public void addAppender(Appender<E> newAppender) {
 		if (appenderCount == 0) {
@@ -130,7 +130,7 @@ public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> i
 	 */
 	public abstract void cleanUp();
 
-	public abstract void connect(InetAddress address, int port);
+	public abstract  void  connect(InetAddress address, int port);
 
 	/**
 	 * Gets the default {@link SocketFactory} for the platform.

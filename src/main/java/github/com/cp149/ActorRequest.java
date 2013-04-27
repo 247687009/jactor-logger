@@ -16,9 +16,8 @@ public class ActorRequest extends Request<String, LoggerActor> {
 
 	@Override
 	public void processRequest(JLPCActor targetActor, RP rp) throws Exception {
-		LoggerActor a = (LoggerActor) targetActor;
-		a.doLogger();
-		rp.processResponse(null);
+		LoggerActor a = (LoggerActor) targetActor;		
+		a.processRequest(this, rp);
 
 	}
 

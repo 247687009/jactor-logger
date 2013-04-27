@@ -20,6 +20,8 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.handler.codec.marshalling.DefaultMarshallerProvider;
 import org.jboss.netty.handler.codec.marshalling.MarshallerProvider;
 import org.jboss.netty.handler.codec.marshalling.MarshallingEncoder;
+import org.jboss.netty.handler.execution.ExecutionHandler;
+import org.jboss.netty.handler.execution.OrderedMemoryAwareThreadPoolExecutor;
 import org.jboss.netty.util.HashedWheelTimer;
 import org.jboss.netty.util.Timer;
 
@@ -48,14 +50,12 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 	protected void append(ILoggingEvent eventObject) {
 		try {
 			if (isStarted()) {
-				// First, close the previous connection if any.
-				if (bootstrap == null)
+				// if not start then start bootstrap
+				if ( connectatstart==false &&  bootstrap == null)
 					connect(address, port);
-				eventObject.prepareForDeferredProcessing();
-				StackTraceElement callerData = null;
-				// if(eventObject.hasCallerData()) {
-				// callerData =
-				eventObject.getCallerData();
+				// eventObject.prepareForDeferredProcessing();
+
+				// eventObject.getCallerData();
 				// }
 				Serializable serEvent = getPST().transform(eventObject);
 				// MyLoggingEventVO serEvent = new
@@ -111,29 +111,31 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 	}
 
 	@Override
-	public void connect(InetAddress address, int port) {
+	public synchronized void connect(InetAddress address, int port) {
+		if (bootstrap == null) {
+			bootstrap = new ClientBootstrap(new NioClientSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
+			bootstrap.setOption("tcpNoDelay", true);
+			bootstrap.setOption("keepAlive", true);
+			bootstrap.setOption("remoteAddress", new InetSocketAddress(address, port));
+			bootstrap.setOption("writeBufferHighWaterMark", 10 * 64 * 1024);
+			bootstrap.setOption("sendBufferSize", 1048576);
+			bootstrap.setOption("receiveBufferSize", 1048576);
 
-		bootstrap = new ClientBootstrap(new NioClientSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
-		bootstrap.setOption("tcpNoDelay", true);
-		bootstrap.setOption("keepAlive", true);
-		bootstrap.setOption("remoteAddress", new InetSocketAddress(address, port));
-		bootstrap.setOption("writeBufferHighWaterMark", 10 * 64 * 1024);
-		bootstrap.setOption("sendBufferSize", 1048576);
-		bootstrap.setOption("receiveBufferSize", 1048576);
-		// Set up the pipeline factory.
-		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
+			// Set up the pipeline factory.
+			bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 
-			public ChannelPipeline getPipeline() throws Exception {
+				public ChannelPipeline getPipeline() throws Exception {
 
-				return Channels.pipeline(new MarshallingEncoder(createProvider()), new AppenderClientHandler(NettyAppender.this, bootstrap, timer, reconnectionDelay));
+					return Channels.pipeline(new MarshallingEncoder(createProvider()), new AppenderClientHandler(NettyAppender.this, bootstrap, timer, reconnectionDelay));
+				}
+			});
+
+			for (int i = 0; i < channelSize; i++) {
+				ChannelFuture future = bootstrap.connect();
+				Channel channel = future.awaitUninterruptibly().getChannel();
+				channel.setReadable(false);
+				channelList.add(channel);
 			}
-		});
-
-		for (int i = 0; i < channelSize; i++) {
-			ChannelFuture future = bootstrap.connect();
-			Channel channel = future.awaitUninterruptibly().getChannel();
-			channel.setReadable(false);
-			channelList.add(channel);
 		}
 
 	}

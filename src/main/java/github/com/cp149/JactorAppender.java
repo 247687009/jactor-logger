@@ -11,6 +11,10 @@ import ch.qos.logback.core.UnsynchronizedAppenderBase;
 import ch.qos.logback.core.spi.AppenderAttachable;
 import ch.qos.logback.core.spi.AppenderAttachableImpl;
 
+/**
+ * @author cp149
+ *jactor appender 
+ */
 public class JactorAppender extends UnsynchronizedAppenderBase<ILoggingEvent> implements AppenderAttachable<ILoggingEvent> {
 
 	AppenderAttachableImpl<ILoggingEvent> aai = new AppenderAttachableImpl<ILoggingEvent>();

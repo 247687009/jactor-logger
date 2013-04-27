@@ -2,6 +2,10 @@ package github.com.cp149;
 
 import org.testng.annotations.Test;
 
+/**
+ * @author cp149
+ * normal fileappender test,show how slow it run,but not lost data;
+ */
 public class FileAppenderTest extends AppenderBaseTest
 
 {
@@ -17,7 +21,7 @@ public class FileAppenderTest extends AppenderBaseTest
 	/**
 	 * test logappand demo by file
 	 */
-	@Test(invocationCount = 100, threadPoolSize = 10)
+	@Test(invocationCount = 100, threadPoolSize = 30)
 	public void testLog() {
 		for (int i = 0; i < loglines; i++)
 			logback.debug("logback I am slow " + i + " at thread" + Thread.currentThread().getId());

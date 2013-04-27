@@ -1,16 +1,16 @@
 package github.com.cp149.netty.client;
 
-import java.util.Date;
-
 import github.com.cp149.AppenderBaseTest;
 
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+/**
+ * @author cp149
+ *nettyappender test ,call by nettytest
+ */
 public class NettyAppenderTest extends AppenderBaseTest{
 		   
-	@Test(invocationCount=100,threadPoolSize=100)
+	@Test(invocationCount=100,threadPoolSize=30)
     public void testLog() throws Exception
     {
     	for (int i = 0; i < loglines; i++)

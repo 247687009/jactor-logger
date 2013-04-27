@@ -16,6 +16,7 @@ import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
 
 public class AppenderBaseTest {
+	public static final int WARMLOGSIZE = 100;
 	// logback config file
 	protected String LOGBACK_XML = "logback.xml";
 	// log out put file
@@ -32,7 +33,7 @@ public class AppenderBaseTest {
 	private String filename;
 
 	// log per thread
-	protected int loglines = 2000;
+	public static int loglines = 5000;
 
 	public AppenderBaseTest() {
 		super();
@@ -49,9 +50,11 @@ public class AppenderBaseTest {
 		lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 		configureLC(lc, this.getClass().getResource("").getFile() + File.separator + LOGBACK_XML);
 		// test log is ok
-		logback.debug("init config" + LOGBACK_XML);
+//		logback.debug("init config" + LOGBACK_XML);
 //		TimeUnit.SECONDS.sleep(5);
-		starttime = System.nanoTime();
+		for(int i=0;i<WARMLOGSIZE;i++)
+			logback.debug("warm logsystem");
+		starttime = System.currentTimeMillis();
 
 	}
 
@@ -64,11 +67,8 @@ public class AppenderBaseTest {
 
 	@AfterClass()
 	public void afteclass() throws IOException {
-		System.out.println("run times" + (System.nanoTime() - starttime));
-
-		// file = new File("logs/logback-" + new
-		// SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".log");
-		Assert.assertEquals(Testutils.countlines(filename) - sizeBeforTest, 100 * loglines + 1);
+		System.out.println("run times" + (System.currentTimeMillis() - starttime));		
+		Assert.assertEquals(Testutils.countlines(filename) - sizeBeforTest, 100 * loglines + WARMLOGSIZE);
 
 	}
 }

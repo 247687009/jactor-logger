@@ -2,14 +2,16 @@ package github.com.cp149;
 
 import org.testng.annotations.Test;
 
+/**
+ * @author cp149
+ *faster logappand by jactor but lost data because system exit too fast
+ */
 public class JactorAppenderTest extends AppenderBaseTest
 
 {
 
-	/**
-	 * faster logappand by jactor but lost data
-	 */
-	@Test(invocationCount = 100, threadPoolSize = 10)
+	
+	@Test(invocationCount = 100, threadPoolSize = 30)
 	public void testLog() {
 		for (int i = 0; i < loglines; i++)
 			logback.debug("logback I am faster " + i + " at thread" + Thread.currentThread().getId());
