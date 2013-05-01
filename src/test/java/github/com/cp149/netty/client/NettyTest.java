@@ -29,7 +29,7 @@ public class NettyTest {
 	protected String logfilename = "logs/logback-server-"+  new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".log";
 	protected final int experttotal = AppenderBaseTest.loglines*100+AppenderBaseTest.WARMLOGSIZE+1;
 
-	@Test
+	@Test(timeOut=30000)
 	public void testNettyclientandserver() throws Exception{
 		File file=new File(logfilename);
 		if(file.exists())file.delete();

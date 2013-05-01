@@ -18,7 +18,7 @@ public class JactorNettyTest extends NettyTest {
 	
 	
 	
-	@Test
+	@Test(timeOut=30000)
 	public void testNettyclientandserver() throws Exception{
 		super.testNettyclientandserver();
 	}
