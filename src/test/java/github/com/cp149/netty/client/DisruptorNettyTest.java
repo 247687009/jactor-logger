@@ -17,7 +17,7 @@ public class DisruptorNettyTest extends NettyTest {
 	
 	
 	
-	@Test(timeOut=30000)
+	@Test(timeOut=40000,groups="nettytest")
 	public void testNettyclientandserver() throws Exception{
 		super.testNettyclientandserver();
 	}

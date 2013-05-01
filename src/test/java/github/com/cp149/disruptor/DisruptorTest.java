@@ -3,7 +3,7 @@ package github.com.cp149.disruptor;
 import org.testng.annotations.Test;
 
 import github.com.cp149.AppenderBaseTest;
-
+@Test(groups="normaltest")
 public class DisruptorTest extends AppenderBaseTest {
 	
 	@Test(invocationCount = 100, threadPoolSize = 30)

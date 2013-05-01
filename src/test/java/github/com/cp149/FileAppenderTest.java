@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
  * @author cp149
  * normal fileappender test,show how slow it run,but not lost data;
  */
+@Test(groups="normaltest")
 public class FileAppenderTest extends AppenderBaseTest
 
 {

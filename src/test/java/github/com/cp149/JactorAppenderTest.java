@@ -2,10 +2,13 @@ package github.com.cp149;
 
 import org.testng.annotations.Test;
 
+
+
 /**
  * @author cp149
  *faster logappand by jactor but lost data because system exit too fast
  */
+@Test(groups="normaltest")
 public class JactorAppenderTest extends AppenderBaseTest
 
 {

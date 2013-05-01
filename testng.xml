@@ -1,0 +1,28 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="280" skipfailedinvocationcounts="true"
+	verbose="1" name="jactor-logger" junit="false"
+	data-provider-thread-count="100" annotations="JDK">	
+		<test name="normaltest" junit="false" annotations="JDK"  skipfailedinvocationcounts="true">
+		<groups>
+			<run>
+				<include name="normaltest" ></include>
+			</run>
+		</groups>
+		<packages>
+			<package name="github.com.cp149.*"></package>			
+		</packages>
+	</test>
+	<test name="nettytest" junit="false" annotations="JDK"  skipfailedinvocationcounts="true" parallel="false">
+		<groups>
+			<run>
+				<include name="nettytest" ></include>
+			</run>
+		</groups>
+		<packages>
+			<package name="github.com.cp149.*"></package>			
+		</packages>
+	</test>
+	 
+</suite>
+	
+	
