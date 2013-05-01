@@ -75,7 +75,7 @@ public class JactorAppender extends UnsynchronizedAppenderBase<ILoggingEvent> im
 		try {
 
 //			eventObject.prepareForDeferredProcessing();
-//			eventObject.getCallerData();
+			eventObject.getCallerData();
 
 			LoggerActor actor = new LoggerActor(eventObject, aai);
 			actor.initialize(mailboxFactory.createMailbox());
