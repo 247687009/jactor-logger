@@ -24,23 +24,21 @@
 	</appender>
 	
 	
-	<appender name="jasocket"
-		class="github.com.cp149.netty.client.NettyAppender">
+	
+	<appender name="janetty"
+		class="github.com.cp149.netty.client.JactorNettyAppender">
 		<remoteHost>localhost</remoteHost>
 		<port>4560</port>
 		<appender-ref ref="STDOUT" />
 		<connectatstart>false</connectatstart>
 		<channelSize>10</channelSize>
-	</appender>	
-	<appender name="jactorplusnetty" class="github.com.cp149.JactorAppender">
-		<appender-ref ref="jasocket" />		
 	</appender>
-	
+		
 	
 	
 
 	<logger name="github.com.cp149.netty.client" level="DEBUG">
-		<appender-ref ref="jactorplusnetty" />
+		<appender-ref ref="janetty" />
 	</logger>	
 	
 	<root level="ERROR">

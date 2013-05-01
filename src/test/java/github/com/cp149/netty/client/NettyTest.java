@@ -24,21 +24,24 @@ import ch.qos.logback.classic.LoggerContext;
 public class NettyTest {
 	
 	
+	protected String testclass = "-Dtest=github.com.cp149.netty.client.NettyAppenderTest";
+	protected String configFile = this.getClass().getResource("").getFile() + File.separator + "logbackserver.xml";
+	protected String logfilename = "logs/logback-server-"+  new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".log";
+
 	@Test
 	public void testNettyclientandserver() throws Exception{
-		String filename = "logs/logback-server-"+  new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".log";
-		File file=new File(filename);
+		File file=new File(logfilename);
 		if(file.exists())file.delete();
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-		NettyappenderServer.configureLC(lc, this.getClass().getResource("").getFile() + File.separator + "logbackserver.xml");
+		NettyappenderServer.configureLC(lc, configFile);
 		NettyappenderServer nettyappenderServer = new NettyappenderServer(4560);			
 		nettyappenderServer.run();
 		
-		new MvnCommandexe().executeCommands("mvn.bat","-Dtest=github.com.cp149.netty.client.NettyAppenderTest","test");
+		new MvnCommandexe().executeCommands("mvn.bat",testclass,"test");
 		int experttotal=AppenderBaseTest.loglines*100+AppenderBaseTest.WARMLOGSIZE+1;
 		int totallogs=CountAppender.count.intValue();
 		
-		while(totallogs!=Testutils.countlines(filename) || totallogs<CountAppender.count.intValue()){
+		while(totallogs!=Testutils.countlines(logfilename) || totallogs<CountAppender.count.intValue()){
 			totallogs=CountAppender.count.intValue();
 			TimeUnit.SECONDS.sleep(4);
 			System.out.println(totallogs);

@@ -1,14 +1,14 @@
 package github.com.cp149.netty.client;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.agilewiki.jactor.JAMailboxFactory;
 import org.agilewiki.jactor.MailboxFactory;
-import org.jboss.netty.channel.Channel;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
+/**
+ * @author cp149
+ * push logevent with actor
+ */
 public class JactorNettyAppender extends NettyAppender{
 	private  final MailboxFactory mailboxFactory = JAMailboxFactory.newMailboxFactory(10);
 	
@@ -18,7 +18,8 @@ public class JactorNettyAppender extends NettyAppender{
 	protected void append(ILoggingEvent eventObject) {
 		try {
 			if (isStarted()) {
-				
+				if ( connectatstart==false &&  bootstrap == null)
+					connect(address, port);
 				NettyActor actor = new NettyActor(eventObject, getChannel());				
 				actor.initialize(mailboxFactory.createMailbox());
 				NettyRequest.req.sendEvent(actor);
