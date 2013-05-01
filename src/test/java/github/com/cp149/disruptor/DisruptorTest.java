@@ -1,8 +1,8 @@
 package github.com.cp149.disruptor;
 
-import org.testng.annotations.Test;
-
 import github.com.cp149.AppenderBaseTest;
+
+import org.testng.annotations.Test;
 @Test(groups="normaltest")
 public class DisruptorTest extends AppenderBaseTest {
 	

@@ -1,7 +1,5 @@
 package github.com.cp149.netty.server;
 
-import github.com.cp149.CountAppender;
-
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicLong;
 

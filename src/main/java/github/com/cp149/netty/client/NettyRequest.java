@@ -1,6 +1,5 @@
 package github.com.cp149.netty.client;
 
-import github.com.cp149.ActorRequest;
 import github.com.cp149.LoggerActor;
 
 import org.agilewiki.jactor.Actor;

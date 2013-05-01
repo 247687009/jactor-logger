@@ -31,8 +31,6 @@ import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.handler.codec.marshalling.DefaultUnmarshallerProvider;
 import org.jboss.netty.handler.codec.marshalling.MarshallingDecoder;
 import org.jboss.netty.handler.codec.marshalling.UnmarshallerProvider;
-import org.jboss.netty.handler.execution.ExecutionHandler;
-import org.jboss.netty.handler.execution.OrderedMemoryAwareThreadPoolExecutor;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.LoggerContext;

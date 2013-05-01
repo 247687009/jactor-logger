@@ -3,7 +3,6 @@ package github.com.cp149;
 import java.util.Iterator;
 
 import org.agilewiki.jactor.JAMailboxFactory;
-import org.agilewiki.jactor.Mailbox;
 import org.agilewiki.jactor.MailboxFactory;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
