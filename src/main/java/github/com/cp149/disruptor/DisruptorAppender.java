@@ -36,7 +36,7 @@ public class DisruptorAppender extends UnsynchronizedAppenderBase<ILoggingEvent>
 		}
 	};
 	private RingBuffer<ValueEvent> ringBuffer;
-
+	 boolean includeCallerData = true;
 	public void addAppender(Appender<ILoggingEvent> newAppender) {
 
 		aai.addAppender(newAppender);
@@ -89,8 +89,9 @@ public class DisruptorAppender extends UnsynchronizedAppenderBase<ILoggingEvent>
 	@Override
 	protected void append(ILoggingEvent eventObject) {
 		try {
+			if(includeCallerData){
 			 eventObject.prepareForDeferredProcessing();
-			 eventObject.getCallerData();
+			 eventObject.getCallerData();}
 			long seq = ringBuffer.next();
 			ValueEvent valueEvent = ringBuffer.get(seq);
 			valueEvent.setEvent(eventObject);
@@ -99,6 +100,14 @@ public class DisruptorAppender extends UnsynchronizedAppenderBase<ILoggingEvent>
 			addError(e.getMessage());
 		}
 
+	}
+
+	public boolean isIncludeCallerData() {
+		return includeCallerData;
+	}
+
+	public void setIncludeCallerData(boolean includeCallerData) {
+		this.includeCallerData = includeCallerData;
 	}
 
 }

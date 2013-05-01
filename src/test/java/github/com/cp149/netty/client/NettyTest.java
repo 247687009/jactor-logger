@@ -44,13 +44,13 @@ public class NettyTest {
 		while(totallogs<experttotal){
 			totallogs=CountAppender.count.intValue();
 			TimeUnit.SECONDS.sleep(2);
-			System.out.println("current lines ="+totallogs);
+			System.out.println(Thread.currentThread().getStackTrace()[1]+"current lines ="+totallogs);
 			
 		}	
-		System.out.println("last total="+totallogs);
+		System.out.println(Thread.currentThread().getStackTrace()[1]+"last total="+totallogs);
 		Assert.assertEquals(CountAppender.count.intValue(), experttotal);
-			
-//		nettyappenderServer.getBootstrap().getPipeline().getChannel().isConnected(); 
+		Assert.assertEquals(Testutils.countlines(logfilename), experttotal);	
+ 
 		
 	}
 	
