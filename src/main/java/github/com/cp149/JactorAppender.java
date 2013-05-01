@@ -74,7 +74,7 @@ public class JactorAppender extends UnsynchronizedAppenderBase<ILoggingEvent> im
 	protected void append(ILoggingEvent eventObject) {
 		try {
 
-//			eventObject.prepareForDeferredProcessing();
+			eventObject.prepareForDeferredProcessing();
 			eventObject.getCallerData();
 
 			LoggerActor actor = new LoggerActor(eventObject, aai);

@@ -89,7 +89,7 @@ public class DisruptorAppender extends UnsynchronizedAppenderBase<ILoggingEvent>
 	@Override
 	protected void append(ILoggingEvent eventObject) {
 		try {
-			// eventObject.prepareForDeferredProcessing();
+			 eventObject.prepareForDeferredProcessing();
 			 eventObject.getCallerData();
 			long seq = ringBuffer.next();
 			ValueEvent valueEvent = ringBuffer.get(seq);
