@@ -27,6 +27,7 @@ public class NettyTest {
 	protected String testclass = "-Dtest=github.com.cp149.netty.client.NettyAppenderTest";
 	protected String configFile = this.getClass().getResource("").getFile() + File.separator + "logbackserver.xml";
 	protected String logfilename = "logs/logback-server-"+  new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".log";
+	protected final int experttotal = AppenderBaseTest.loglines*100+AppenderBaseTest.WARMLOGSIZE+1;
 
 	@Test
 	public void testNettyclientandserver() throws Exception{
@@ -38,16 +39,14 @@ public class NettyTest {
 		nettyappenderServer.run();
 		
 		new MvnCommandexe().executeCommands("mvn.bat",testclass,"test");
-		int experttotal=AppenderBaseTest.loglines*100+AppenderBaseTest.WARMLOGSIZE+1;
 		int totallogs=CountAppender.count.intValue();
 		
-		while(totallogs!=Testutils.countlines(logfilename) || totallogs<CountAppender.count.intValue()){
+		while(totallogs<experttotal){
 			totallogs=CountAppender.count.intValue();
-			TimeUnit.SECONDS.sleep(4);
-			System.out.println(totallogs);
+			TimeUnit.SECONDS.sleep(2);
+			System.out.println("current lines ="+totallogs);
 			
-		}
-		TimeUnit.SECONDS.sleep(5);
+		}	
 		System.out.println("last total="+totallogs);
 		Assert.assertEquals(CountAppender.count.intValue(), experttotal);
 			

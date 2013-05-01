@@ -3,6 +3,7 @@ package github.com.cp149;
 import java.util.Iterator;
 
 import org.agilewiki.jactor.JAMailboxFactory;
+import org.agilewiki.jactor.Mailbox;
 import org.agilewiki.jactor.MailboxFactory;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -20,6 +21,7 @@ public class JactorAppender extends UnsynchronizedAppenderBase<ILoggingEvent> im
 	AppenderAttachableImpl<ILoggingEvent> aai = new AppenderAttachableImpl<ILoggingEvent>();
 	private int threadSize=8;
 	private  MailboxFactory mailboxFactory ;
+	
 
 	public void addAppender(Appender<ILoggingEvent> newAppender) {
 
@@ -58,16 +60,13 @@ public class JactorAppender extends UnsynchronizedAppenderBase<ILoggingEvent> im
 		
 		super.start();
 		mailboxFactory= JAMailboxFactory.newMailboxFactory(threadSize);
+		 
 	}
 
 	@Override
 	public void stop() {
 		mailboxFactory.close();
-		Iterator<Appender<ILoggingEvent>> iteratorForAppenders = aai.iteratorForAppenders();
-		while (iteratorForAppenders.hasNext()) {
-			iteratorForAppenders.next().stop();
-		}
-
+		detachAndStopAllAppenders();
 		super.stop();
 	}
 
@@ -75,8 +74,8 @@ public class JactorAppender extends UnsynchronizedAppenderBase<ILoggingEvent> im
 	protected void append(ILoggingEvent eventObject) {
 		try {
 
-			eventObject.prepareForDeferredProcessing();
-			eventObject.getCallerData();
+//			eventObject.prepareForDeferredProcessing();
+//			eventObject.getCallerData();
 
 			LoggerActor actor = new LoggerActor(eventObject, aai);
 			actor.initialize(mailboxFactory.createMailbox());

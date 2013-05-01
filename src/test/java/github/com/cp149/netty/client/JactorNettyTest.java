@@ -18,6 +18,9 @@ public class JactorNettyTest extends NettyTest {
 	
 	
 	
-	
+	@Test
+	public void testNettyclientandserver() throws Exception{
+		super.testNettyclientandserver();
+	}
 
 }

@@ -23,7 +23,7 @@
 		</encoder>
 	</appender>
 	
-	
+	<appender name="Countout" class="github.com.cp149.CountAppender" />
 	
 	<appender name="janetty"
 		class="github.com.cp149.netty.client.JactorNettyAppender">
@@ -39,6 +39,7 @@
 
 	<logger name="github.com.cp149.netty.client" level="DEBUG">
 		<appender-ref ref="janetty" />
+		<appender-ref ref="Countout" />
 	</logger>	
 	
 	<root level="ERROR">

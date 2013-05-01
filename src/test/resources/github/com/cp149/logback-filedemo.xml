@@ -9,6 +9,7 @@
 			</pattern>
 		</encoder>
 	</appender>
+	<appender name="Countout" class="github.com.cp149.CountAppender" />
 	<appender name="RollingFile"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 				<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -21,8 +22,13 @@
 			
 		</encoder>
 	</appender>	
+	<appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+	<queueSize>50500</queueSize>
+    <appender-ref ref="RollingFile" />
+  	</appender>
 	
 	<root level="DEBUG">		
+		<appender-ref ref="Countout" />
 		<appender-ref ref="RollingFile" />
 	</root>
 </configuration>

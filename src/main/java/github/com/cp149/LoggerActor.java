@@ -22,6 +22,6 @@ public class LoggerActor extends JLPCActor {
 	 protected void processRequest(ActorRequest ar, RP rp) throws Exception {
 		 attachableImpl.appendLoopOnAppenders(event);
 	        rp.processResponse(null); //all done
-	    }
+	  }
 
 }

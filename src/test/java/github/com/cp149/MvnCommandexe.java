@@ -31,7 +31,7 @@ public class MvnCommandexe
             String line = null;  
               
             while ((line = br.readLine()) != null) {
-            	if(line.contains("run times"))
+            	if(line.contains("time="))
                 System.out.println(line);  
             } 
             return 0;

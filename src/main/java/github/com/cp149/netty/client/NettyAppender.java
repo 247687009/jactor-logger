@@ -20,8 +20,6 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.handler.codec.marshalling.DefaultMarshallerProvider;
 import org.jboss.netty.handler.codec.marshalling.MarshallerProvider;
 import org.jboss.netty.handler.codec.marshalling.MarshallingEncoder;
-import org.jboss.netty.handler.execution.ExecutionHandler;
-import org.jboss.netty.handler.execution.OrderedMemoryAwareThreadPoolExecutor;
 import org.jboss.netty.util.HashedWheelTimer;
 import org.jboss.netty.util.Timer;
 
