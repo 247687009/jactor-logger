@@ -13,7 +13,9 @@ import ch.qos.logback.core.spi.AppenderAttachableImpl;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.SleepingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
+import com.lmax.disruptor.dsl.ProducerType;
 
 public class DisruptorAppender extends UnsynchronizedAppenderBase<ILoggingEvent> implements AppenderAttachable<ILoggingEvent> {
 	private final class LogEventHandler implements EventHandler<ValueEvent> {
@@ -25,9 +27,10 @@ public class DisruptorAppender extends UnsynchronizedAppenderBase<ILoggingEvent>
 	}
 
 	AppenderAttachableImpl<ILoggingEvent> aai = new AppenderAttachableImpl<ILoggingEvent>();
-	ExecutorService exec = Executors.newCachedThreadPool();
+	ExecutorService exec = Executors.newFixedThreadPool(1);
 	// Preallocate RingBuffer with 1024 ILoggingEvents
-	Disruptor<ValueEvent> disruptor = new Disruptor<ValueEvent>(DisruptorAppender.EVENT_FACTORY, 1024, exec);
+	Disruptor<ValueEvent> disruptor =new Disruptor<ValueEvent>(DisruptorAppender.EVENT_FACTORY,1024, exec);
+			
 	final EventHandler<ValueEvent> handler = new LogEventHandler();
 
 	public final static EventFactory<ValueEvent> EVENT_FACTORY = new EventFactory<ValueEvent>() {
@@ -36,7 +39,8 @@ public class DisruptorAppender extends UnsynchronizedAppenderBase<ILoggingEvent>
 		}
 	};
 	private RingBuffer<ValueEvent> ringBuffer;
-	 boolean includeCallerData = true;
+	boolean includeCallerData = true;
+
 	public void addAppender(Appender<ILoggingEvent> newAppender) {
 
 		aai.addAppender(newAppender);
@@ -89,9 +93,10 @@ public class DisruptorAppender extends UnsynchronizedAppenderBase<ILoggingEvent>
 	@Override
 	protected void append(ILoggingEvent eventObject) {
 		try {
-			if(includeCallerData){
-			 eventObject.prepareForDeferredProcessing();
-			 eventObject.getCallerData();}
+			if (includeCallerData) {
+				eventObject.prepareForDeferredProcessing();
+				eventObject.getCallerData();
+			}
 			long seq = ringBuffer.next();
 			ValueEvent valueEvent = ringBuffer.get(seq);
 			valueEvent.setEvent(eventObject);

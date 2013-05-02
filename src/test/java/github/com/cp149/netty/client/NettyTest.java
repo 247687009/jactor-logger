@@ -34,7 +34,7 @@ public class NettyTest {
 
 	@BeforeMethod(alwaysRun=true)
 	public void befortest() throws Exception{
-		CountAppender.count.set(0);
+//		CountAppender.count.set(0);
 		File file=new File(logfilename);
 		if(file.exists())file.delete();
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();

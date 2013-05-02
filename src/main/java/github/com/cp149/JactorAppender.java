@@ -12,15 +12,13 @@ import ch.qos.logback.core.spi.AppenderAttachable;
 import ch.qos.logback.core.spi.AppenderAttachableImpl;
 
 /**
- * @author cp149
- *jactor appender 
+ * @author cp149 jactor appender
  */
 public class JactorAppender extends UnsynchronizedAppenderBase<ILoggingEvent> implements AppenderAttachable<ILoggingEvent> {
 
 	AppenderAttachableImpl<ILoggingEvent> aai = new AppenderAttachableImpl<ILoggingEvent>();
-	private int threadSize=8;
-	private  MailboxFactory mailboxFactory ;
-	
+	private int threadSize = 8;
+	private MailboxFactory mailboxFactory;
 
 	public void addAppender(Appender<ILoggingEvent> newAppender) {
 
@@ -53,13 +51,12 @@ public class JactorAppender extends UnsynchronizedAppenderBase<ILoggingEvent> im
 		return aai.detachAppender(name);
 	}
 
-	
 	@Override
 	public void start() {
-		
+
 		super.start();
-		mailboxFactory= JAMailboxFactory.newMailboxFactory(threadSize);
-		 
+		mailboxFactory = JAMailboxFactory.newMailboxFactory(threadSize);
+
 	}
 
 	@Override
