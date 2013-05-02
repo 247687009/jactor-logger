@@ -73,13 +73,18 @@ public class NettyappenderServerHandler extends SimpleChannelHandler {
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
 		// Send back the received message to the remote peer.
 		LoggingEventVO event = ((LoggingEventVO) e.getMessage());
-
+		Logger remoteLogger = lc.getLogger(event.getLoggerName());
+		// apply the logger-level filter
+		if (remoteLogger.isEnabledFor(event.getLevel())) {
+			// finally log the event as if was generated locally
+			remoteLogger.callAppenders(event);
+		}
 		
 		
-		long seq = ringBuffer.next();
-		ValueEvent valueEvent = ringBuffer.get(seq);
-		valueEvent.setEvent(event);
-		ringBuffer.publish(seq);
+//		long seq = ringBuffer.next();
+//		ValueEvent valueEvent = ringBuffer.get(seq);
+//		valueEvent.setEvent(event);
+//		ringBuffer.publish(seq);
 		
 
 	}

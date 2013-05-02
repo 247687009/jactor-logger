@@ -38,10 +38,11 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 
 	int channelid = 0;
 
+	
 	protected Channel getChannel() {
 		if (channelid >= channelSize)
 			channelid = 0;
-		return channelList.get(channelid++);
+		return channelList.get(channelid++);		
 	}
 
 	@Override

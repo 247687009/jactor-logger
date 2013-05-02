@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import javax.swing.Box.Filler;
+
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -21,7 +23,7 @@ public class AppenderBaseTest {
 	// log out put file
 	protected String Logfile = "logback-";
 	// file size of logfile before test
-	private int sizeBeforTest = 0;
+	protected int sizeBeforTest = 0;
 
 	protected org.slf4j.Logger logback = LoggerFactory.getLogger(this.getClass());
 	private LoggerContext lc;
@@ -64,7 +66,7 @@ public class AppenderBaseTest {
 		configurator.doConfigure(configFile);
 	}
 
-	@AfterClass()
+	@AfterClass(timeOut=20000)
 	public void afteclass() throws Exception {		
 		long runtime = System.currentTimeMillis() - starttime;
 		System.out.println( this.getClass().getSimpleName()+"run time=" + runtime);	
@@ -73,7 +75,14 @@ public class AppenderBaseTest {
 			System.out.println( this.getClass().getSimpleName()+"current lines time="  + CountAppender.count);	
 		}
 		System.out.println( this.getClass().getSimpleName()+"total  time=" + (System.currentTimeMillis() - starttime));
-		Assert.assertEquals(Testutils.countlines(filename) -sizeBeforTest,100 * loglines + WARMLOGSIZE );
+		int fileline = Testutils.countlines(filename) -sizeBeforTest;
+		Assert.assertEquals(fileline, 100 * loglines + WARMLOGSIZE);
+//		while(fileline<100 * loglines + WARMLOGSIZE){
+//			TimeUnit.MILLISECONDS.sleep(500);
+//			System.out.println( this.getClass().getSimpleName()+"current logfile lines time="  + fileline);
+//			fileline = Testutils.countlines(filename) -sizeBeforTest;
+//		}
+		
 
 	}
 }
