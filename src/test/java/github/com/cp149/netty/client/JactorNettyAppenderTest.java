@@ -16,8 +16,9 @@ public class JactorNettyAppenderTest extends AppenderBaseTest {
 
 	public JactorNettyAppenderTest() {
 		super();
-		LOGBACK_XML = "logback-netty.xml";
+		LOGBACK_XML = "logback-jactor.xml";
 		Logfile = "logback-server-netty";
+		isNettyappender=true;
 	}
 
 }

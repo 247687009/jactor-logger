@@ -30,20 +30,22 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.spi.PreSerializationTransformer;
 
 public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
-	PreSerializationTransformer<ILoggingEvent> pst = new LoggingEventPreSerializationTransformer();
+	protected PreSerializationTransformer<ILoggingEvent> pst = new LoggingEventPreSerializationTransformer();
 	protected ClientBootstrap bootstrap = null;
-	protected int channelSize = 10;
+	protected int channelSize = 5;
 
 	protected AppenderClientHandler appenderClientHandler;
 	protected static final Timer timer = new HashedWheelTimer();
-	protected final List<Channel> channelList = new ArrayList<Channel>();
+//	 protected final List<Channel> channelList = new ArrayList<Channel>();
+	private Channel channel;
 
 	int channelid = 0;
 
 	protected Channel getChannel() {
-		if (channelid >= channelSize)
-			channelid = 0;
-		return channelList.get(channelid++);
+//		 if (channelid >= channelSize)
+//		 channelid = 0;
+//		 return channelList.get(channelid++);
+		return channel;
 	}
 
 	@Override
@@ -53,13 +55,9 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 				// if not start then start bootstrap
 				if (connectatstart == false && bootstrap == null)
 					connect(address, port);
-//				 eventObject.prepareForDeferredProcessing();
-//
-//				 eventObject.getCallerData();
-				// }
+				// eventObject.prepareForDeferredProcessing();
+				eventObject.getCallerData();
 				Serializable serEvent = getPST().transform(eventObject);
-				// MyLoggingEventVO serEvent = new
-				// MyLoggingEventVO(callerData+eventObject.getFormattedMessage(),eventObject.getLevel().levelInt);
 				// if connect write to server
 				Channel channel = getChannel();
 				if (channel.isConnected())
@@ -80,11 +78,13 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 	public void cleanUp() {
 		try {
 			if (bootstrap != null) {
-				for (Channel channel : channelList) {
-					channel.disconnect().awaitUninterruptibly();
-					channel.close();
-				}
-				channelList.clear();
+//				 for (Channel channel : channelList) {
+//				 channel.disconnect().awaitUninterruptibly();
+//				 channel.close();
+//				 }
+//				 channelList.clear();
+				channel.disconnect().awaitUninterruptibly();
+				channel.close();
 				bootstrap.releaseExternalResources();
 				bootstrap.shutdown();
 				bootstrap = null;
@@ -117,28 +117,27 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 			bootstrap.setOption("tcpNoDelay", true);
 			bootstrap.setOption("keepAlive", true);
 			bootstrap.setOption("remoteAddress", new InetSocketAddress(address, port));
-			final ExecutionHandler executionHandler =  
-			        new ExecutionHandler(  
-			                new OrderedMemoryAwareThreadPoolExecutor(16, 1048576, 1048576));
+			final ExecutionHandler executionHandler = new ExecutionHandler(new OrderedMemoryAwareThreadPoolExecutor(16, 1048576, 1048576));
 			bootstrap.setOption("writeBufferHighWaterMark", 10 * 64 * 1024);
-			bootstrap.setOption("sendBufferSize", 1048576);
-			bootstrap.setOption("receiveBufferSize", 1048576);
+			bootstrap.setOption("sendBufferSize", 1048576);			
 
 			// Set up the pipeline factory.
 			bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 
 				public ChannelPipeline getPipeline() throws Exception {
 
-					return Channels.pipeline(executionHandler,new MarshallingEncoder(createProvider()), new AppenderClientHandler(NettyAppender.this, bootstrap, timer, reconnectionDelay));
+					return Channels.pipeline(executionHandler, new MarshallingEncoder(createProvider()), new AppenderClientHandler(NettyAppender.this, bootstrap, timer,
+							reconnectionDelay));
 				}
 			});
 
-			for (int i = 0; i < channelSize; i++) {
-				ChannelFuture future = bootstrap.connect();
-				Channel channel = future.awaitUninterruptibly().getChannel();
-				channel.setReadable(false);
-				channelList.add(channel);
-			}
+//			 for (int i = 0; i < channelSize; i++) {
+			ChannelFuture future = bootstrap.connect();
+			channel = future.awaitUninterruptibly().getChannel();
+			channel.setReadable(false);
+
+//			 channelList.add(channel);
+//			 }
 		}
 
 	}

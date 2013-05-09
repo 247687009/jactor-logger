@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<configuration>	
+<configuration>
 	
+	<appender name="Countout" class="github.com.cp149.CountAppender" />
 	
-	<appender name="jasocket"
-		class="github.com.cp149.netty.client.NettyAppender">
+	<appender name="janetty"
+		class="github.com.cp149.netty.client.JactorNettyAppender">
 		<remoteHost>localhost</remoteHost>
 		<port>4560</port>
 		<appender-ref ref="STDOUT" />
 		<connectatstart>false</connectatstart>
-		<channelSize>2</channelSize>
-	</appender>	
-	<appender name="Countout" class="github.com.cp149.CountAppender" />		
+		<channelSize>10</channelSize>
+	</appender>
+		
+	
+	
+	
 
 	<logger name="github.com.cp149.netty.client" level="DEBUG">
-		<appender-ref ref="jasocket" />
-		<appender-ref ref="Countout" />	
-	</logger>
+		<appender-ref ref="janetty" />
+		<appender-ref ref="Countout" />
+		
+	</logger>	
 	
 	<root level="ERROR">
 		

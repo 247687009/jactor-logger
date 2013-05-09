@@ -11,14 +11,14 @@ public class JactorNettyTest extends NettyTest {
 	public JactorNettyTest() {
 		super();
 		this.testclass="-Dtest=github.com.cp149.netty.client.JactorNettyAppenderTest";
-		configFile = this.getClass().getResource("").getFile() + File.separator + "logbackserver-netty.xml";
+		configFile = this.getClass().getResource("").getFile() + File.separator + "logbackserver-jactor.xml";
 		logfilename = "logs/logback-server-netty"+  new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".log";
 	}
 
 	
 	
 	
-	@Test(timeOut=40000,groups="nettytest")
+	@Test(timeOut=30000,groups="nettytest")
 	public void testNettyclientandserver() throws Exception{
 		super.testNettyclientandserver();
 	}

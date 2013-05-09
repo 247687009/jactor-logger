@@ -18,6 +18,7 @@ public class DisruptorAppenderTest extends AppenderBaseTest {
 		super();
 		LOGBACK_XML = "logback-disruptor.xml";
 		Logfile = "logback-server-disruptor";
+		isNettyappender=true;
 	}
 
 }

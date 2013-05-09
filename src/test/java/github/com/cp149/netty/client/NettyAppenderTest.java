@@ -1,7 +1,10 @@
 package github.com.cp149.netty.client;
 
+import java.util.concurrent.TimeUnit;
+
 import github.com.cp149.AppenderBaseTest;
 
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 /**
@@ -21,8 +24,14 @@ public class NettyAppenderTest extends AppenderBaseTest{
 
 	public NettyAppenderTest() {
 		super();
+		isNettyappender=true;
 		Logfile = "logback-server-";
 	}
+	
+	
+
+	
+	
 	
 
 }

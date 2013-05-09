@@ -1,6 +1,5 @@
 package github.com.cp149;
 
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,6 +34,8 @@ public class AppenderBaseTest {
 	// log per thread
 	public static int loglines = 5000;
 
+	protected boolean isNettyappender = false;
+
 	public AppenderBaseTest() {
 		super();
 	}
@@ -47,44 +48,52 @@ public class AppenderBaseTest {
 			sizeBeforTest = Testutils.countlines(filename);
 		}
 		System.out.println(file.getAbsolutePath());
-		lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-		configureLC(lc, this.getClass().getResource("").getFile() + File.separator + LOGBACK_XML);
-
-		//warmup the logfile
-		for(int i=0;i<WARMLOGSIZE;i++)
+		configureLC();
+		// warmup the logfile
+		for (int i = 0; i < WARMLOGSIZE; i++)
 			logback.debug("warm logsystem");
 		starttime = System.currentTimeMillis();
 
 	}
 
-	private void configureLC(LoggerContext lc, String configFile) throws JoranException {
+	private void configureLC() throws JoranException {
+		lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+		String configFile = this.getClass().getResource("").getFile() + File.separator + LOGBACK_XML;
 		JoranConfigurator configurator = new JoranConfigurator();
 		lc.reset();
 		configurator.setContext(lc);
 		configurator.doConfigure(configFile);
 	}
 
-	@AfterClass(timeOut=20000)
-	public void afteclass() throws Exception {		
-		//get total test run time
+	@AfterClass(timeOut = 20000)
+	public void afteclass() throws Exception {
+		// get total test run time
 		long runtime = System.currentTimeMillis() - starttime;
-		System.out.println( this.getClass().getSimpleName()+" thread run over time=" + runtime);
-		//get total log 
-		int expertlines = 100 * loglines + WARMLOGSIZE;
-		while(CountAppender.count.intValue()<expertlines){
+		System.out.println(this.getClass().getSimpleName() + " thread run over time=" + runtime);
+		int expectlines = 100 * loglines + WARMLOGSIZE;
+		// get total log
+
+		while (CountAppender.count.intValue() < expectlines) {
 			TimeUnit.MILLISECONDS.sleep(300);
-			System.out.println( this.getClass().getSimpleName()+"current lines time="  + CountAppender.count);	
+			System.out.println(this.getClass().getSimpleName() + "current lines time=" + CountAppender.count);
 		}
-		//get the write time
-		System.out.println( this.getClass().getSimpleName()+" total  time=" + (System.currentTimeMillis() - starttime));
-		int fileline = Testutils.countlines(filename) -sizeBeforTest;
-		Assert.assertEquals(fileline, expertlines);
-//		while(fileline<expertlines){
-//			TimeUnit.MILLISECONDS.sleep(500);
-//			System.out.println( this.getClass().getSimpleName()+"current logfile lines time="  + fileline);
-//			fileline = Testutils.countlines(filename) -sizeBeforTest;
-//		}
-		
+		// get the write time
+		System.out.println(this.getClass().getSimpleName() + " total  time=" + (System.currentTimeMillis() - starttime) + " total lines=" + expectlines);
+
+		if (!isNettyappender) {
+			int fileline = Testutils.countlines(filename) - sizeBeforTest;
+			Assert.assertEquals(fileline, expectlines);
+		} else {
+//			TimeUnit.SECONDS.sleep(4);
+//			int fileline = Testutils.countlines(filename) - sizeBeforTest;
+//			while (fileline < expectlines) {
+//				TimeUnit.MILLISECONDS.sleep(500);
+//				System.out.println(this.getClass().getSimpleName() + " current logfile lines time=" + fileline);
+//				fileline = Testutils.countlines(filename) - sizeBeforTest;
+//			}
+//			// get the write time
+//			System.out.println(this.getClass().getSimpleName() + " total  timefor server=" + (System.currentTimeMillis() - starttime) + " total lines=" + expectlines);
+		}
 
 	}
 }
