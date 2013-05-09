@@ -6,8 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import javax.swing.Box.Filler;
-
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -51,9 +49,8 @@ public class AppenderBaseTest {
 		System.out.println(file.getAbsolutePath());
 		lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 		configureLC(lc, this.getClass().getResource("").getFile() + File.separator + LOGBACK_XML);
-		// test log is ok
-//		logback.debug("init config" + LOGBACK_XML);
-//		TimeUnit.SECONDS.sleep(5);
+
+		//warmup the logfile
 		for(int i=0;i<WARMLOGSIZE;i++)
 			logback.debug("warm logsystem");
 		starttime = System.currentTimeMillis();
@@ -69,16 +66,20 @@ public class AppenderBaseTest {
 
 	@AfterClass(timeOut=20000)
 	public void afteclass() throws Exception {		
+		//get total test run time
 		long runtime = System.currentTimeMillis() - starttime;
-		System.out.println( this.getClass().getSimpleName()+" thread run over time=" + runtime);	
-		while(CountAppender.count.intValue()<100 * loglines + WARMLOGSIZE){
+		System.out.println( this.getClass().getSimpleName()+" thread run over time=" + runtime);
+		//get total log 
+		int expertlines = 100 * loglines + WARMLOGSIZE;
+		while(CountAppender.count.intValue()<expertlines){
 			TimeUnit.MILLISECONDS.sleep(300);
 			System.out.println( this.getClass().getSimpleName()+"current lines time="  + CountAppender.count);	
 		}
+		//get the write time
 		System.out.println( this.getClass().getSimpleName()+" total  time=" + (System.currentTimeMillis() - starttime));
 		int fileline = Testutils.countlines(filename) -sizeBeforTest;
-		Assert.assertEquals(fileline, 100 * loglines + WARMLOGSIZE);
-//		while(fileline<100 * loglines + WARMLOGSIZE){
+		Assert.assertEquals(fileline, expertlines);
+//		while(fileline<expertlines){
 //			TimeUnit.MILLISECONDS.sleep(500);
 //			System.out.println( this.getClass().getSimpleName()+"current logfile lines time="  + fileline);
 //			fileline = Testutils.countlines(filename) -sizeBeforTest;

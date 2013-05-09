@@ -23,4 +23,9 @@ public class JactorAppenderTest extends AppenderBaseTest
 
 	}
 
+	public JactorAppenderTest() {
+		super();
+		Logfile="logback-jactor-";
+	}
+
 }

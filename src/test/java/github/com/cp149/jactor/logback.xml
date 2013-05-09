@@ -13,7 +13,7 @@
 	<appender name="RollingFile"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">	
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>logs/logback-%d{yyyy-MM-dd}.log</fileNamePattern>
+			<fileNamePattern>logs/logback-jactor-%d{yyyy-MM-dd}.log</fileNamePattern>
 			<maxHistory>10</maxHistory>
 		</rollingPolicy>
 				

@@ -13,4 +13,10 @@ public class DisruptorTest extends AppenderBaseTest {
 
 	}
 
+	public DisruptorTest() {
+		super();
+		this.Logfile="logback-disruptor-";
+	}
+	
+
 }

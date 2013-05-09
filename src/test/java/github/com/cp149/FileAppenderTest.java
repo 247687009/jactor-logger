@@ -17,6 +17,7 @@ public class FileAppenderTest extends AppenderBaseTest
 	public FileAppenderTest() {
 		super();
 		 LOGBACK_XML = "logback-filedemo.xml";
+		 Logfile="logback-file-";
 	}
 
 
