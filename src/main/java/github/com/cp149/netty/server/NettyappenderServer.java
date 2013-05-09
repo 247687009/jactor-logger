@@ -76,6 +76,8 @@ public class NettyappenderServer {
 		bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
 		final ExecutionHandler executionHandler = new ExecutionHandler(
 	             new OrderedMemoryAwareThreadPoolExecutor(16, 1048576, 1048576));
+		bootstrap.setOption("tcpNoDelay", true);
+		bootstrap.setOption("keepAlive", true);
 		bootstrap.setOption("writeBufferHighWaterMark", 10 * 64 * 1024);
 		bootstrap.setOption("sendBufferSize", 1048576);
 		bootstrap.setOption("receiveBufferSize", 1048576);
