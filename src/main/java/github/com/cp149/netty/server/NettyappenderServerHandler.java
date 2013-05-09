@@ -76,6 +76,7 @@ public class NettyappenderServerHandler extends SimpleChannelHandler {
 		Logger remoteLogger = lc.getLogger(event.getLoggerName());
 		// apply the logger-level filter
 		if (remoteLogger.isEnabledFor(event.getLevel())) {
+			event.getCallerData();
 			// finally log the event as if was generated locally
 			remoteLogger.callAppenders(event);
 		}

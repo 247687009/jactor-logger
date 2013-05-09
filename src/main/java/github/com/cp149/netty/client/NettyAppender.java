@@ -20,6 +20,8 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.handler.codec.marshalling.DefaultMarshallerProvider;
 import org.jboss.netty.handler.codec.marshalling.MarshallerProvider;
 import org.jboss.netty.handler.codec.marshalling.MarshallingEncoder;
+import org.jboss.netty.handler.execution.ExecutionHandler;
+import org.jboss.netty.handler.execution.OrderedMemoryAwareThreadPoolExecutor;
 import org.jboss.netty.util.HashedWheelTimer;
 import org.jboss.netty.util.Timer;
 
@@ -38,11 +40,10 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 
 	int channelid = 0;
 
-	
 	protected Channel getChannel() {
 		if (channelid >= channelSize)
 			channelid = 0;
-		return channelList.get(channelid++);		
+		return channelList.get(channelid++);
 	}
 
 	@Override
@@ -50,11 +51,11 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 		try {
 			if (isStarted()) {
 				// if not start then start bootstrap
-				if ( connectatstart==false &&  bootstrap == null)
+				if (connectatstart == false && bootstrap == null)
 					connect(address, port);
-				// eventObject.prepareForDeferredProcessing();
-
-				// eventObject.getCallerData();
+//				 eventObject.prepareForDeferredProcessing();
+//
+//				 eventObject.getCallerData();
 				// }
 				Serializable serEvent = getPST().transform(eventObject);
 				// MyLoggingEventVO serEvent = new
@@ -116,6 +117,9 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 			bootstrap.setOption("tcpNoDelay", true);
 			bootstrap.setOption("keepAlive", true);
 			bootstrap.setOption("remoteAddress", new InetSocketAddress(address, port));
+			final ExecutionHandler executionHandler =  
+			        new ExecutionHandler(  
+			                new OrderedMemoryAwareThreadPoolExecutor(16, 1048576, 1048576));
 			bootstrap.setOption("writeBufferHighWaterMark", 10 * 64 * 1024);
 			bootstrap.setOption("sendBufferSize", 1048576);
 			bootstrap.setOption("receiveBufferSize", 1048576);
@@ -125,7 +129,7 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 
 				public ChannelPipeline getPipeline() throws Exception {
 
-					return Channels.pipeline(new MarshallingEncoder(createProvider()), new AppenderClientHandler(NettyAppender.this, bootstrap, timer, reconnectionDelay));
+					return Channels.pipeline(executionHandler,new MarshallingEncoder(createProvider()), new AppenderClientHandler(NettyAppender.this, bootstrap, timer, reconnectionDelay));
 				}
 			});
 

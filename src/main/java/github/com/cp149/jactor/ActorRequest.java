@@ -1,4 +1,4 @@
-package github.com.cp149;
+package github.com.cp149.jactor;
 
 import org.agilewiki.jactor.Actor;
 import org.agilewiki.jactor.RP;

@@ -29,15 +29,10 @@
 		<remoteHost>localhost</remoteHost>
 		<port>4560</port>
 		<appender-ref ref="STDOUT" />
-		<connectatstart>true</connectatstart>
-		<channelSize>10</channelSize>
+		<connectatstart>false</connectatstart>
+		<channelSize>5</channelSize>
 	</appender>	
-	<appender name="Countout" class="github.com.cp149.CountAppender" />
-	<appender name="jactorplusnetty" class="github.com.cp149.disruptor.DisruptorAppender">
-		<appender-ref ref="jasocket" />	
-		<appender-ref ref="Countout" />			
-	</appender>
-	
+	<appender name="Countout" class="github.com.cp149.CountAppender" />	
 	
 	
 

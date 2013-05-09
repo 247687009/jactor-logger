@@ -33,6 +33,6 @@
 	
 	
 	<root level="DEBUG">		
-		<appender-ref ref="RollingFile" />	
+		<appender-ref ref="ASYNCFile" />	
 	</root>
 </configuration>

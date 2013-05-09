@@ -1,4 +1,6 @@
-package github.com.cp149;
+package github.com.cp149.jactor;
+
+import github.com.cp149.AppenderBaseTest;
 
 import org.testng.annotations.Test;
 

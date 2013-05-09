@@ -54,7 +54,7 @@ public class NettyTest {
 		while(totallogs<experttotal){
 			totallogs=CountAppender.count.intValue();
 			TimeUnit.SECONDS.sleep(2);
-			System.out.println(this.getClass().getSimpleName()+"current lines ="+totallogs+" expert "+experttotal);
+			System.out.println(this.getClass().getSimpleName()+" current lines ="+totallogs+" expert "+experttotal);
 			
 		}	
 		System.out.println(Thread.currentThread().getStackTrace()[1]+"last total="+totallogs);

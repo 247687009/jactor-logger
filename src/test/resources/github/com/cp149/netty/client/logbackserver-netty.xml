@@ -15,7 +15,7 @@
 			
 		</encoder>
 	</appender>
-	<appender name="ASYNC" class="github.com.cp149.JactorAppender">
+	<appender name="ASYNC" class="github.com.cp149.jactor.JactorAppender">
 		<threadSize>1</threadSize>
 		<appender-ref ref="Countout" />
 		<appender-ref ref="RollingFile" />

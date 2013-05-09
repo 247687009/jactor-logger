@@ -1,5 +1,6 @@
 package github.com.cp149;
 
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -69,12 +70,12 @@ public class AppenderBaseTest {
 	@AfterClass(timeOut=20000)
 	public void afteclass() throws Exception {		
 		long runtime = System.currentTimeMillis() - starttime;
-		System.out.println( this.getClass().getSimpleName()+"run time=" + runtime);	
+		System.out.println( this.getClass().getSimpleName()+" thread run over time=" + runtime);	
 		while(CountAppender.count.intValue()<100 * loglines + WARMLOGSIZE){
 			TimeUnit.MILLISECONDS.sleep(300);
 			System.out.println( this.getClass().getSimpleName()+"current lines time="  + CountAppender.count);	
 		}
-		System.out.println( this.getClass().getSimpleName()+"total  time=" + (System.currentTimeMillis() - starttime));
+		System.out.println( this.getClass().getSimpleName()+" total  time=" + (System.currentTimeMillis() - starttime));
 		int fileline = Testutils.countlines(filename) -sizeBeforTest;
 		Assert.assertEquals(fileline, 100 * loglines + WARMLOGSIZE);
 //		while(fileline<100 * loglines + WARMLOGSIZE){

@@ -1,4 +1,6 @@
-package github.com.cp149;
+package github.com.cp149.jactor;
+
+import github.com.cp149.BaseAppender;
 
 import java.util.Iterator;
 
@@ -14,42 +16,13 @@ import ch.qos.logback.core.spi.AppenderAttachableImpl;
 /**
  * @author cp149 jactor appender
  */
-public class JactorAppender extends UnsynchronizedAppenderBase<ILoggingEvent> implements AppenderAttachable<ILoggingEvent> {
+public class JactorAppender extends BaseAppender {
 
-	AppenderAttachableImpl<ILoggingEvent> aai = new AppenderAttachableImpl<ILoggingEvent>();
+	
 	private int threadSize = 8;
 	private MailboxFactory mailboxFactory;
 
-	public void addAppender(Appender<ILoggingEvent> newAppender) {
-
-		aai.addAppender(newAppender);
-
-	}
-
-	public Iterator<Appender<ILoggingEvent>> iteratorForAppenders() {
-		return aai.iteratorForAppenders();
-	}
-
-	public Appender<ILoggingEvent> getAppender(String name) {
-		return aai.getAppender(name);
-	}
-
-	public boolean isAttached(Appender<ILoggingEvent> appender) {
-		return aai.isAttached(appender);
-	}
-
-	public void detachAndStopAllAppenders() {
-		aai.detachAndStopAllAppenders();
-
-	}
-
-	public boolean detachAppender(Appender<ILoggingEvent> appender) {
-		return aai.detachAppender(appender);
-	}
-
-	public boolean detachAppender(String name) {
-		return aai.detachAppender(name);
-	}
+	
 
 	@Override
 	public void start() {

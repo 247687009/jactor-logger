@@ -31,6 +31,8 @@ import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.handler.codec.marshalling.DefaultUnmarshallerProvider;
 import org.jboss.netty.handler.codec.marshalling.MarshallingDecoder;
 import org.jboss.netty.handler.codec.marshalling.UnmarshallerProvider;
+import org.jboss.netty.handler.execution.ExecutionHandler;
+import org.jboss.netty.handler.execution.OrderedMemoryAwareThreadPoolExecutor;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.LoggerContext;
@@ -72,12 +74,16 @@ public class NettyappenderServer {
 
 	public void run() {
 		bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
-//		final ExecutionHandler executionHandler = new ExecutionHandler(
-//	             new OrderedMemoryAwareThreadPoolExecutor(16, 1048576, 1048576));
+		final ExecutionHandler executionHandler = new ExecutionHandler(
+	             new OrderedMemoryAwareThreadPoolExecutor(16, 1048576, 1048576));
+		bootstrap.setOption("writeBufferHighWaterMark", 10 * 64 * 1024);
+		bootstrap.setOption("sendBufferSize", 1048576);
+		bootstrap.setOption("receiveBufferSize", 1048576);
+
 		// Set up the pipeline factory.
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 			public ChannelPipeline getPipeline() throws Exception {
-				return Channels.pipeline(new MarshallingDecoder(createProvider(createMarshallerFactory(), createMarshallingConfig())),  new NettyappenderServerHandler());
+				return Channels.pipeline(executionHandler,new MarshallingDecoder(createProvider(createMarshallerFactory(), createMarshallingConfig())),  new NettyappenderServerHandler());
 			}
 		});
 		LoggerFactory.getLogger(this.getClass()).info("start server at" + port);
