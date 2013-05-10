@@ -17,7 +17,7 @@ public class MarshallUtil {
 	public static MarshallingConfiguration createMarshallingConfig() {
 		// Create a configuration
 		final MarshallingConfiguration configuration = new MarshallingConfiguration();
-		configuration.setVersion(5);
+//		configuration.setVersion(5);
 		return configuration;
 	}
 

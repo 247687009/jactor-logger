@@ -40,7 +40,7 @@ public class AppenderBaseTest {
 		super();
 	}
 
-	@BeforeClass(alwaysRun = true)
+	@BeforeClass(alwaysRun = true,timeOut=20000)
 	public void initLogconfig() throws Exception {
 		filename = "logs/" + Logfile + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".log";
 		File file = new File(filename);
@@ -52,6 +52,7 @@ public class AppenderBaseTest {
 		// warmup the logfile
 		for (int i = 0; i < WARMLOGSIZE; i++)
 			logback.debug("warm logsystem");
+		while(CountAppender.count.intValue()!= WARMLOGSIZE)TimeUnit.MILLISECONDS.sleep(500);		
 		starttime = System.currentTimeMillis();
 
 	}
@@ -85,7 +86,7 @@ public class AppenderBaseTest {
 			int fileline = Testutils.countlines(filename) - sizeBeforTest;
 			Assert.assertEquals(fileline, expectlines);
 		} else {
-			TimeUnit.SECONDS.sleep(8);
+			TimeUnit.SECONDS.sleep(22-(System.currentTimeMillis() - starttime)/1000);
 			// int fileline = Testutils.countlines(filename) - sizeBeforTest;
 			// while (fileline < expectlines) {
 			// TimeUnit.MILLISECONDS.sleep(500);

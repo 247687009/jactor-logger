@@ -20,8 +20,9 @@
 		<appender-ref ref="Countout" />
 		<appender-ref ref="RollingFile" />
 	</appender>
-
-	<root level="DEBUG">
+	<logger name="github.com.cp149" level="DEBUG">
 		<appender-ref ref="ASYNC" />
+	</logger>
+	<root level="ERROR">		
 	</root>
 </configuration>

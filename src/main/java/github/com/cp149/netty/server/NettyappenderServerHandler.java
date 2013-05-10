@@ -19,8 +19,8 @@ public class NettyappenderServerHandler extends ChannelInboundMessageHandlerAdap
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) {
 		// Close the connection when an exception is raised.
-		if (!(e.getCause() instanceof IOException))
-			logger.warn("Unexpected exception from downstream.", e.getCause());
+		if (!(e instanceof IOException))
+			logger.warn("Unexpected exception from downstream.", e);
 
 		ctx.close();
 	}

@@ -55,8 +55,8 @@ public class NettyappenderServer {
 
 	private final int port;
 	private ServerBootstrap bootstrap;
-	EventLoopGroup bossGroup = new NioEventLoopGroup(8);
-	EventLoopGroup workerGroup = new NioEventLoopGroup(8);
+	EventLoopGroup bossGroup = new NioEventLoopGroup();
+	EventLoopGroup workerGroup = new NioEventLoopGroup();
 
 	public ServerBootstrap getBootstrap() {
 		return bootstrap;
@@ -73,7 +73,7 @@ public class NettyappenderServer {
 			final EventExecutorGroup executor = new DefaultEventExecutorGroup(8);
 
 			bootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).option(ChannelOption.SO_KEEPALIVE, true)
-					.option(ChannelOption.TCP_NODELAY, true).option(ChannelOption.SO_RCVBUF, 43690 * 100)
+					.option(ChannelOption.TCP_NODELAY, true).option(ChannelOption.SO_RCVBUF, 43690)
 					.option(ChannelOption.SO_SNDBUF, 2048).childHandler(new ChannelInitializer<SocketChannel>() {
 						@Override
 						public void initChannel(SocketChannel ch) throws Exception {
@@ -83,15 +83,8 @@ public class NettyappenderServer {
 						}
 					});
 
-			bootstrap.bind(port);
-			// Bind and start to accept incoming connections.
-			// ChannelFuture f = bootstrap.bind(port).sync();
-
-			// Wait until the server socket is closed.
-			// In this example, this does not happen, but you can do that to
-			// gracefully
-			// shut down your server.
-			// f.channel().closeFuture().sync();
+			bootstrap.bind(port).sync();
+			
 		} finally {
 
 		}
@@ -116,10 +109,11 @@ public class NettyappenderServer {
 		// new NettyappenderServerHandler());
 		// }
 		// });
-		// LoggerFactory.getLogger(this.getClass()).info("start server at" +
-		// port);
+		
 		// // Bind and start to accept incoming connections.
 		// bootstrap.bind(new InetSocketAddress(port));
+		 LoggerFactory.getLogger(this.getClass()).info("start server at" +
+				 port);
 	}
 
 	public void shutdown() {

@@ -28,9 +28,9 @@ public class NettyTest {
 	protected String testclass = "-Dtest=github.com.cp149.netty.client.NettyAppenderTest";
 	protected String configFile = this.getClass().getResource("").getFile() + File.separator + "logbackserver.xml";
 	protected String logfilename = "logs/logback-server-" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".log";
-	protected final int expecttotal = AppenderBaseTest.loglines * 100 + AppenderBaseTest.WARMLOGSIZE + 1;
+	protected  int expecttotal = AppenderBaseTest.loglines * 100 + AppenderBaseTest.WARMLOGSIZE+1;
 	private NettyappenderServer nettyappenderServer;
-	protected int fileline=0;
+	
 
 	/**
 	 * @throws Exception
@@ -46,8 +46,8 @@ public class NettyTest {
 		NettyappenderServer.configureLC(lc, configFile);
 		// start netty server
 		nettyappenderServer = new NettyappenderServer(4560);
-		nettyappenderServer.run();
-		fileline=Testutils.countlines(logfilename);
+		nettyappenderServer.run();	
+		
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class NettyTest {
 		// CountAppender's count should equal expect total
 		Assert.assertEquals(CountAppender.count.intValue(), expecttotal);
 		//
-		Assert.assertEquals(Testutils.countlines(logfilename), expecttotal+fileline);
+		Assert.assertEquals(Testutils.countlines(logfilename), expecttotal);
 
 	}
 

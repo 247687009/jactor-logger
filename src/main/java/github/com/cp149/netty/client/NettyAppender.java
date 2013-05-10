@@ -103,9 +103,9 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 	@Override
 	public synchronized void connect(InetAddress address, int port) {
 		if (bootstrap == null) {
-			final EventExecutorGroup executor = new DefaultEventExecutorGroup(8);
+			final EventExecutorGroup executor = new DefaultEventExecutorGroup(channelSize);
 			bootstrap = new Bootstrap();
-			group = new NioEventLoopGroup();
+			group = new NioEventLoopGroup(channelSize);
 			
 			bootstrap.group(group).channel(NioSocketChannel.class).option(ChannelOption.TCP_NODELAY, true)
 			.option(ChannelOption.SO_KEEPALIVE, true).option(ChannelOption.SO_RCVBUF, 20).option(ChannelOption.SO_SNDBUF, 46390)
@@ -143,9 +143,16 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 			// });
 			channelList = new Channel[channelSize];
 			for (int i = 0; i < channelSize; i++) {
-				ChannelFuture future = bootstrap.connect();
-				channel = future.channel();
-				channelList[i] = channel;
+				ChannelFuture future;
+				try {
+					future = bootstrap.connect().sync();
+					channel = future.channel();
+					channelList[i] = channel;
+				} catch (InterruptedException e) {
+					
+					addError(e.getMessage());
+				}
+				
 			}
 		}
 
