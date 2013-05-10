@@ -10,7 +10,6 @@ public class DisruptorAppenderTest extends AppenderBaseTest {
 	public void testLog() throws Exception {
 		for (int i = 0; i < loglines; i++)
 			logback.debug("logback test disruptro {} at thread {}", i, Thread.currentThread().getId());
-		
 
 	}
 
@@ -18,7 +17,7 @@ public class DisruptorAppenderTest extends AppenderBaseTest {
 		super();
 		LOGBACK_XML = "logback-disruptor.xml";
 		Logfile = "logback-server-disruptor";
-		isNettyappender=true;
+		isNettyappender = true;
 	}
 
 }

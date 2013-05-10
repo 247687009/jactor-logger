@@ -12,11 +12,11 @@ import ch.qos.logback.core.spi.AppenderAttachableImpl;
 import ch.qos.logback.core.spi.PreSerializationTransformer;
 
 /**
- * @author cp149
- *base appender for network,if network is not available,the log can  write to a local appender 
+ * @author cp149 base appender for network,if network is not available,the log
+ *         can write to a local appender
  * @param <E>
  */
-public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> implements AppenderAttachable<E>{
+public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> implements AppenderAttachable<E> {
 
 	/**
 	 * The default port number of remote logging server (4560).
@@ -42,9 +42,9 @@ public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> i
 	protected int counter = 0;
 	AppenderAttachableImpl<E> aai = new AppenderAttachableImpl<E>();
 	int appenderCount = 0;
-	//indicate if connect at start,witch will slow down startup
-	protected boolean connectatstart =false;
-	
+	// indicate if connect at start,witch will slow down startup
+	protected boolean connectatstart = false;
+
 	public void addAppender(Appender<E> newAppender) {
 		if (appenderCount == 0) {
 			appenderCount++;
@@ -81,6 +81,7 @@ public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> i
 	public boolean detachAppender(String name) {
 		return aai.detachAppender(name);
 	}
+
 	/**
 	 * Start this appender.
 	 */
@@ -88,15 +89,17 @@ public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> i
 		int errorCount = 0;
 		if (port == 0) {
 			errorCount++;
-			addError("No port was configured for appender" + name + " For more information, please visit https://github.com/cp149/jactor-logger");
+			addError("No port was configured for appender" + name
+					+ " For more information, please visit https://github.com/cp149/jactor-logger");
 		}
 
 		if (address == null) {
 			errorCount++;
-			addError("No remote address was configured for appender" + name + " For more information, please visit https://github.com/cp149/jactor-logger");
+			addError("No remote address was configured for appender" + name
+					+ " For more information, please visit https://github.com/cp149/jactor-logger");
 		}
 
-		if(connectatstart){
+		if (connectatstart) {
 			cleanUp();
 			connect(address, port);
 		}
@@ -120,7 +123,8 @@ public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> i
 
 		this.started = false;
 		Iterator<Appender<E>> appender = aai.iteratorForAppenders();
-		if(appender.hasNext())appender.next().stop();
+		if (appender.hasNext())
+			appender.next().stop();
 		cleanUp();
 	}
 
@@ -130,7 +134,7 @@ public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> i
 	 */
 	public abstract void cleanUp();
 
-	public abstract  void  connect(InetAddress address, int port);
+	public abstract void connect(InetAddress address, int port);
 
 	/**
 	 * Gets the default {@link SocketFactory} for the platform.
@@ -148,7 +152,8 @@ public abstract class NetAppenderBase<E> extends UnsynchronizedAppenderBase<E> i
 			return;
 
 		if (address == null) {
-			addError("No remote host is set for SocketAppender named \"" + this.name + "\". For more information, please visit https://github.com/cp149/jactor-logger");
+			addError("No remote host is set for SocketAppender named \"" + this.name
+					+ "\". For more information, please visit https://github.com/cp149/jactor-logger");
 			return;
 		}
 

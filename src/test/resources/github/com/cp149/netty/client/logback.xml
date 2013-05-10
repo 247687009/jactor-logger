@@ -15,7 +15,7 @@
 		<port>4560</port>
 		<appender-ref ref="STDOUT" />
 		<connectatstart>true</connectatstart>
-		<channelSize>1</channelSize>
+		<channelSize>2</channelSize>
 	</appender>	
 	<appender name="Countout" class="github.com.cp149.CountAppender" />		
 

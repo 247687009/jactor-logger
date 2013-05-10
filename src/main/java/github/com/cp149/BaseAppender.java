@@ -11,6 +11,7 @@ import ch.qos.logback.core.spi.AppenderAttachableImpl;
 public abstract class BaseAppender extends UnsynchronizedAppenderBase<ILoggingEvent> implements AppenderAttachable<ILoggingEvent> {
 	protected AppenderAttachableImpl<ILoggingEvent> aai = new AppenderAttachableImpl<ILoggingEvent>();
 	protected boolean includeCallerData = true;
+
 	public void addAppender(Appender<ILoggingEvent> newAppender) {
 
 		aai.addAppender(newAppender);
@@ -41,6 +42,7 @@ public abstract class BaseAppender extends UnsynchronizedAppenderBase<ILoggingEv
 	public boolean detachAppender(String name) {
 		return aai.detachAppender(name);
 	}
+
 	public boolean isIncludeCallerData() {
 		return includeCallerData;
 	}

@@ -78,21 +78,25 @@ public class AppenderBaseTest {
 			System.out.println(this.getClass().getSimpleName() + "current lines time=" + CountAppender.count);
 		}
 		// get the write time
-		System.out.println(this.getClass().getSimpleName() + " total  time=" + (System.currentTimeMillis() - starttime) + " total lines=" + expectlines);
+		System.out.println(this.getClass().getSimpleName() + " total  time=" + (System.currentTimeMillis() - starttime) + " total lines="
+				+ expectlines);
 
 		if (!isNettyappender) {
 			int fileline = Testutils.countlines(filename) - sizeBeforTest;
 			Assert.assertEquals(fileline, expectlines);
 		} else {
-			TimeUnit.SECONDS.sleep(5);
-//			int fileline = Testutils.countlines(filename) - sizeBeforTest;
-//			while (fileline < expectlines) {
-//				TimeUnit.MILLISECONDS.sleep(500);
-//				System.out.println(this.getClass().getSimpleName() + " current logfile lines time=" + fileline);
-//				fileline = Testutils.countlines(filename) - sizeBeforTest;
-//			}
-//			// get the write time
-//			System.out.println(this.getClass().getSimpleName() + " total  timefor server=" + (System.currentTimeMillis() - starttime) + " total lines=" + expectlines);
+			TimeUnit.SECONDS.sleep(8);
+			// int fileline = Testutils.countlines(filename) - sizeBeforTest;
+			// while (fileline < expectlines) {
+			// TimeUnit.MILLISECONDS.sleep(500);
+			// System.out.println(this.getClass().getSimpleName() +
+			// " current logfile lines time=" + fileline);
+			// fileline = Testutils.countlines(filename) - sizeBeforTest;
+			// }
+			// // get the write time
+			// System.out.println(this.getClass().getSimpleName() +
+			// " total  timefor server=" + (System.currentTimeMillis() -
+			// starttime) + " total lines=" + expectlines);
 		}
 
 	}

@@ -15,25 +15,33 @@
  */
 package github.com.cp149.netty.server;
 
-import java.io.File;
-import java.net.InetSocketAddress;
+import io.netty.bootstrap.Bootstrap;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioDatagramChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.udt.nio.NioUdtByteAcceptorChannel;
+import io.netty.channel.udt.nio.NioUdtMessageAcceptorChannel;
+import io.netty.handler.codec.marshalling.DefaultUnmarshallerProvider;
+import io.netty.handler.codec.marshalling.MarshallingDecoder;
+import io.netty.handler.codec.marshalling.ThreadLocalUnmarshallerProvider;
+import io.netty.handler.codec.marshalling.UnmarshallerProvider;
+import io.netty.util.concurrent.DefaultEventExecutorGroup;
+import io.netty.util.concurrent.EventExecutor;
+import io.netty.util.concurrent.EventExecutorGroup;
+import io.netty.util.concurrent.ImmediateExecutor;
 
-import java.util.concurrent.Executors;
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import org.jboss.marshalling.MarshallerFactory;
 import org.jboss.marshalling.Marshalling;
 import org.jboss.marshalling.MarshallingConfiguration;
-import org.jboss.netty.bootstrap.ServerBootstrap;
-import org.jboss.netty.channel.ChannelPipeline;
-import org.jboss.netty.channel.ChannelPipelineFactory;
-import org.jboss.netty.channel.Channels;
-import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
-import org.jboss.netty.handler.codec.marshalling.DefaultUnmarshallerProvider;
-import org.jboss.netty.handler.codec.marshalling.MarshallingDecoder;
-import org.jboss.netty.handler.codec.marshalling.UnmarshallerProvider;
-import org.jboss.netty.handler.execution.ExecutionHandler;
-import org.jboss.netty.handler.execution.OrderedMemoryAwareThreadPoolExecutor;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.LoggerContext;
@@ -47,6 +55,8 @@ public class NettyappenderServer {
 
 	private final int port;
 	private ServerBootstrap bootstrap;
+	EventLoopGroup bossGroup = new NioEventLoopGroup(8);
+	EventLoopGroup workerGroup = new NioEventLoopGroup(8);
 
 	public ServerBootstrap getBootstrap() {
 		return bootstrap;
@@ -56,46 +66,68 @@ public class NettyappenderServer {
 		this.port = port;
 	}
 
-	protected MarshallerFactory createMarshallerFactory() {
-		return Marshalling.getProvidedMarshallerFactory("serial");
-	}
+	public void run() throws Exception {
 
-	protected MarshallingConfiguration createMarshallingConfig() {
-		// Create a configuration
-		final MarshallingConfiguration configuration = new MarshallingConfiguration();
-		configuration.setVersion(5);
-		return configuration;
-	}
+		try {			
+			bootstrap = new ServerBootstrap();
+			final EventExecutorGroup executor = new DefaultEventExecutorGroup(8);
 
-	protected UnmarshallerProvider createProvider(MarshallerFactory factory, MarshallingConfiguration config) {
-		return new DefaultUnmarshallerProvider(factory, config);
+			bootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).option(ChannelOption.SO_KEEPALIVE, true)
+					.option(ChannelOption.TCP_NODELAY, true).option(ChannelOption.SO_RCVBUF, 43690 * 100)
+					.option(ChannelOption.SO_SNDBUF, 2048).childHandler(new ChannelInitializer<SocketChannel>() {
+						@Override
+						public void initChannel(SocketChannel ch) throws Exception {
+							ch.pipeline().addLast(new MarshallingDecoder(MarshallUtil.createUnProvider()));
+							ch.pipeline().addLast(executor, new NettyappenderServerHandler());
+							//
+						}
+					});
 
-	}
+			bootstrap.bind(port);
+			// Bind and start to accept incoming connections.
+			// ChannelFuture f = bootstrap.bind(port).sync();
 
-	public void run() {
-		bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(Executors.newFixedThreadPool(4), Executors.newFixedThreadPool(4)));
-		final ExecutionHandler executionHandler = new ExecutionHandler(new OrderedMemoryAwareThreadPoolExecutor(4, 1024 * 1024 * 300, 1024 * 1024 * 300 * 2));
-		bootstrap.setOption("tcpNoDelay", true);
-		bootstrap.setOption("keepAlive", true);
-		// bootstrap.setOption("writeBufferHighWaterMark", 100 * 64 * 1024);
-		// bootstrap.setOption("sendBufferSize", 1048576);
-		bootstrap.setOption("receiveBufferSize", 1048576*10 );
+			// Wait until the server socket is closed.
+			// In this example, this does not happen, but you can do that to
+			// gracefully
+			// shut down your server.
+			// f.channel().closeFuture().sync();
+		} finally {
 
-		// Set up the pipeline factory.
-		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
-			public ChannelPipeline getPipeline() throws Exception {
-				return Channels.pipeline(executionHandler, new MarshallingDecoder(createProvider(createMarshallerFactory(), createMarshallingConfig())),
-						new NettyappenderServerHandler());
-			}
-		});
-		LoggerFactory.getLogger(this.getClass()).info("start server at" + port);
-		// Bind and start to accept incoming connections.
-		bootstrap.bind(new InetSocketAddress(port));
+		}
+		// bootstrap = new ServerBootstrap(new
+		// NioServerSocketChannelFactory(Executors.newFixedThreadPool(4),
+		// Executors.newFixedThreadPool(4)));
+		// final ExecutionHandler executionHandler = new ExecutionHandler(new
+		// OrderedMemoryAwareThreadPoolExecutor(4, 1024 * 1024 * 300, 1024 *
+		// 1024 * 300 * 2));
+		// bootstrap.setOption("tcpNoDelay", true);
+		// bootstrap.setOption("keepAlive", true);
+		// // bootstrap.setOption("writeBufferHighWaterMark", 100 * 64 * 1024);
+		// // bootstrap.setOption("sendBufferSize", 1048576);
+		// bootstrap.setOption("receiveBufferSize", 1048576*10 );
+		//
+		// // Set up the pipeline factory.
+		// bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
+		// public ChannelPipeline getPipeline() throws Exception {
+		// return Channels.pipeline(executionHandler, new
+		// MarshallingDecoder(createProvider(createMarshallerFactory(),
+		// createMarshallingConfig())),
+		// new NettyappenderServerHandler());
+		// }
+		// });
+		// LoggerFactory.getLogger(this.getClass()).info("start server at" +
+		// port);
+		// // Bind and start to accept incoming connections.
+		// bootstrap.bind(new InetSocketAddress(port));
 	}
 
 	public void shutdown() {
-		if (bootstrap != null)
-			bootstrap.shutdown();
+		if (bootstrap != null) {
+			workerGroup.shutdownGracefully();
+			bossGroup.shutdownGracefully();
+
+		}
 	}
 
 	public static void main(String[] args) throws Exception {

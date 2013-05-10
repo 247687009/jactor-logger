@@ -12,11 +12,8 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
  */
 public class JactorAppender extends BaseAppender {
 
-	
 	private int threadSize = 8;
 	private MailboxFactory mailboxFactory;
-
-	
 
 	@Override
 	public void start() {

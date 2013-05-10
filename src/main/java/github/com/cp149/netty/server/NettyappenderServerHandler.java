@@ -1,44 +1,34 @@
 package github.com.cp149.netty.server;
 
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundMessageHandlerAdapter;
+
 import java.io.IOException;
 
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelStateEvent;
-import org.jboss.netty.channel.ExceptionEvent;
-import org.jboss.netty.channel.MessageEvent;
-import org.jboss.netty.channel.SimpleChannelHandler;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.spi.LoggingEventVO;
 
-public class NettyappenderServerHandler extends SimpleChannelHandler {
+public class NettyappenderServerHandler extends ChannelInboundMessageHandlerAdapter<LoggingEventVO> {
 
 	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(NettyappenderServerHandler.class);
 	private static final LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-	
 
-	
-		
-
-	
 	@Override
-	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {		
-		super.channelConnected(ctx, e);
-	
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) {
+		// Close the connection when an exception is raised.
+		if (!(e.getCause() instanceof IOException))
+			logger.warn("Unexpected exception from downstream.", e.getCause());
+
+		ctx.close();
 	}
 
 	@Override
-	public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-		super.channelClosed(ctx, e);
-	
-	}
-
-	@Override
-	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
+	public void messageReceived(ChannelHandlerContext arg0, LoggingEventVO event) throws Exception {
 		// Send back the received message to the remote peer.
-		LoggingEventVO event = ((LoggingEventVO) e.getMessage());
+		// LoggingEventVO event = ((LoggingEventVO) e.getMessage());
 		Logger remoteLogger = lc.getLogger(event.getLoggerName());
 		// apply the logger-level filter
 		if (remoteLogger.isEnabledFor(event.getLevel())) {
@@ -46,18 +36,6 @@ public class NettyappenderServerHandler extends SimpleChannelHandler {
 			// finally log the event as if was generated locally
 			remoteLogger.callAppenders(event);
 		}
-		
-		
-	
 
-	}
-
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
-		// Close the connection when an exception is raised.
-		if (!(e.getCause() instanceof IOException))
-			logger.warn("Unexpected exception from downstream.", e.getCause());
-	
-		e.getChannel().close();
 	}
 }

@@ -2,8 +2,8 @@ package github.com.cp149.disruptor;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
-public class  ValueEvent{
-	
+public class ValueEvent {
+
 	private ILoggingEvent event;
 
 	public ILoggingEvent getEvent() {
@@ -14,7 +14,4 @@ public class  ValueEvent{
 		this.event = event;
 	}
 
-	
-	
-	
 }

@@ -4,18 +4,15 @@ import github.com.cp149.AppenderBaseTest;
 
 import org.testng.annotations.Test;
 
-
-
 /**
- * @author cp149
- *faster logappand by jactor but lost data because system exit too fast
+ * @author cp149 faster logappand by jactor but lost data because system exit
+ *         too fast
  */
-@Test(groups="normaltest")
+@Test(groups = "normaltest")
 public class JactorAppenderTest extends AppenderBaseTest
 
 {
 
-	
 	@Test(invocationCount = 100, threadPoolSize = 30)
 	public void testLog() {
 		for (int i = 0; i < loglines; i++)
@@ -25,7 +22,7 @@ public class JactorAppenderTest extends AppenderBaseTest
 
 	public JactorAppenderTest() {
 		super();
-		Logfile="logback-jactor-";
+		Logfile = "logback-jactor-";
 	}
 
 }

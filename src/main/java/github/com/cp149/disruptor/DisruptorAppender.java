@@ -21,7 +21,6 @@ public class DisruptorAppender extends BaseAppender {
 		}
 	}
 
-	
 	ExecutorService exec = Executors.newFixedThreadPool(1);
 	// Preallocate RingBuffer with 1024 ILoggingEvents
 	Disruptor<ValueEvent> disruptor = new Disruptor<ValueEvent>(DisruptorAppender.EVENT_FACTORY, 1024, exec);

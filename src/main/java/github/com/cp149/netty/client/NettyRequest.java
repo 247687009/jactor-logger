@@ -7,7 +7,6 @@ import org.agilewiki.jactor.RP;
 import org.agilewiki.jactor.lpc.JLPCActor;
 import org.agilewiki.jactor.lpc.Request;
 
-
 public class NettyRequest extends Request<String, NettyActor> {
 
 	public static final NettyRequest req = new NettyRequest();

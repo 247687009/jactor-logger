@@ -30,10 +30,11 @@ public class NettyTest {
 	protected String logfilename = "logs/logback-server-" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".log";
 	protected final int expecttotal = AppenderBaseTest.loglines * 100 + AppenderBaseTest.WARMLOGSIZE + 1;
 	private NettyappenderServer nettyappenderServer;
+	protected int fileline=0;
 
 	/**
 	 * @throws Exception
-	 * do config
+	 *             do config
 	 */
 	@BeforeMethod(alwaysRun = true)
 	public void befortest() throws Exception {
@@ -43,14 +44,15 @@ public class NettyTest {
 			file.delete();
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 		NettyappenderServer.configureLC(lc, configFile);
-		//start netty server
+		// start netty server
 		nettyappenderServer = new NettyappenderServer(4560);
 		nettyappenderServer.run();
+		fileline=Testutils.countlines(logfilename);
 	}
 
 	/**
 	 * @throws Exception
-	 * close nettyserver
+	 *             close nettyserver
 	 */
 	@AfterMethod(alwaysRun = true)
 	public void aftertest() throws Exception {
@@ -59,9 +61,9 @@ public class NettyTest {
 
 	@Test(timeOut = 40000, groups = "nettytest")
 	public void testNettyclientandserver() throws Exception {
-		//run client
+		// run client
 		new MvnCommandexe().executeCommands("mvn.bat", testclass, "test");
-		//check log lines 
+		// check log lines
 		int totallogs = CountAppender.count.intValue();
 
 		while (totallogs < expecttotal) {
@@ -70,10 +72,10 @@ public class NettyTest {
 			System.out.println(this.getClass().getSimpleName() + " current lines =" + totallogs + " expert " + expecttotal);
 		}
 		System.out.println(Thread.currentThread().getStackTrace()[1] + "last total=" + totallogs);
-		//CountAppender's count should equal expect total
+		// CountAppender's count should equal expect total
 		Assert.assertEquals(CountAppender.count.intValue(), expecttotal);
 		//
-		Assert.assertEquals(Testutils.countlines(logfilename), expecttotal);
+		Assert.assertEquals(Testutils.countlines(logfilename), expecttotal+fileline);
 
 	}
 

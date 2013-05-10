@@ -10,18 +10,15 @@ public class LoggerActor extends JLPCActor {
 	private ILoggingEvent event;
 	private AppenderAttachableImpl<ILoggingEvent> attachableImpl;
 
-	
-
 	public LoggerActor(ILoggingEvent event, AppenderAttachableImpl<ILoggingEvent> attachableImpl) {
 		super();
 		this.event = event;
 		this.attachableImpl = attachableImpl;
 	}
 
-	
-	 protected void processRequest(ActorRequest ar, RP rp) throws Exception {
-		 attachableImpl.appendLoopOnAppenders(event);
-	        rp.processResponse(null); //all done
-	  }
+	protected void processRequest(ActorRequest ar, RP rp) throws Exception {
+		attachableImpl.appendLoopOnAppenders(event);
+		rp.processResponse(null); // all done
+	}
 
 }
