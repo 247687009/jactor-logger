@@ -117,9 +117,9 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 			bootstrap.setOption("tcpNoDelay", true);
 			bootstrap.setOption("keepAlive", true);
 			bootstrap.setOption("remoteAddress", new InetSocketAddress(address, port));
-			final ExecutionHandler executionHandler = new ExecutionHandler(new OrderedMemoryAwareThreadPoolExecutor(channelSize, 1024 * 1024, 1024 * 1024));
-			bootstrap.setOption("writeBufferHighWaterMark", 10 * 64 * 1024);
-			bootstrap.setOption("sendBufferSize", 1048576 );
+			final ExecutionHandler executionHandler = new ExecutionHandler(new OrderedMemoryAwareThreadPoolExecutor(channelSize, 1024 * 1024*100, 1024 * 1024*100*channelSize));
+//			bootstrap.setOption("writeBufferHighWaterMark", 10 * 64 * 1024);
+			bootstrap.setOption("sendBufferSize", 1048576*100 );
 
 			// Set up the pipeline factory.
 			bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
@@ -132,7 +132,7 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 			});
 			channelList = new Channel[channelSize];
 			for (int i = 0; i < channelSize; i++) {
-				ChannelFuture future = bootstrap.connect();
+				ChannelFuture future = bootstrap.connect().awaitUninterruptibly();
 				channel = future.getChannel();
 				channel.setReadable(false);
 

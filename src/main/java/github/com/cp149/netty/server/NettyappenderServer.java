@@ -74,12 +74,12 @@ public class NettyappenderServer {
 
 	public void run() {
 		bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(Executors.newFixedThreadPool(4), Executors.newFixedThreadPool(4)));
-		final ExecutionHandler executionHandler = new ExecutionHandler(new OrderedMemoryAwareThreadPoolExecutor(5, 1024 * 1024 * 200, 1024 * 1024 * 200 * 2));
+		final ExecutionHandler executionHandler = new ExecutionHandler(new OrderedMemoryAwareThreadPoolExecutor(4, 1024 * 1024 * 300, 1024 * 1024 * 300 * 2));
 		bootstrap.setOption("tcpNoDelay", true);
 		bootstrap.setOption("keepAlive", true);
 		// bootstrap.setOption("writeBufferHighWaterMark", 100 * 64 * 1024);
 		// bootstrap.setOption("sendBufferSize", 1048576);
-		bootstrap.setOption("receiveBufferSize", 1048576 );
+		bootstrap.setOption("receiveBufferSize", 1048576*10 );
 
 		// Set up the pipeline factory.
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {

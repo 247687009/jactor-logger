@@ -1,11 +1,6 @@
 package github.com.cp149.netty.server;
 
-import github.com.cp149.disruptor.DisruptorAppender;
-import github.com.cp149.disruptor.ValueEvent;
-
 import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
@@ -17,11 +12,6 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.spi.LoggingEventVO;
-
-import com.lmax.disruptor.EventFactory;
-import com.lmax.disruptor.EventHandler;
-import com.lmax.disruptor.RingBuffer;
-import com.lmax.disruptor.dsl.Disruptor;
 
 public class NettyappenderServerHandler extends SimpleChannelHandler {
 
