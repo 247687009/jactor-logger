@@ -27,46 +27,22 @@ public class NettyappenderServerHandler extends SimpleChannelHandler {
 
 	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(NettyappenderServerHandler.class);
 	private static final LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-	private final class LogEventHandler implements EventHandler<ValueEvent> {
-		// event will eventually be recycled by the Disruptor after it wraps
-		public void onEvent(final ValueEvent event, final long sequence, final boolean endOfBatch) throws Exception {
-			
-			Logger remoteLogger = lc.getLogger(event.getEvent().getLoggerName());
-			// apply the logger-level filter
-			if (remoteLogger.isEnabledFor(event.getEvent().getLevel())) {
-				// finally log the event as if was generated locally
-				remoteLogger.callAppenders(event.getEvent());
-			}
-			event.setEvent(null);
-		}
-	}
-
-	
-	ExecutorService exec = Executors.newFixedThreadPool(1);
-	// Preallocate RingBuffer with 1024 ILoggingEvents
-	Disruptor<ValueEvent> disruptor = new Disruptor<ValueEvent>(DisruptorAppender.EVENT_FACTORY, 1024, exec);
-	final EventHandler<ValueEvent> handler = new LogEventHandler();
-
-	public final static EventFactory<ValueEvent> EVENT_FACTORY = new EventFactory<ValueEvent>() {
-		public ValueEvent newInstance() {
-			return new ValueEvent();
-		}
-	};
-	private RingBuffer<ValueEvent> ringBuffer;
 	
 
+	
+		
+
+	
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {		
 		super.channelConnected(ctx, e);
-		disruptor.handleEventsWith(handler);
-		ringBuffer = disruptor.start();
+	
 	}
 
 	@Override
 	public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
 		super.channelClosed(ctx, e);
-		disruptor.shutdown();
-		exec.shutdown();
+	
 	}
 
 	@Override
@@ -82,11 +58,7 @@ public class NettyappenderServerHandler extends SimpleChannelHandler {
 		}
 		
 		
-//		long seq = ringBuffer.next();
-//		ValueEvent valueEvent = ringBuffer.get(seq);
-//		valueEvent.setEvent(event);
-//		ringBuffer.publish(seq);
-		
+	
 
 	}
 
@@ -95,8 +67,7 @@ public class NettyappenderServerHandler extends SimpleChannelHandler {
 		// Close the connection when an exception is raised.
 		if (!(e.getCause() instanceof IOException))
 			logger.warn("Unexpected exception from downstream.", e.getCause());
-		disruptor.shutdown();
-		exec.shutdown();
+	
 		e.getChannel().close();
 	}
 }

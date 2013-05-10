@@ -2,12 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>logback-jactor</groupId>
-	<artifactId>logbackappend</artifactId>
+	<groupId>github.com.cp149</groupId>
+	<artifactId>jactor-logger</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>logbackappend</name>
+	<name>jactor-logge</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -25,16 +25,6 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-examples</artifactId>
 			<version>1.0.11</version>
-		</dependency>
-		<dependency>
-			<groupId>org.agilewiki.jasocket</groupId>
-			<artifactId>jasocket</artifactId>
-			<version>3.2.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty</artifactId>
-			<version>3.6.5.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -60,6 +50,17 @@
 			<groupId>com.lmax</groupId>
 			<artifactId>disruptor</artifactId>
 			<version>3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.agilewiki.jactor</groupId>
+			<artifactId>jactor</artifactId>
+			<version>4.6.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty</artifactId>
+			<version>3.6.5.Final</version>
+			<type>bundle</type>
 		</dependency>
 	</dependencies>
 	<build>

@@ -36,16 +36,16 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 
 	protected AppenderClientHandler appenderClientHandler;
 	protected static final Timer timer = new HashedWheelTimer();
-//	 protected final List<Channel> channelList = new ArrayList<Channel>();
+	protected Channel[] channelList;
 	private Channel channel;
 
 	int channelid = 0;
 
 	protected Channel getChannel() {
-//		 if (channelid >= channelSize)
-//		 channelid = 0;
-//		 return channelList.get(channelid++);
-		return channel;
+		if (channelid >= channelSize)
+			channelid = 0;
+		return channelList[channelid++];
+		// return channel;
 	}
 
 	@Override
@@ -78,13 +78,13 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 	public void cleanUp() {
 		try {
 			if (bootstrap != null) {
-//				 for (Channel channel : channelList) {
-//				 channel.disconnect().awaitUninterruptibly();
-//				 channel.close();
-//				 }
-//				 channelList.clear();
-				channel.disconnect().awaitUninterruptibly();
-				channel.close();
+				for (int i = 0; i < channelList.length; i++) {
+					channelList[i].disconnect().awaitUninterruptibly();
+					channelList[i].close();
+				}
+
+				// channel.disconnect().awaitUninterruptibly();
+				// channel.close();
 				bootstrap.releaseExternalResources();
 				bootstrap.shutdown();
 				bootstrap = null;
@@ -113,13 +113,13 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 	@Override
 	public synchronized void connect(InetAddress address, int port) {
 		if (bootstrap == null) {
-			bootstrap = new ClientBootstrap(new NioClientSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
+			bootstrap = new ClientBootstrap(new NioClientSocketChannelFactory(Executors.newFixedThreadPool(channelSize), Executors.newFixedThreadPool(channelSize)));
 			bootstrap.setOption("tcpNoDelay", true);
 			bootstrap.setOption("keepAlive", true);
 			bootstrap.setOption("remoteAddress", new InetSocketAddress(address, port));
-			final ExecutionHandler executionHandler = new ExecutionHandler(new OrderedMemoryAwareThreadPoolExecutor(16, 1048576, 1048576));
+			final ExecutionHandler executionHandler = new ExecutionHandler(new OrderedMemoryAwareThreadPoolExecutor(channelSize, 1024 * 1024, 1024 * 1024));
 			bootstrap.setOption("writeBufferHighWaterMark", 10 * 64 * 1024);
-			bootstrap.setOption("sendBufferSize", 1048576);			
+			bootstrap.setOption("sendBufferSize", 1048576 );
 
 			// Set up the pipeline factory.
 			bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
@@ -130,14 +130,14 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 							reconnectionDelay));
 				}
 			});
+			channelList = new Channel[channelSize];
+			for (int i = 0; i < channelSize; i++) {
+				ChannelFuture future = bootstrap.connect();
+				channel = future.getChannel();
+				channel.setReadable(false);
 
-//			 for (int i = 0; i < channelSize; i++) {
-			ChannelFuture future = bootstrap.connect();
-			channel = future.awaitUninterruptibly().getChannel();
-			channel.setReadable(false);
-
-//			 channelList.add(channel);
-//			 }
+				channelList[i] = channel;
+			}
 		}
 
 	}

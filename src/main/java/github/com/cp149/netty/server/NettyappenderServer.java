@@ -17,6 +17,7 @@ package github.com.cp149.netty.server;
 
 import java.io.File;
 import java.net.InetSocketAddress;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -46,7 +47,6 @@ public class NettyappenderServer {
 
 	private final int port;
 	private ServerBootstrap bootstrap;
-	
 
 	public ServerBootstrap getBootstrap() {
 		return bootstrap;
@@ -73,19 +73,19 @@ public class NettyappenderServer {
 	}
 
 	public void run() {
-		bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
-		final ExecutionHandler executionHandler = new ExecutionHandler(
-	             new OrderedMemoryAwareThreadPoolExecutor(16, 1048576, 1048576));
+		bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(Executors.newFixedThreadPool(4), Executors.newFixedThreadPool(4)));
+		final ExecutionHandler executionHandler = new ExecutionHandler(new OrderedMemoryAwareThreadPoolExecutor(5, 1024 * 1024 * 200, 1024 * 1024 * 200 * 2));
 		bootstrap.setOption("tcpNoDelay", true);
 		bootstrap.setOption("keepAlive", true);
-		bootstrap.setOption("writeBufferHighWaterMark", 10 * 64 * 1024);
-		bootstrap.setOption("sendBufferSize", 1048576);
-		bootstrap.setOption("receiveBufferSize", 1048576);
+		// bootstrap.setOption("writeBufferHighWaterMark", 100 * 64 * 1024);
+		// bootstrap.setOption("sendBufferSize", 1048576);
+		bootstrap.setOption("receiveBufferSize", 1048576 );
 
 		// Set up the pipeline factory.
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 			public ChannelPipeline getPipeline() throws Exception {
-				return Channels.pipeline(executionHandler,new MarshallingDecoder(createProvider(createMarshallerFactory(), createMarshallingConfig())),  new NettyappenderServerHandler());
+				return Channels.pipeline(executionHandler, new MarshallingDecoder(createProvider(createMarshallerFactory(), createMarshallingConfig())),
+						new NettyappenderServerHandler());
 			}
 		});
 		LoggerFactory.getLogger(this.getClass()).info("start server at" + port);
@@ -104,25 +104,24 @@ public class NettyappenderServer {
 		if (args.length > 0) {
 			timeout = Integer.parseInt(args[0]);
 		}
-		
-		
+
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 		configureLC(lc, NettyappenderServer.class.getResource("").getFile() + File.separator + "logbackserver.xml");
 
 		NettyappenderServer nettyappenderServer = new NettyappenderServer(port);
-		//success lines 
-		int successlines=0;
-		if(args.length>1){
-			successlines=Integer.parseInt(args[0]);
+		// success lines
+		int successlines = 0;
+		if (args.length > 1) {
+			successlines = Integer.parseInt(args[0]);
 		}
-		
+
 		nettyappenderServer.run();
-		//if timeout >0 then autoshutdown after timeout,just for unit test
+		// if timeout >0 then autoshutdown after timeout,just for unit test
 		if (timeout > 0) {
 			TimeUnit.SECONDS.sleep(timeout);
 			lc.getLogger(NettyappenderServer.class).debug("shut down");
 			nettyappenderServer.shutdown();
-			
+
 			System.exit(0);
 		}
 	}

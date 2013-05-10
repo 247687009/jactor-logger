@@ -2,16 +2,10 @@ package github.com.cp149.jactor;
 
 import github.com.cp149.BaseAppender;
 
-import java.util.Iterator;
-
 import org.agilewiki.jactor.JAMailboxFactory;
 import org.agilewiki.jactor.MailboxFactory;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.Appender;
-import ch.qos.logback.core.UnsynchronizedAppenderBase;
-import ch.qos.logback.core.spi.AppenderAttachable;
-import ch.qos.logback.core.spi.AppenderAttachableImpl;
 
 /**
  * @author cp149 jactor appender
