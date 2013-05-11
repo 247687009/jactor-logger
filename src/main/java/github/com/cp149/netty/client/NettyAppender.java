@@ -1,7 +1,5 @@
 package github.com.cp149.netty.client;
 
-import io.netty.handler.timeout.ReadTimeoutHandler;
-
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -116,7 +114,7 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 			channelList = new Channel[channelSize];
 			for (int i = 0; i < channelSize; i++) {
 				org.jboss.netty.channel.ChannelFuture future;
-				future = bootstrap.connect();
+				future = bootstrap.connect().syncUninterruptibly();
 				channel = future.getChannel();
 				channelList[i] = channel;
 

@@ -31,7 +31,7 @@ public class Netty4Appender extends NetAppenderBase<ILoggingEvent> {
 	protected int channelSize = 5;
 
 	
-	protected static final Timer timer = new HashedWheelTimer();
+
 	protected Channel[] channelList;
 	private Channel channel;
 
@@ -109,30 +109,6 @@ public class Netty4Appender extends NetAppenderBase<ILoggingEvent> {
 							// AppenderClientHandler());
 						}
 					});
-
-			// // Start the client.
-			// ChannelFuture f = b.connect(host, port).sync();
-			// bootstrap = new ClientBootstrap(new
-			// NioClientSocketChannelFactory(Executors.newFixedThreadPool(channelSize),
-			// Executors.newFixedThreadPool(channelSize)));
-			// bootstrap.setOption("tcpNoDelay", true);
-			// bootstrap.setOption("keepAlive", true);
-			// bootstrap.setOption("remoteAddress", new
-			// InetSocketAddress(address, port));
-			//
-			// bootstrap.setOption("sendBufferSize", 1048576*100 );
-			//
-			// // Set up the pipeline factory.
-			// bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
-			//
-			// public ChannelPipeline getPipeline() throws Exception {
-			//
-			// return Channels.pipeline(executionHandler, new
-			// MarshallingEncoder(createProvider()), new
-			// AppenderClientHandler(NettyAppender.this, bootstrap, timer,
-			// reconnectionDelay));
-			// }
-			// });
 			channelList = new Channel[channelSize];
 			for (int i = 0; i < channelSize; i++) {
 				ChannelFuture future;
