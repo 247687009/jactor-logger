@@ -15,33 +15,20 @@
  */
 package github.com.cp149.netty.server;
 
-import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.channel.udt.nio.NioUdtByteAcceptorChannel;
-import io.netty.channel.udt.nio.NioUdtMessageAcceptorChannel;
-import io.netty.handler.codec.marshalling.DefaultUnmarshallerProvider;
 import io.netty.handler.codec.marshalling.MarshallingDecoder;
-import io.netty.handler.codec.marshalling.ThreadLocalUnmarshallerProvider;
-import io.netty.handler.codec.marshalling.UnmarshallerProvider;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
-import io.netty.util.concurrent.EventExecutor;
 import io.netty.util.concurrent.EventExecutorGroup;
-import io.netty.util.concurrent.ImmediateExecutor;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
-import org.jboss.marshalling.MarshallerFactory;
-import org.jboss.marshalling.Marshalling;
-import org.jboss.marshalling.MarshallingConfiguration;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.LoggerContext;
@@ -55,8 +42,8 @@ public class NettyappenderServer {
 
 	private final int port;
 	private ServerBootstrap bootstrap;
-	EventLoopGroup bossGroup = new NioEventLoopGroup();
-	EventLoopGroup workerGroup = new NioEventLoopGroup();
+	EventLoopGroup bossGroup = new NioEventLoopGroup(8);
+	EventLoopGroup workerGroup = new NioEventLoopGroup(8);
 
 	public ServerBootstrap getBootstrap() {
 		return bootstrap;

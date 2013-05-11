@@ -8,7 +8,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 /**
  * @author cp149 push logevent with actor
  */
-public class JactorNettyAppender extends NettyAppender {
+public class JactorNettyAppender extends Netty4Appender {
 	private final MailboxFactory mailboxFactory = JAMailboxFactory.newMailboxFactory(10);
 
 	@Override

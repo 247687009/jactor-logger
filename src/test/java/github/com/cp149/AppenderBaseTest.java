@@ -86,7 +86,7 @@ public class AppenderBaseTest {
 			int fileline = Testutils.countlines(filename) - sizeBeforTest;
 			Assert.assertEquals(fileline, expectlines);
 		} else {
-			TimeUnit.SECONDS.sleep(22-(System.currentTimeMillis() - starttime)/1000);
+//			TimeUnit.SECONDS.sleep(18-(System.currentTimeMillis() - starttime)/1000);
 			// int fileline = Testutils.countlines(filename) - sizeBeforTest;
 			// while (fileline < expectlines) {
 			// TimeUnit.MILLISECONDS.sleep(500);

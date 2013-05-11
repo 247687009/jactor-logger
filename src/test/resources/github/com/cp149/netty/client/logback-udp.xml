@@ -12,9 +12,9 @@
 	<appender name="Countout" class="github.com.cp149.CountAppender" />
 	
 	<appender name="janetty"
-		class="github.com.cp149.netty.client.JactorNettyAppender">
+		class="github.com.cp149.netty.client.NettyUdpAppender">
 		<remoteHost>localhost</remoteHost>
-		<port>4560</port>
+		<port>4570</port>
 		<appender-ref ref="STDOUT" />
 		<connectatstart>false</connectatstart>
 		<channelSize>1</channelSize>

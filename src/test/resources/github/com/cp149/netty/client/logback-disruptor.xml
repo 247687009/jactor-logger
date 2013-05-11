@@ -20,11 +20,11 @@
 	<appender name="ASYNC" class="github.com.cp149.disruptor.DisruptorAppender">
 		<threadSize>1</threadSize>
 		<appender-ref ref="jasocket" />
-		<appender-ref ref="Countout" />
+		
 	</appender>
 	<logger name="github.com.cp149.netty.client" level="DEBUG">
 		<appender-ref ref="ASYNC" />
-			
+		<appender-ref ref="Countout" />
 	</logger>
 
 	<root level="ERROR">

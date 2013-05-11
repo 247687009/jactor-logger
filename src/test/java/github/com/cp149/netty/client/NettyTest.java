@@ -46,7 +46,7 @@ public class NettyTest {
 		NettyappenderServer.configureLC(lc, configFile);
 		// start netty server
 		nettyappenderServer = new NettyappenderServer(4560);
-		nettyappenderServer.run();	
+		nettyappenderServer.run();
 		
 	}
 

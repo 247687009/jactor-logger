@@ -14,7 +14,7 @@ public class DisruptorNettyTest extends NettyTest {
 		logfilename = "logs/logback-server-disruptor" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".log";
 	}
 
-	@Test(timeOut = 30000, groups = "nettytest")
+	@Test(timeOut = 40000, groups = "nettytest")
 	public void testNettyclientandserver() throws Exception {
 		super.testNettyclientandserver();
 	}

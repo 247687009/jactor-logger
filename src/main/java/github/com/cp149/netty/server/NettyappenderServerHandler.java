@@ -32,7 +32,7 @@ public class NettyappenderServerHandler extends ChannelInboundMessageHandlerAdap
 		Logger remoteLogger = lc.getLogger(event.getLoggerName());
 		// apply the logger-level filter
 		if (remoteLogger.isEnabledFor(event.getLevel())) {
-			event.getCallerData();
+//			event.getCallerData();
 			// finally log the event as if was generated locally
 			remoteLogger.callAppenders(event);
 		}

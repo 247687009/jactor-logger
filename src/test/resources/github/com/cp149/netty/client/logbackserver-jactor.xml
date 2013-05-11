@@ -15,13 +15,14 @@
 			
 		</encoder>
 	</appender>
-	<appender name="ASYNC" class="github.com.cp149.jactor.JactorAppender">
-		<threadSize>1</threadSize>
+	<appender name="ASYNC" class="github.com.cp149.jactor.JactorAppender">		
 		<appender-ref ref="Countout" />
 		<appender-ref ref="RollingFile" />
 	</appender>
 
-	<root level="DEBUG">
+	<logger name="github.com.cp149" level="DEBUG">
 		<appender-ref ref="ASYNC" />
+	</logger>
+	<root level="ERROR">		
 	</root>
 </configuration>
