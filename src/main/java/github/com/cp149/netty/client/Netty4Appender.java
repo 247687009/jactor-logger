@@ -96,7 +96,7 @@ public class Netty4Appender extends NetAppenderBase<ILoggingEvent> {
 		if (bootstrap == null) {
 			final EventExecutorGroup executor = new DefaultEventExecutorGroup(10);
 			bootstrap = new Bootstrap();
-			group = new NioEventLoopGroup(channelSize);
+			group = new NioEventLoopGroup(4);
 			
 			bootstrap.group(group).channel(NioSocketChannel.class).option(ChannelOption.TCP_NODELAY, true)
 			.option(ChannelOption.SO_KEEPALIVE, true).option(ChannelOption.SO_RCVBUF, 20).option(ChannelOption.SO_SNDBUF, 46390)

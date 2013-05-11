@@ -17,6 +17,8 @@ public class JactorNettyAppender extends Netty4Appender {
 			if (isStarted()) {
 				if (connectatstart == false && bootstrap == null)
 					connect(address, port);
+				eventObject.prepareForDeferredProcessing();
+				eventObject.getCallerData();
 				NettyActor actor = new NettyActor(eventObject, getChannel());
 				actor.initialize(mailboxFactory.createMailbox());
 				NettyRequest.req.sendEvent(actor);

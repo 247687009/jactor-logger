@@ -60,7 +60,7 @@ public class NettyappenderServer {
 			final EventExecutorGroup executor = new DefaultEventExecutorGroup(8);
 
 			bootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).option(ChannelOption.SO_KEEPALIVE, true)
-					.option(ChannelOption.TCP_NODELAY, true).option(ChannelOption.SO_RCVBUF, 43690)
+					.option(ChannelOption.TCP_NODELAY, true).option(ChannelOption.SO_RCVBUF, 436900)
 					.option(ChannelOption.SO_SNDBUF, 2048).childHandler(new ChannelInitializer<SocketChannel>() {
 						@Override
 						public void initChannel(SocketChannel ch) throws Exception {

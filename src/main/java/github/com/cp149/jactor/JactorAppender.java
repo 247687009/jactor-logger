@@ -33,8 +33,10 @@ public class JactorAppender extends BaseAppender {
 	@Override
 	protected void append(ILoggingEvent eventObject) {
 		try {		
+			if (includeCallerData) {
 			eventObject.prepareForDeferredProcessing();
 			eventObject.getCallerData();
+			}
 			LoggerActor actor = new LoggerActor(eventObject, aai);
 			actor.initialize(mailboxFactory.createMailbox());
 			ActorRequest.req.sendEvent(actor);

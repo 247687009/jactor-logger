@@ -91,32 +91,35 @@ public class NettyAppender extends NetAppenderBase<ILoggingEvent> {
 	public synchronized void connect(InetAddress address, int port) {
 		if (bootstrap == null) {
 
-			final ExecutionHandler executionHandler = new ExecutionHandler(new OrderedMemoryAwareThreadPoolExecutor(4, 1024 * 1024 * 300,
-					1024 * 1024 * 300 * 2));
+			final ExecutionHandler executionHandler = new ExecutionHandler(new OrderedMemoryAwareThreadPoolExecutor(4, 1024 * 1024 * 100,
+					1024 * 1024 * 100 * 2));
 			bootstrap = new ClientBootstrap(new NioClientSocketChannelFactory(Executors.newFixedThreadPool(4),
 					Executors.newFixedThreadPool(4)));
 			bootstrap.setOption("tcpNoDelay", true);
 			bootstrap.setOption("keepAlive", true);
 			bootstrap.setOption("remoteAddress", new InetSocketAddress(address, port));
 
-			bootstrap.setOption("sendBufferSize", 1048576 * 100);
+			bootstrap.setOption("sendBufferSize", 1048576 );
 
 			// Set up the pipeline factory.
 			bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 
 				public ChannelPipeline getPipeline() throws Exception {
-
-					return Channels.pipeline(executionHandler,new org.jboss.netty.handler.timeout.ReadTimeoutHandler(new HashedWheelTimer(),30),new org.jboss.netty.handler.codec.marshalling.MarshallingEncoder(
+					// new
+					// org.jboss.netty.handler.timeout.ReadTimeoutHandler(new
+					// HashedWheelTimer(),30),
+					return Channels.pipeline(executionHandler, new org.jboss.netty.handler.codec.marshalling.MarshallingEncoder(
 							new org.jboss.netty.handler.codec.marshalling.DefaultMarshallerProvider(createMarshallerFactory(),
 									createMarshallingConfig())));
 				}
 			});
 			channelList = new Channel[channelSize];
 			for (int i = 0; i < channelSize; i++) {
-				org.jboss.netty.channel.ChannelFuture future;
-				future = bootstrap.connect().syncUninterruptibly();
-				channel = future.getChannel();
-				channelList[i] = channel;
+				org.jboss.netty.channel.ChannelFuture 				
+					future = bootstrap.connect();
+					channel = future.getChannel();
+					channelList[i] = channel;
+				
 
 			}
 		}

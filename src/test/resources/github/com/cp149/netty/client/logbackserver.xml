@@ -20,7 +20,7 @@
 		
 		<encoder>
 			<pattern>%d %-5p [%t] %c [%F:%L] - %msg%n</pattern>
-			
+			<immediateFlush>false</immediateFlush>
 		</encoder>
 	</appender>
 	<appender name="ASYNC" class="github.com.cp149.jactor.JactorAppender">		

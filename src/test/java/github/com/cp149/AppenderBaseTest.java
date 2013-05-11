@@ -52,7 +52,7 @@ public class AppenderBaseTest {
 		// warmup the logfile
 		for (int i = 0; i < WARMLOGSIZE; i++)
 			logback.debug("warm logsystem");
-		while(CountAppender.count.intValue()!= WARMLOGSIZE)TimeUnit.MILLISECONDS.sleep(500);		
+//		while(CountAppender.count.intValue()!= WARMLOGSIZE)TimeUnit.MILLISECONDS.sleep(500);		
 		starttime = System.currentTimeMillis();
 
 	}

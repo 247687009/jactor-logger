@@ -6,7 +6,7 @@
 			by default -->
 		<encoder>
 			<pattern>%d{HH:mm:ss.SSS} %p [%t] %c [%F:%L] - %msg%n
-			</pattern>
+			</pattern>			
 		</encoder>
 	</appender>
 	<appender name="Countout" class="github.com.cp149.CountAppender" />
@@ -19,7 +19,7 @@
 				
 		<encoder>
 			<pattern>%d %-5p [%t] %c [%F:%L] - %msg%n</pattern>
-			
+			<immediateFlush>false</immediateFlush>
 		</encoder>
 	</appender>	
 	

@@ -16,7 +16,7 @@
 		<remoteHost>localhost</remoteHost>
 		<port>4560</port>
 		<appender-ref ref="STDOUT" />
-		<connectatstart>false</connectatstart>
+		<connectatstart>true</connectatstart>
 		<channelSize>1</channelSize>
 	</appender>
 		
