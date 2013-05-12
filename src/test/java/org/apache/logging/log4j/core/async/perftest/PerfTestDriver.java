@@ -67,9 +67,13 @@ public class PerfTestDriver {
             List<String> args = new ArrayList<String>();
             args.add(java);
             args.add("-server");
-            args.add("-Xms1g");
-            args.add("-Xmx1g");
-            args.add("-XX:-UseGCOverheadLimit");            
+            args.add("-Xms1500m");
+            args.add("-Xmx1500m");
+            args.add("-XX:-UseGCOverheadLimit");
+            args.add("-Xss256k");
+            args.add("-Xmn512m");
+            args.add("-XX:PermSize=256M");
+            args.add("-XX:MaxPermSize=256M");            
             // args.add("-XX:+UseParallelOldGC");
             // args.add("-Xloggc:gc.log");
             // args.add("-XX:+PrintGCTimeStamps");
@@ -218,9 +222,10 @@ public class PerfTestDriver {
         long start = System.nanoTime();
         List<Setup> tests = new ArrayList<PerfTestDriver.Setup>();
         // includeLocation=false
+//        tests.add(s("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender"));
 //        tests.add(s("perf-logback-jactor.xml", LOGBK, "Async jactor Appender"));
 //        tests.add(s("perf-logback-disruptor.xml", LOGBK, "Async disruptor Appender"));
-//        tests.add(s("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender"));
+        
         
         
 //        tests.add(s("perf3PlainNoLoc.xml", LOG20, "Loggers all async",
@@ -255,11 +260,12 @@ public class PerfTestDriver {
         // "RollFastFileAppender"));
 
         final int MAX_THREADS = 16; // 64 takes a LONG time
-        for (int i = 2; i <= MAX_THREADS; i *= 2) {
+        for (int i = 8; i <= MAX_THREADS; i *= 2) {
             // includeLocation = false
         	tests.add(m("perf-logback-jactor.xml", LOGBK, "Async jactor Appender",i));
+        	tests.add(m("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender", i));        	
         	tests.add(m("perf-logback-disruptor.xml", LOGBK, "Async disruptor Appender",i));
-        	 tests.add(m("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender", i));
+        	 
         	 
 //            tests.add(m("perf-logback.xml", LOGBK, "Sync", i));
 //            tests.add(m("perf-log4j12.xml", LOG12, "Sync", i));

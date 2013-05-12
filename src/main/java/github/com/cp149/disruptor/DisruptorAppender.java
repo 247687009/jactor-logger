@@ -10,7 +10,9 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.SleepingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
+import com.lmax.disruptor.dsl.ProducerType;
 
 public class DisruptorAppender extends BaseAppender {
 	private final class LogEventHandler implements EventHandler<ValueEvent> {
@@ -21,9 +23,9 @@ public class DisruptorAppender extends BaseAppender {
 		}
 	}
 
-	ExecutorService exec = Executors.newFixedThreadPool(1);
+	ExecutorService exec = Executors.newFixedThreadPool(4);
 	// Preallocate RingBuffer with 1024 ILoggingEvents
-	Disruptor<ValueEvent> disruptor = new Disruptor<ValueEvent>(DisruptorAppender.EVENT_FACTORY, 1024, exec);
+	Disruptor<ValueEvent> disruptor = new Disruptor<ValueEvent>(DisruptorAppender.EVENT_FACTORY, 1024, exec,ProducerType.MULTI,new SleepingWaitStrategy());
 
 	final EventHandler<ValueEvent> handler = new LogEventHandler();
 
