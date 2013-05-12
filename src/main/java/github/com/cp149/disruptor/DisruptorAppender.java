@@ -19,13 +19,13 @@ public class DisruptorAppender extends BaseAppender {
 		// event will eventually be recycled by the Disruptor after it wraps
 		public void onEvent(final ValueEvent event, final long sequence, final boolean endOfBatch) throws Exception {
 			aai.appendLoopOnAppenders(event.getEvent());
-			event.setEvent(null);
+//			event.setEvent(null);
 		}
 	}
 
 	ExecutorService exec = Executors.newFixedThreadPool(4);
 	// Preallocate RingBuffer with 1024 ILoggingEvents
-	Disruptor<ValueEvent> disruptor = new Disruptor<ValueEvent>(DisruptorAppender.EVENT_FACTORY, 1024, exec,ProducerType.MULTI,new SleepingWaitStrategy());
+	Disruptor<ValueEvent> disruptor = new Disruptor<ValueEvent>(DisruptorAppender.EVENT_FACTORY, 1024, exec);
 
 	final EventHandler<ValueEvent> handler = new LogEventHandler();
 

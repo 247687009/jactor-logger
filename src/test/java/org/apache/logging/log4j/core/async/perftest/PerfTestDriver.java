@@ -222,9 +222,9 @@ public class PerfTestDriver {
         long start = System.nanoTime();
         List<Setup> tests = new ArrayList<PerfTestDriver.Setup>();
         // includeLocation=false
-//        tests.add(s("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender"));
-//        tests.add(s("perf-logback-jactor.xml", LOGBK, "Async jactor Appender"));
-//        tests.add(s("perf-logback-disruptor.xml", LOGBK, "Async disruptor Appender"));
+        tests.add(s("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender"));
+        tests.add(s("perf-logback-jactor.xml", LOGBK, "Async jactor Appender"));
+        tests.add(s("perf-logback-disruptor.xml", LOGBK, "Async disruptor Appender"));
         
         
         
@@ -262,9 +262,9 @@ public class PerfTestDriver {
         final int MAX_THREADS = 16; // 64 takes a LONG time
         for (int i = 8; i <= MAX_THREADS; i *= 2) {
             // includeLocation = false
-        	tests.add(m("perf-logback-jactor.xml", LOGBK, "Async jactor Appender",i));
-        	tests.add(m("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender", i));        	
-        	tests.add(m("perf-logback-disruptor.xml", LOGBK, "Async disruptor Appender",i));
+//        	tests.add(m("perf-logback-jactor.xml", LOGBK, "Async jactor Appender",i));
+//        	tests.add(m("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender", i));        	
+//        	tests.add(m("perf-logback-disruptor.xml", LOGBK, "Async disruptor Appender",i));
         	 
         	 
 //            tests.add(m("perf-logback.xml", LOGBK, "Sync", i));
