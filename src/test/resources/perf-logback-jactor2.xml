@@ -9,7 +9,7 @@
   </appender>
  
 	
-  <appender name="ASYNC1" class="github.com.cp149.jactor.JactorAppender">
+  <appender name="ASYNC1" class="github.com.cp149.jactor2.Jactor2Appender">
   <includeCallerData>false</includeCallerData>    
     <appender-ref ref="FILE" />
     <threadSize>1</threadSize>

@@ -17,6 +17,7 @@ public class MvnCommandexe {
 			// String libPath = System.getProperty("java.library.path");
 
 			pb.environment().put("PATH", path);
+			pb.redirectErrorStream(true);
 			Process process = pb.start();
 
 			InputStream fis = process.getInputStream();
