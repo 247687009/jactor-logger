@@ -18,7 +18,7 @@ public class JactorAppender extends BaseAppender {
 	private MailboxFactory mailboxFactory;
 	private Mailbox mailbox;
 	private final JAFuture future = new JAFuture();
-	private static final int RINGBUFFER_DEFAULT_SIZE = 256 * 1024;
+	private static final int RINGBUFFER_DEFAULT_SIZE = 48 * 1024;
 	@Override
 	public void start() {
 

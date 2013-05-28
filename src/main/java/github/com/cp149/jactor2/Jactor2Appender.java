@@ -6,13 +6,16 @@ import org.agilewiki.jactor.api.Mailbox;
 import org.agilewiki.jactor.api.MailboxFactory;
 import org.agilewiki.jactor.impl.DefaultMailboxFactoryImpl;
 import org.agilewiki.jactor.impl.ThreadManagerImpl;
+import org.agilewiki.jactor.util.PASemaphore;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
 public class Jactor2Appender extends BaseAppender {
+	private static final int RINGBUFFER_DEFAULT_SIZE = 1024*1024;
 	final MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl( ThreadManagerImpl.newThreadManager(1));
-    final Mailbox mailbox = mailboxFactory.createMailbox(true);
-	
+    final Mailbox mailbox = mailboxFactory.createMailbox();
+    final github.com.cp149.jactor2.PASemaphore semaphore = new github.com.cp149.jactor2.PASemaphore(
+    		new DefaultMailboxFactoryImpl( ThreadManagerImpl.newThreadManager(1)).createMailbox(), RINGBUFFER_DEFAULT_SIZE,RINGBUFFER_DEFAULT_SIZE);
 	private int threadSize = 2;
 	
 	@Override
@@ -40,11 +43,13 @@ public class Jactor2Appender extends BaseAppender {
 			eventObject.prepareForDeferredProcessing();
 			eventObject.getCallerData();
 			}
-			final LoggerActor2 actor1 = new LoggerActor2(mailbox,eventObject,this.aai);
-			try {
+			final LoggerActor2 actor1 = new LoggerActor2(mailbox,eventObject,this.aai,semaphore);
+			try {				
 				actor1.hi1.signal();
-			} catch (Exception e) {
+//				semaphore.acquireReq().call();
 				
+			} catch (Exception e) {
+				addError(e.getMessage());
 			}
 		} catch (Exception e) {
 			addError(e.getMessage());
