@@ -10,12 +10,9 @@ import org.agilewiki.jactor.util.PASemaphore;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
-public class Jactor2Appender extends BaseAppender {
-	private static final int RINGBUFFER_DEFAULT_SIZE = 1024*1024;
+public class Jactor2Appender extends BaseAppender {	
 	final MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl( ThreadManagerImpl.newThreadManager(1));
     final Mailbox mailbox = mailboxFactory.createMailbox();
-    final github.com.cp149.jactor2.PASemaphore semaphore = new github.com.cp149.jactor2.PASemaphore(
-    		new DefaultMailboxFactoryImpl( ThreadManagerImpl.newThreadManager(1)).createMailbox(), RINGBUFFER_DEFAULT_SIZE,RINGBUFFER_DEFAULT_SIZE);
 	private int threadSize = 2;
 	
 	@Override
@@ -43,11 +40,9 @@ public class Jactor2Appender extends BaseAppender {
 			eventObject.prepareForDeferredProcessing();
 			eventObject.getCallerData();
 			}
-			final LoggerActor2 actor1 = new LoggerActor2(mailbox,eventObject,this.aai,semaphore);
+			final LoggerActor2 actor1 = new LoggerActor2(mailbox,eventObject,this.aai);
 			try {				
-				actor1.hi1.signal();
-//				semaphore.acquireReq().call();
-				
+				actor1.hi1.signal();				
 			} catch (Exception e) {
 				addError(e.getMessage());
 			}

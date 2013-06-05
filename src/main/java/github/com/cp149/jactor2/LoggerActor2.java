@@ -14,7 +14,7 @@ public class LoggerActor2  {
    
     public final Request<Void> hi1;
 
-    public LoggerActor2(final Mailbox mbox, final ILoggingEvent eventObject, final AppenderAttachableImpl<ILoggingEvent> aai, final github.com.cp149.jactor2.PASemaphore semaphore) {   
+    public LoggerActor2(final Mailbox mbox, final ILoggingEvent eventObject, final AppenderAttachableImpl<ILoggingEvent> aai) {   
     	
         hi1 = new RequestBase<Void>(mbox) {
             @Override
@@ -22,7 +22,6 @@ public class LoggerActor2  {
                     final Transport<Void> responseProcessor)
                     throws Exception {
             	aai.appendLoopOnAppenders(eventObject);
-//            	semaphore.releaseReq().signal();
                 responseProcessor.processResponse(null);
             }
         };
