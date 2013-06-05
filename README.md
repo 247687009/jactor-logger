@@ -38,21 +38,21 @@ put together
 
 ```html
 Ranking:
-1. Logback: Async disruptor Appender (single thread): throughput: 12,358,997 ops/sec. latency(ns): avg=817.6 99% < 5734.4 99.99% < 65536.0 (1864241 samples)
-2. Logback: Async jactor Appender (single thread): throughput: 10,609,816 ops/sec. latency(ns): avg=780.2 99% < 2048.0 99.99% < 32768.0 (19479097 samples)
-3. Log4j2: Loggers all async (single thread): throughput: 10,108,214 ops/sec. latency(ns): avg=1196.4 99% < 5734.4 99.99% < 65536.0 (2392987 samples)
-4. Log4j2: Async Appender (single thread): throughput: 8,401,083 ops/sec. latency(ns): avg=648.4 99% < 8192.0 99.99% < 65536.0 (616363 samples)
-5. Logback: Async disruptor Appender (2 threads): throughput: 4,968,991 ops/sec. latency(ns): avg=567.8 99% < 1843.2 99.99% < 26214.4 (11641379 samples)
-6. Log4j2: Async Appender (2 threads): throughput: 3,945,138 ops/sec. latency(ns): avg=672.0 99% < 8192.0 99.99% < 91750.4 (2861566 samples)
-7. Logback: Async jactor2 Appender (4 threads): throughput: 3,410,098 ops/sec. latency(ns): avg=710.3 99% < 1024.0 99.99% < 8192.0 (83727392 samples)
-8. Log4j2: Loggers all  Sync (2 threads): throughput: 3,392,813 ops/sec. latency(ns): avg=586.9 99% < 2048.0 99.99% < 49152.0 (11866973 samples)
-9. Logback: Async jactor2 Appender (2 threads): throughput: 3,294,824 ops/sec. latency(ns): avg=503.2 99% < 2048.0 99.99% < 16384.0 (20504661 samples)
-10. Logback: Async jactor2 Appender (single thread): throughput: 3,272,595 ops/sec. latency(ns): avg=573.0 99% < 2048.0 99.99% < 32768.0 (8861775 samples)
-11. Log4j2: Loggers all  Sync (4 threads): throughput: 3,237,113 ops/sec. latency(ns): avg=713.0 99% < 1024.0 99.99% < 18841.6 (40574503 samples)
-12. Logback: Async disruptor Appender (4 threads): throughput: 2,731,884 ops/sec. latency(ns): avg=685.1 99% < 1024.0 99.99% < 15974.4 (25614599 samples)
-13. Logback: Async jactor Appender (2 threads): throughput: 2,480,663 ops/sec. latency(ns): avg=565.4 99% < 2048.0 99.99% < 19660.8 (45254375 samples)
-14. Log4j2: Async Appender (4 threads): throughput: 2,051,807 ops/sec. latency(ns): avg=427.4 99% < 1024.0 99.99% < 11878.4 (37606585 samples)
-15. Logback: Async jactor Appender (4 threads): throughput: 1,563,293 ops/sec. latency(ns): avg=585.1 99% < 2048.0 99.99% < 9420.8 (97661429 samples)
+1. Logback: Async disruptor Appender (single thread): throughput: 9,951,645 ops/sec. latency(ns): avg=5836.8 99% < 8192.0 99.99% < 40317747.2 (301733 samples)
+2. Log4j2: Loggers all async (single thread): throughput: 9,286,567 ops/sec. latency(ns): avg=4537.4 99% < 7372.8 99.99% < 13513523.2 (636258 samples)
+3. Logback: Async jactor Appender (single thread): throughput: 8,881,213 ops/sec. latency(ns): avg=1158.4 99% < 2048.0 99.99% < 52428.8 (23572385 samples)
+4. Log4j2: Async Appender (single thread): throughput: 7,426,999 ops/sec. latency(ns): avg=820.6 99% < 4096.0 99.99% < 91750.4 (200265 samples)
+5. Log4j2: Async Appender (2 threads): throughput: 3,751,904 ops/sec. latency(ns): avg=760.0 99% < 4096.0 99.99% < 72089.6 (1165310 samples)
+6. Log4j2: Loggers all  Sync (2 threads): throughput: 3,684,754 ops/sec. latency(ns): avg=6704.4 99% < 6553.6 99.99% < 23592960.0 (1725538 samples)
+7. Log4j2: Async Appender (4 threads): throughput: 3,046,964 ops/sec. latency(ns): avg=501.3 99% < 2048.0 99.99% < 88473.6 (22276330 samples)
+8. Log4j2: Loggers all  Sync (4 threads): throughput: 2,713,546 ops/sec. latency(ns): avg=3802.8 99% < 4915.2 99.99% < 11403264.0 (6888406 samples)
+9. Logback: Async jactor2 Appender (2 threads): throughput: 2,522,910 ops/sec. latency(ns): avg=1035.2 99% < 2048.0 99.99% < 65536.0 (36582271 samples)
+10. Logback: Async disruptor Appender (2 threads): throughput: 2,521,034 ops/sec. latency(ns): avg=2618.0 99% < 4915.2 99.99% < 10190848.0 (2325082 samples)
+11. Logback: Async disruptor Appender (4 threads): throughput: 2,075,186 ops/sec. latency(ns): avg=13528.8 99% < 6144.0 99.99% < 63871385.6 (4671829 samples)
+12. Logback: Async jactor Appender (4 threads): throughput: 1,485,376 ops/sec. latency(ns): avg=915.8 99% < 1536.0 99.99% < 65536.0 (99159695 samples)
+13. Logback: Async jactor2 Appender (4 threads): throughput: 1,473,195 ops/sec. latency(ns): avg=1216.7 99% < 1689.6 99.99% < 62259.2 (83900069 samples)
+14. Logback: Async jactor2 Appender (single thread): throughput: 1,408,032 ops/sec. latency(ns): avg=1090.0 99% < 2048.0 99.99% < 58982.4 (13567361 samples)
+15. Logback: Async jactor Appender (2 threads): throughput: 1,198,566 ops/sec. latency(ns): avg=927.9 99% < 2048.0 99.99% < 52428.8 (49802004 samples)
 
 ```
 
