@@ -2,22 +2,25 @@ package github.com.cp149.jactor2;
 
 import github.com.cp149.BaseAppender;
 
+import org.agilewiki.jactor2.core.context.DefaultThreadFactory;
 import org.agilewiki.jactor2.core.context.JAContext;
 import org.agilewiki.jactor2.core.processing.AtomicMessageProcessor;
 import org.agilewiki.jactor2.core.processing.MessageProcessor;
+import org.agilewiki.jactor2.core.processing.NonBlockingMessageProcessor;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
-public class Jactor2Appender extends BaseAppender {	
-	final JAContext jaContext = new JAContext(1);
-    final MessageProcessor messageProcessor = new AtomicMessageProcessor(jaContext);
-	
-	
+public class Jactor2Appender extends BaseAppender {
+	JAContext jaContext;
+	MessageProcessor messageProcessor;
+	private int threadSize = 1;
+
 	@Override
 	public void start() {
 
 		super.start();
-		
+		jaContext = new JAContext(1024 * 256, 1024 *256, threadSize, new DefaultThreadFactory());
+		messageProcessor = new NonBlockingMessageProcessor(jaContext);
 	}
 
 	@Override
@@ -25,7 +28,7 @@ public class Jactor2Appender extends BaseAppender {
 		try {
 			jaContext.close();
 		} catch (Exception e) {
-			
+
 		}
 		detachAndStopAllAppenders();
 		super.stop();
@@ -33,14 +36,14 @@ public class Jactor2Appender extends BaseAppender {
 
 	@Override
 	protected void append(ILoggingEvent eventObject) {
-		try {		
+		try {
 			if (includeCallerData) {
-			eventObject.prepareForDeferredProcessing();
-			eventObject.getCallerData();
+				eventObject.prepareForDeferredProcessing();
+				eventObject.getCallerData();
 			}
-			final LoggerActor2 actor1 = new LoggerActor2(messageProcessor,eventObject,this.aai);
-			try {				
-				actor1.hi1.signal();				
+			final LoggerActor2 actor1 = new LoggerActor2(messageProcessor, eventObject, this.aai);
+			try {
+				actor1.hi1.signal();
 			} catch (Exception e) {
 				addError(e.getMessage());
 			}
@@ -50,5 +53,12 @@ public class Jactor2Appender extends BaseAppender {
 
 	}
 
+	public int getThreadSize() {
+		return threadSize;
+	}
+
+	public void setThreadSize(int threadSize) {
+		this.threadSize = threadSize;
+	}
 
 }

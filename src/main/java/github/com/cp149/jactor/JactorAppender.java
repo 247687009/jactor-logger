@@ -14,7 +14,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
  */
 public class JactorAppender extends BaseAppender {
 
-	private int threadSize = 2;
+	private int threadSize = 1;
 	private MailboxFactory mailboxFactory;
 	private Mailbox mailbox;
 	private final JAFuture future = new JAFuture();
