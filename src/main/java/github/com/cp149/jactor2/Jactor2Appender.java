@@ -2,18 +2,16 @@ package github.com.cp149.jactor2;
 
 import github.com.cp149.BaseAppender;
 
-import org.agilewiki.jactor.api.Mailbox;
-import org.agilewiki.jactor.api.MailboxFactory;
-import org.agilewiki.jactor.impl.DefaultMailboxFactoryImpl;
-import org.agilewiki.jactor.impl.ThreadManagerImpl;
-import org.agilewiki.jactor.util.PASemaphore;
+import org.agilewiki.jactor2.core.context.JAContext;
+import org.agilewiki.jactor2.core.processing.AtomicMessageProcessor;
+import org.agilewiki.jactor2.core.processing.MessageProcessor;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
 public class Jactor2Appender extends BaseAppender {	
-	final MailboxFactory mailboxFactory = new DefaultMailboxFactoryImpl( ThreadManagerImpl.newThreadManager(1));
-    final Mailbox mailbox = mailboxFactory.createMailbox();
-	private int threadSize = 2;
+	final JAContext jaContext = new JAContext(1);
+    final MessageProcessor messageProcessor = new AtomicMessageProcessor(jaContext);
+	
 	
 	@Override
 	public void start() {
@@ -25,7 +23,7 @@ public class Jactor2Appender extends BaseAppender {
 	@Override
 	public void stop() {
 		try {
-			mailboxFactory.close();
+			jaContext.close();
 		} catch (Exception e) {
 			
 		}
@@ -40,7 +38,7 @@ public class Jactor2Appender extends BaseAppender {
 			eventObject.prepareForDeferredProcessing();
 			eventObject.getCallerData();
 			}
-			final LoggerActor2 actor1 = new LoggerActor2(mailbox,eventObject,this.aai);
+			final LoggerActor2 actor1 = new LoggerActor2(messageProcessor,eventObject,this.aai);
 			try {				
 				actor1.hi1.signal();				
 			} catch (Exception e) {
@@ -52,12 +50,5 @@ public class Jactor2Appender extends BaseAppender {
 
 	}
 
-	public int getThreadSize() {
-		return threadSize;
-	}
-
-	public void setThreadSize(int threadSize) {
-		this.threadSize = threadSize;
-	}
 
 }
