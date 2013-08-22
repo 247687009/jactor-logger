@@ -19,7 +19,7 @@ public class Jactor2Appender extends BaseAppender {
 	public void start() {
 
 		super.start();
-		jaContext = new JAContext(1024 * 256, 1024 *256, threadSize, new DefaultThreadFactory());
+		jaContext = new JAContext(1024, 1024, threadSize, new DefaultThreadFactory());
 		messageProcessor = new NonBlockingMessageProcessor(jaContext);
 	}
 
@@ -41,7 +41,7 @@ public class Jactor2Appender extends BaseAppender {
 				eventObject.prepareForDeferredProcessing();
 				eventObject.getCallerData();
 			}
-			final LoggerActor2 actor1 = new LoggerActor2(messageProcessor, eventObject, this.aai);
+			LoggerActor2 actor1 = new LoggerActor2(messageProcessor, eventObject, this.aai);
 			try {
 				actor1.hi1.signal();
 			} catch (Exception e) {
