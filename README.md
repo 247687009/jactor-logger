@@ -3,7 +3,7 @@ jactor-logger
 
 logback appender use jactor,another Async appender
 easy to use,such as add append in logback.xml
-
+just down https://github.com/cp149/jactor-logger/blob/master/dist/jactor-logger-0.9.jar
 ```html
 <appender name="ASYNC" class="github.com.cp149.jactor.JactorAppender">
 		<appender-ref ref="STDOUT" />
