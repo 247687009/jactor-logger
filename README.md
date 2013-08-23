@@ -15,7 +15,7 @@ just down https://raw.github.com/cp149/jactor-logger/master/dist/jactor-logger-0
 	</appender>
 ```
 Unlike log4j2 use Fast File Appenders,my three  Appenders use normal ch.qos.logback.core.FileAppende
-The test code detail is at http://logging.apache.org/log4j/2.0/manual/async.html#Performance
+The  code detail is at http://logging.apache.org/log4j/2.0/manual/async.html#Performance
 ```html
 
 Done. Total duration: 192.6 minutes

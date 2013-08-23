@@ -2,16 +2,14 @@ package github.com.cp149.jactor2;
 
 import github.com.cp149.BaseAppender;
 
-import org.agilewiki.jactor2.core.context.DefaultThreadFactory;
-import org.agilewiki.jactor2.core.context.JAContext;
-import org.agilewiki.jactor2.core.processing.AtomicMessageProcessor;
 import org.agilewiki.jactor2.core.processing.MessageProcessor;
 import org.agilewiki.jactor2.core.processing.NonBlockingMessageProcessor;
+import org.agilewiki.jactor2.core.threading.ModuleContext;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
 public class Jactor2Appender extends BaseAppender {
-	JAContext jaContext;
+	ModuleContext jaContext;
 	MessageProcessor messageProcessor;
 	private int threadSize = 1;
 
@@ -19,7 +17,7 @@ public class Jactor2Appender extends BaseAppender {
 	public void start() {
 
 		super.start();
-		jaContext = new JAContext(1024, 1024, threadSize, new DefaultThreadFactory());
+		jaContext = new ModuleContext(1024, 1024, threadSize, new org.agilewiki.jactor2.core.threading.DefaultThreadFactory());
 		messageProcessor = new NonBlockingMessageProcessor(jaContext);
 	}
 
