@@ -4,6 +4,7 @@ jactor-logger
 logback appender use jactor,another Async appender
 easy to use,such as add append in logback.xml
 just down https://raw.github.com/cp149/jactor-logger/master/dist/jactor-logger-0.9.jar
+and downlaod jactor disruptor from maven
 ```html
 <appender name="ASYNC" class="github.com.cp149.jactor.JactorAppender">
 		<appender-ref ref="STDOUT" />
