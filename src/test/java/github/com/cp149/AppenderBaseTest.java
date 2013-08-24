@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -24,6 +25,7 @@ public class AppenderBaseTest {
 	protected int sizeBeforTest = 0;
 
 	protected org.slf4j.Logger logback = LoggerFactory.getLogger(this.getClass());
+	private Logger debuglog = LoggerFactory.getLogger(AppenderBaseTest.class);
 	private LoggerContext lc;
 
 	// test start time ,
@@ -40,19 +42,20 @@ public class AppenderBaseTest {
 		super();
 	}
 
-	@BeforeClass(alwaysRun = true,timeOut=20000)
+	@BeforeClass(alwaysRun = true, timeOut = 20000)
 	public void initLogconfig() throws Exception {
 		filename = "logs/" + Logfile + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".log";
 		File file = new File(filename);
 		if (file.exists()) {
 			sizeBeforTest = Testutils.countlines(filename);
 		}
-		System.out.println(file.getAbsolutePath());
+		debuglog.debug(file.getAbsolutePath());
 		configureLC();
 		// warmup the logfile
 		for (int i = 0; i < WARMLOGSIZE; i++)
 			logback.debug("warm logsystem");
-//		while(CountAppender.count.intValue()!= WARMLOGSIZE)TimeUnit.MILLISECONDS.sleep(500);		
+		// while(CountAppender.count.intValue()!=
+		// WARMLOGSIZE)TimeUnit.MILLISECONDS.sleep(500);
 		starttime = System.currentTimeMillis();
 
 	}
@@ -70,34 +73,22 @@ public class AppenderBaseTest {
 	public void afteclass() throws Exception {
 		// get total test run time
 		long runtime = System.currentTimeMillis() - starttime;
-		System.out.println(this.getClass().getSimpleName() + " thread run over time=" + runtime);
+		debuglog.debug(this.getClass().getSimpleName() + " thread run over time=" + runtime);
 		int expectlines = 100 * loglines + WARMLOGSIZE;
 		// get total log
 
 		while (CountAppender.count.intValue() < expectlines) {
 			TimeUnit.MILLISECONDS.sleep(300);
-			System.out.println(this.getClass().getSimpleName() + "current lines time=" + CountAppender.count);
+			debuglog.debug(this.getClass().getSimpleName() + "current lines time=" + CountAppender.count);
 		}
 		// get the write time
-		System.out.println(this.getClass().getSimpleName() + " total  time=" + (System.currentTimeMillis() - starttime) + " total lines="
+		debuglog.debug(this.getClass().getSimpleName() + " total  time=" + (System.currentTimeMillis() - starttime) + " total lines="
 				+ expectlines);
 
 		if (!isNettyappender) {
 			int fileline = Testutils.countlines(filename) - sizeBeforTest;
 			Assert.assertEquals(fileline, expectlines);
 		} else {
-//			TimeUnit.SECONDS.sleep(18-(System.currentTimeMillis() - starttime)/1000);
-			// int fileline = Testutils.countlines(filename) - sizeBeforTest;
-			// while (fileline < expectlines) {
-			// TimeUnit.MILLISECONDS.sleep(500);
-			// System.out.println(this.getClass().getSimpleName() +
-			// " current logfile lines time=" + fileline);
-			// fileline = Testutils.countlines(filename) - sizeBeforTest;
-			// }
-			// // get the write time
-			// System.out.println(this.getClass().getSimpleName() +
-			// " total  timefor server=" + (System.currentTimeMillis() -
-			// starttime) + " total lines=" + expectlines);
 		}
 
 	}

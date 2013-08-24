@@ -22,7 +22,7 @@ public class Jactor2AppenderTest extends AppenderBaseTest
 
 	public Jactor2AppenderTest() {
 		super();
-		Logfile = "logback-jactor-";
+		Logfile = "logback-jactor2-";
 	}
 
 }

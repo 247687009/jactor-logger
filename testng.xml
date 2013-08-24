@@ -11,17 +11,7 @@
 		<packages>
 			<package name="github.com.cp149.*"></package>			
 		</packages>
-	</test>
-	<test name="nettytest" junit="false" annotations="JDK"  skipfailedinvocationcounts="true" parallel="false">
-		<groups>
-			<run>
-				<include name="nettytest" ></include>
-			</run>
-		</groups>
-		<packages>
-			<package name="github.com.cp149.*"></package>			
-		</packages>
-	</test>
+	</test>	
 	 
 </suite>
 	
