@@ -20,6 +20,8 @@ This three appender are independent,So ,if you wish only one appender,you just n
 ```
 Unlike log4j2 use Fast File Appenders,my three  Appenders use normal ch.qos.logback.core.FileAppende
 The  code detail is at http://logging.apache.org/log4j/2.0/manual/async.html#Performance
+
+if you wish test it,run org.apache.logging.log4j.core.async.perftest.PerfTestDriver at src/test/java
 ```html
 
 Done. Total duration: 192.6 minutes
