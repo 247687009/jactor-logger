@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder 
+			by default -->
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %p [%t] %c [%F:%L] - %msg%n
+			</pattern>
+			<immediateFlush>false</immediateFlush>
+		</encoder>
+	</appender>
+	<appender name="Countout" class="github.com.cp149.CountAppender" />
+	<appender name="RollingFile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+				<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>logs/logback-file-%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>		
+		
+		<encoder>
+			<pattern>%d %-5p [%t] %c [%F:%L] - %msg%n</pattern>
+			
+		</encoder>
+	</appender>	
+	<appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+	<queueSize>50500</queueSize>
+    <appender-ref ref="RollingFile" />
+  	</appender>
+	<logger name="test.info"  level="DEBUG" additivity="false" >				
+		<appender-ref ref="STDOUT" />
+	</logger>
+	
+	<root level="DEBUG" >		
+		<appender-ref ref="Countout" />
+		<appender-ref ref="RollingFile" />
+	</root>
+</configuration>
