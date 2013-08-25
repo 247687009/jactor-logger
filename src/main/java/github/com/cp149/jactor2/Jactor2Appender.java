@@ -9,16 +9,18 @@ import org.agilewiki.jactor2.core.threading.ModuleContext;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
 public class Jactor2Appender extends BaseAppender {
-	ModuleContext jaContext;
-	MessageProcessor messageProcessor;
-	private int threadSize = 1;
+	ModuleContext jaContext;	
+	
+	private MessageProcessor messageProcessor;
+	
 
 	@Override
 	public void start() {
 
 		super.start();
-		jaContext = new ModuleContext(1024, 1024, threadSize, new org.agilewiki.jactor2.core.threading.DefaultThreadFactory());
-		messageProcessor = new NonBlockingMessageProcessor(jaContext);
+		jaContext = new ModuleContext(1024*1024, 1024*1024, 1, new org.agilewiki.jactor2.core.threading.DefaultThreadFactory());
+		messageProcessor=new NonBlockingMessageProcessor(jaContext);
+		
 	}
 
 	@Override
@@ -38,8 +40,8 @@ public class Jactor2Appender extends BaseAppender {
 			if (includeCallerData) {
 				eventObject.prepareForDeferredProcessing();
 				eventObject.getCallerData();
-			}
-			LoggerActor2 actor1 = new LoggerActor2(messageProcessor, eventObject, this.aai);
+			}			
+			LoggerActor2 actor1 = new LoggerActor2(messageProcessor, eventObject, this.aai);			
 			try {
 				actor1.hi1.signal();
 			} catch (Exception e) {
@@ -51,12 +53,6 @@ public class Jactor2Appender extends BaseAppender {
 
 	}
 
-	public int getThreadSize() {
-		return threadSize;
-	}
-
-	public void setThreadSize(int threadSize) {
-		this.threadSize = threadSize;
-	}
+	
 
 }

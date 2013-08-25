@@ -20,8 +20,8 @@ public class LoggerActor2 extends ActorBase {
             public void processRequest(
                     final Transport<Void> responseProcessor)
                     throws Exception {
-            	aai.appendLoopOnAppenders(eventObject);
-                responseProcessor.processResponse(null);
+            	aai.appendLoopOnAppenders(eventObject);       
+            	
             }
         };
     }

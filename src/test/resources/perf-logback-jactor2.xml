@@ -11,8 +11,7 @@
 	
   <appender name="ASYNC1" class="github.com.cp149.jactor2.Jactor2Appender">
   <includeCallerData>false</includeCallerData>    
-    <appender-ref ref="FILE" />
-    <threadSize>1</threadSize>
+    <appender-ref ref="FILE" />   
   </appender>
 
   <root level="debug">
