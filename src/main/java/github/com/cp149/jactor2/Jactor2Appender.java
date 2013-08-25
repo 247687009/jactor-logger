@@ -26,7 +26,7 @@ public class Jactor2Appender extends BaseAppender {
 	@Override
 	public void stop() {
 		try {
-			jaContext.close();
+			jaContext.close();			
 		} catch (Exception e) {
 
 		}
