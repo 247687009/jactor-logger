@@ -23,7 +23,7 @@ The  code detail is at http://logging.apache.org/log4j/2.0/manual/async.html#Per
 
 if you wish test it,run org.apache.logging.log4j.core.async.perftest.PerfTestDriver at src/test/java
 
-using maven test to see the unit test result
+using maven clean test to see the unit test result
 ```html
 
 Done. Total duration: 192.6 minutes
