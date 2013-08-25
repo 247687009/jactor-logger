@@ -21,7 +21,7 @@ public class LoggerActor2 extends ActorBase {
                     final Transport<Void> responseProcessor)
                     throws Exception {
             	aai.appendLoopOnAppenders(eventObject);       
-            	
+            	responseProcessor.processResponse(null);
             }
         };
     }
