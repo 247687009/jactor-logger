@@ -25,7 +25,7 @@ public class AppenderBaseTest {
 	protected int sizeBeforTest = 0;
 
 	protected org.slf4j.Logger logback = LoggerFactory.getLogger(this.getClass());
-	private Logger debuglog = LoggerFactory.getLogger(AppenderBaseTest.class);
+	private Logger debuglog = LoggerFactory.getLogger("test.info");
 	private LoggerContext lc;
 
 	// test start time ,
@@ -69,7 +69,7 @@ public class AppenderBaseTest {
 		configurator.doConfigure(configFile);
 	}
 
-	@AfterClass(timeOut = 20000)
+	@AfterClass(timeOut = 20000,alwaysRun=true)
 	public void afteclass() throws Exception {
 		// get total test run time
 		long runtime = System.currentTimeMillis() - starttime;

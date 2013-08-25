@@ -31,7 +31,7 @@
 		<appender-ref ref="Countout" />
 	</appender>
 	
-	<logger name="github.com.cp149.AppenderBaseTest"  level="DEBUG" additivity="false" >				
+	<logger name="test.info"  level="DEBUG" additivity="false" >				
 		<appender-ref ref="STDOUT" />
 	</logger>
 	
