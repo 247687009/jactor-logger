@@ -36,8 +36,6 @@ public class AppenderBaseTest {
 	// log per thread
 	public static int loglines = 5000;
 
-	protected boolean isNettyappender = false;
-
 	public AppenderBaseTest() {
 		super();
 	}
@@ -48,9 +46,10 @@ public class AppenderBaseTest {
 		File file = new File(filename);
 		if (file.exists()) {
 			sizeBeforTest = Testutils.countlines(filename);
-		}
-		debuglog.debug(file.getAbsolutePath());
+		}		
 		configureLC();
+		CountAppender.count.set(0);
+		debuglog.debug(file.getAbsolutePath());
 		// warmup the logfile
 		for (int i = 0; i < WARMLOGSIZE; i++)
 			logback.debug("warm logsystem");
@@ -69,7 +68,7 @@ public class AppenderBaseTest {
 		configurator.doConfigure(configFile);
 	}
 
-	@AfterClass(timeOut = 20000,alwaysRun=true)
+	@AfterClass(timeOut = 20000, alwaysRun = true)
 	public void afteclass() throws Exception {
 		// get total test run time
 		long runtime = System.currentTimeMillis() - starttime;
@@ -85,11 +84,8 @@ public class AppenderBaseTest {
 		debuglog.debug(this.getClass().getSimpleName() + " total  time=" + (System.currentTimeMillis() - starttime) + " total lines="
 				+ expectlines);
 
-		if (!isNettyappender) {
-			int fileline = Testutils.countlines(filename) - sizeBeforTest;
-			Assert.assertEquals(fileline, expectlines);
-		} else {
-		}
+		int fileline = Testutils.countlines(filename) - sizeBeforTest;
+		Assert.assertEquals(fileline, expectlines);
 
 	}
 }
