@@ -2,6 +2,21 @@ jactor-logger
 =============
 
 logback appender use jactor,another Async appender
+
+on my pc
+
+RollingFile test 
+FileAppenderTest total  time=24227 total lines=500100
+
+and this three appender is 
+DisruptorTest total  time=7539 total lines=500100 
+JactorAppenderTest total  time=8892 total lines=500100 
+Jactor2AppenderTest total  time=6140 total lines=500100
+
+and The most import is logging is asynchronous,which means main program can run much faster
+
+ 
+
 easy to use,such as add append in logback.xml
 just down https://raw.github.com/cp149/jactor-logger/master/dist/jactor-logger-0.9.jar
 
