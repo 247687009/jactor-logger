@@ -1,5 +1,8 @@
 jactor-logger
 =============
+Logger is very important,there are two issue in logger system,first is performance,logger should not delay the main program's performance
+second is data lost,because logger is in same jvm,so when jvm is crash,logger messages may lost if the writing speed is slow.  
+
 
 logback appender use jactor,another Async appender
 
@@ -9,8 +12,10 @@ RollingFile test
 FileAppenderTest total  time=24227 total lines=500100
 
 and this three appender is 
-DisruptorTest total  time=7539 total lines=500100 
-JactorAppenderTest total  time=8892 total lines=500100 
+DisruptorTest total  time=7539 total lines=500100
+ 
+JactorAppenderTest total  time=8892 total lines=500100
+ 
 Jactor2AppenderTest total  time=6140 total lines=500100
 
 and The most import is logging is asynchronous,which means main program can run much faster
