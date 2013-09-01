@@ -16,16 +16,12 @@ public class JactorAppender extends BaseAppender {
 
 	private int threadSize = 1;
 	private MailboxFactory mailboxFactory;
-	private Mailbox mailbox;
-	private final JAFuture future = new JAFuture();
-	private static final int RINGBUFFER_DEFAULT_SIZE = 48 * 1024;
+	private Mailbox mailbox;	
 	@Override
 	public void start() {
-
 		super.start();
 		mailboxFactory = JAMailboxFactory.newMailboxFactory(threadSize);
-		mailbox = mailboxFactory.createMailbox();
-		
+		mailbox = mailboxFactory.createMailbox();		
 	}
 
 	@Override

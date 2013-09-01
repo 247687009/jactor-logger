@@ -33,7 +33,7 @@ public class DisruptorAppender extends BaseAppender {
 	}
 
 	final ExecutorService exec = Executors.newSingleThreadExecutor();	
-	final Disruptor<ValueEvent> disruptor = new Disruptor<ValueEvent>(DisruptorAppender.EVENT_FACTORY, RINGBUFFER_DEFAULT_SIZE, exec,ProducerType.MULTI, new SleepingWaitStrategy());
+	Disruptor<ValueEvent> disruptor = new Disruptor<ValueEvent>(DisruptorAppender.EVENT_FACTORY, RINGBUFFER_DEFAULT_SIZE, exec,ProducerType.MULTI, new SleepingWaitStrategy());
 
 	final LogEventHandler handler = new LogEventHandler();
 
@@ -59,17 +59,16 @@ public class DisruptorAppender extends BaseAppender {
 			return;
 
 		this.started = false;
-		try {
-			Disruptor<ValueEvent> temp = disruptor;
+		try {			 ;
 
 			// Must guarantee that publishing to the RingBuffer has stopped
 			// before we call disruptor.shutdown()
 //			disruptor = null; // client code fails with NPE if log after stop =
 								// OK
-			temp.shutdown();
+			 disruptor.shutdown();
 
 			// wait up to 10 seconds for the ringbuffer to drain
-			RingBuffer<ValueEvent> ringBuffer = temp.getRingBuffer();
+			RingBuffer<ValueEvent> ringBuffer = disruptor.getRingBuffer();
 			for (int i = 0; i < MAX_DRAIN_ATTEMPTS_BEFORE_SHUTDOWN; i++) {
 				if (ringBuffer.hasAvailableCapacity(ringBuffer.getBufferSize())) {
 					break;
@@ -81,7 +80,17 @@ public class DisruptorAppender extends BaseAppender {
 					// ignored
 				}
 			}
+			disruptor.shutdown();
+			disruptor = null;			
 			exec.shutdown(); // finally, kill the processor thread
+			try {
+				// give ringbuffer some time to drain...
+				Thread.sleep(HALF_A_SECOND);
+			} catch (InterruptedException e) {
+				// ignored
+			}finally{
+				exec.shutdownNow();
+			}
 			detachAndStopAllAppenders();
 		} catch (Exception e) {
 			addError(e.getMessage());
