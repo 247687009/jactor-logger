@@ -215,9 +215,9 @@ public class PerfTestDriver {
 		// tests.add(s("perf3PlainNoLoc.xml", LOG20, "Sync"));
 		// tests.add(s("perf-logback-async.xml", LOGBK, "Async Appender"));
 		// tests.add(s("perf-log4j12-async.xml", LOG12, "Async Appender"));
-//		tests.add(s("perf3PlainNoLoc.xml", LOG20, "Loggers all async", ALL_ASYNC, SYSCLOCK));
+		tests.add(s("perf3PlainNoLoc.xml", LOG20, "Loggers all async", ALL_ASYNC, SYSCLOCK));
 //		tests.add(s("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender"));
-//		tests.add(s("perf-logback-disruptor.xml", LOGBK, "Async disruptor Appender"));
+		tests.add(s("perf-logback-disruptor.xml", LOGBK, "Async disruptor Appender"));
 //		tests.add(s("perf-logback-jactor.xml", LOGBK, "Async jactor Appender"));
 		tests.add(s("perf-logback-jactor2.xml", LOGBK, "Async jactor2 Appender"));
 		// includeLocation=true
@@ -250,11 +250,11 @@ public class PerfTestDriver {
 			// i));
 			// tests.add(m("perf-log4j12-async.xml", LOG12, "Async Appender",
 			// i));
-//			 tests.add(m("perf3PlainNoLoc.xml", LOG20, "Loggers all  Sync", i,ALL_ASYNC, SYSCLOCK));
+			 tests.add(m("perf3PlainNoLoc.xml", LOG20, "Loggers all  Sync", i,ALL_ASYNC, SYSCLOCK));
 //			tests.add(m("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender", i));
 			tests.add(m("perf-logback-jactor2.xml", LOGBK, "Async jactor2 Appender", i));
 //			tests.add(m("perf-logback-jactor.xml", LOGBK, "Async jactor Appender", i));
-//			tests.add(m("perf-logback-disruptor.xml", LOGBK, "Async disruptor Appender", i));
+			tests.add(m("perf-logback-disruptor.xml", LOGBK, "Async disruptor Appender", i));
 			// tests.add(m("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender",
 			// i));
 
