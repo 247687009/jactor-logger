@@ -11,7 +11,7 @@ public class Jactor2Appender extends BaseAppender {
 	public void start() {
 
 		super.start();
-		new Plant();
+		new Plant(1);
 	
 		
 	}
@@ -37,7 +37,7 @@ public class Jactor2Appender extends BaseAppender {
 			}			
 			LoggerActor2 actor1 = new LoggerActor2();			
 			try {
-				actor1.new h1(eventObject, aai).call();
+				actor1.new h1(eventObject, aai).signal();;
 			} catch (Exception e) {
 				addError(e.getMessage());
 			}

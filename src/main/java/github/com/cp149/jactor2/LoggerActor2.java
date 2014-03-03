@@ -23,7 +23,7 @@ public class LoggerActor2 extends NonBlockingBladeBase {
 		@Override
 		public void processAsyncRequest() throws Exception {
 			aai.appendLoopOnAppenders(eventObject);
-
+			processAsyncResponse(null);
 		}
 
 	}
