@@ -1,27 +1,30 @@
 package github.com.cp149.jactor2;
 
-import org.agilewiki.jactor2.core.messages.SyncRequest;
-import org.agilewiki.jactor2.core.reactors.IsolationReactor;
-import org.agilewiki.jactor2.core.reactors.Reactor;
+import org.agilewiki.jactor2.core.blades.NonBlockingBladeBase;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.spi.AppenderAttachableImpl;
 
+public class LoggerActor2 extends NonBlockingBladeBase {
 
-public class LoggerActor2  {
-	 private final Reactor reactor;
-    public final SyncRequest<Void> hi1;
+	class
 
-    public LoggerActor2(final IsolationReactor mbox, final ILoggingEvent eventObject, final AppenderAttachableImpl<ILoggingEvent> aai) throws Exception{   
-    	reactor=(mbox);
-        hi1 = new SyncRequest<Void>(reactor) {
-            
+	h1 extends AsyncBladeRequest<Void> {
 
-			@Override
-			protected Void processSyncRequest() throws Exception {
-				aai.appendLoopOnAppenders(eventObject);       
-            	return null;
-			}
-        };
-    }
+		private final AppenderAttachableImpl<ILoggingEvent> aai;
+		private final ILoggingEvent eventObject;
+
+		public h1(final ILoggingEvent eventObject, final AppenderAttachableImpl<ILoggingEvent> aai) {
+			super();
+			this.aai = aai;
+			this.eventObject = eventObject;
+		}
+
+		@Override
+		public void processAsyncRequest() throws Exception {
+			aai.appendLoopOnAppenders(eventObject);
+
+		}
+
+	}
 }

@@ -240,7 +240,7 @@ public class PerfTestDriver {
 		// tests.add(s("perf2syncRollFastFile.xml", LOG20,
 		// "RollFastFileAppender"));
 
-		final int MAX_THREADS = 4; // 64 takes a LONG time
+		final int MAX_THREADS =2; // 64 takes a LONG time
 		for (int i = 2; i <= MAX_THREADS; i *= 2) {
 			// includeLocation = false
 			// tests.add(m("perf-logback.xml", LOGBK, "Sync", i));

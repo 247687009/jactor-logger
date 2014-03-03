@@ -2,36 +2,30 @@ package github.com.cp149.jactor2;
 
 import github.com.cp149.BaseAppender;
 
-import org.agilewiki.jactor2.core.facilities.DefaultThreadFactory;
-import org.agilewiki.jactor2.core.facilities.Facility;
-import org.agilewiki.jactor2.core.reactors.IsolationReactor;
+import org.agilewiki.jactor2.core.plant.Plant;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
-public class Jactor2Appender extends BaseAppender {
-	 Facility facility;
-	
-	private IsolationReactor isolationReactor;
-	
-
+public class Jactor2Appender extends BaseAppender {	
 	@Override
 	public void start() {
 
 		super.start();
-		facility = new Facility(1024*1024, 1024*1024, 1, new DefaultThreadFactory());
-		isolationReactor= new IsolationReactor(facility);
+		new Plant();
+	
 		
 	}
 
 	@Override
 	public void stop() {
+		
+		detachAndStopAllAppenders();
+		super.stop();
 		try {
-			facility.close();			
+			Plant.close();			
 		} catch (Exception e) {
 
 		}
-		detachAndStopAllAppenders();
-		super.stop();
 	}
 
 	@Override
@@ -41,9 +35,9 @@ public class Jactor2Appender extends BaseAppender {
 				eventObject.prepareForDeferredProcessing();
 				eventObject.getCallerData();
 			}			
-			LoggerActor2 actor1 = new LoggerActor2(isolationReactor, eventObject, this.aai);			
+			LoggerActor2 actor1 = new LoggerActor2();			
 			try {
-				actor1.hi1.signal();
+				actor1.new h1(eventObject, aai).call();
 			} catch (Exception e) {
 				addError(e.getMessage());
 			}
