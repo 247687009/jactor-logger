@@ -7,12 +7,13 @@ import org.agilewiki.jactor2.core.plant.Plant;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
 public class Jactor2Appender extends BaseAppender {	
+	LoggerActor2 actor1 ;
 	@Override
 	public void start() {
 
 		super.start();
 		new Plant(1);
-	
+		actor1= new LoggerActor2();	
 		
 	}
 
@@ -22,6 +23,8 @@ public class Jactor2Appender extends BaseAppender {
 		detachAndStopAllAppenders();
 		super.stop();
 		try {
+			actor1.getReactor().close();
+			actor1=null;
 			Plant.close();			
 		} catch (Exception e) {
 
@@ -35,9 +38,9 @@ public class Jactor2Appender extends BaseAppender {
 				eventObject.prepareForDeferredProcessing();
 				eventObject.getCallerData();
 			}			
-			LoggerActor2 actor1 = new LoggerActor2();			
+					
 			try {
-				actor1.new h1(eventObject, aai).signal();;
+				actor1.new h1(eventObject, aai).call();
 			} catch (Exception e) {
 				addError(e.getMessage());
 			}

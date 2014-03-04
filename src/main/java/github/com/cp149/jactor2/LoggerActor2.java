@@ -1,12 +1,16 @@
 package github.com.cp149.jactor2;
 
 import org.agilewiki.jactor2.core.blades.NonBlockingBladeBase;
+import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.spi.AppenderAttachableImpl;
 
 public class LoggerActor2 extends NonBlockingBladeBase {
 
+	
+
+	
 	class
 
 	h1 extends AsyncBladeRequest<Void> {
