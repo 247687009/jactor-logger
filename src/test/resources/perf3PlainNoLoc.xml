@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration status="OFF">
-  <appenders>
-    <FastFile name="FastFile" fileName="perftest.log" immediateFlush="false" append="false">
+<Configuration status="OFF">
+  <Appenders>
+    <RandomAccessFile name="RandomAccessFile" fileName="perftest.log" immediateFlush="false" append="false">
       <PatternLayout>
-        <pattern>%d %p %c{1.} [%t] %X{aKey} %m %ex%n</pattern>
+        <Pattern>%d %p %c{1.} [%t] %X{aKey} %m %ex%n</Pattern>
       </PatternLayout>
-    </FastFile>
-  </appenders>
-  <loggers>
-    <root level="info" includeLocation="false">
-      <appender-ref ref="FastFile"/>
-    </root>
-  </loggers>
-</configuration>
+    </RandomAccessFile>
+  </Appenders>
+  <Loggers>
+    <Root level="info" includeLocation="false">
+      <appender-ref ref="RandomAccessFile"/>
+    </Root>
+  </Loggers>
+</Configuration>

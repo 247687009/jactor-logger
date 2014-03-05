@@ -3,6 +3,7 @@ package github.com.cp149.jactor2;
 import github.com.cp149.BaseAppender;
 
 import org.agilewiki.jactor2.core.plant.Plant;
+import org.agilewiki.jactor2.core.reactors.IsolationReactor;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
@@ -12,7 +13,7 @@ public class Jactor2Appender extends BaseAppender {
 	public void start() {
 
 		super.start();
-		new Plant(1);
+		new Plant(1);		
 		actor1= new LoggerActor2();	
 		
 	}
@@ -39,8 +40,8 @@ public class Jactor2Appender extends BaseAppender {
 				eventObject.getCallerData();
 			}			
 					
-			try {
-				actor1.new h1(eventObject, aai).call();
+			try {				
+				actor1.printReq(aai, eventObject).call();
 			} catch (Exception e) {
 				addError(e.getMessage());
 			}

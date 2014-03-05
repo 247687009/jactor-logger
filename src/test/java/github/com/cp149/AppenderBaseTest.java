@@ -16,7 +16,7 @@ import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
 
 public class AppenderBaseTest {
-	public static final int WARMLOGSIZE = 100;
+	public static final int WARMLOGSIZE = 500;
 	// logback config file
 	protected String LOGBACK_XML = "logback.xml";
 	// log out put file
@@ -34,7 +34,7 @@ public class AppenderBaseTest {
 	private String filename;
 
 	// log per thread
-	public static int loglines = 5000;
+	public static int loglines = 10000;
 
 	public AppenderBaseTest() {
 		super();
@@ -55,7 +55,7 @@ public class AppenderBaseTest {
 			logback.debug("warm logsystem");
 		// while(CountAppender.count.intValue()!=
 		// WARMLOGSIZE)TimeUnit.MILLISECONDS.sleep(500);
-		starttime = System.currentTimeMillis();
+		starttime = System.nanoTime();
 
 	}
 
@@ -71,7 +71,7 @@ public class AppenderBaseTest {
 	@AfterClass(timeOut = 20000, alwaysRun = true)
 	public void afteclass() throws Exception {
 		// get total test run time
-		long runtime = System.currentTimeMillis() - starttime;
+		long runtime = System.nanoTime() - starttime;
 		debuglog.debug(this.getClass().getSimpleName() + " thread run over time=" + runtime);
 		int expectlines = 100 * loglines + WARMLOGSIZE;
 		// get total log
@@ -81,7 +81,7 @@ public class AppenderBaseTest {
 			debuglog.debug(this.getClass().getSimpleName() + "current lines time=" + CountAppender.count);
 		}
 		// get the write time
-		debuglog.debug(this.getClass().getSimpleName() + " total  time=" + (System.currentTimeMillis() - starttime) + " total lines="
+		debuglog.debug(this.getClass().getSimpleName() + " total  time=" + (System.nanoTime() - starttime)/1000000+ " total lines="
 				+ expectlines);
 
 		int fileline = Testutils.countlines(filename) - sizeBeforTest;
