@@ -34,7 +34,7 @@ public class AppenderBaseTest {
 	private String filename;
 
 	// log per thread
-	public static int loglines = 50000;
+	public static int loglines = 5000;
 
 	public AppenderBaseTest() {
 		super();
