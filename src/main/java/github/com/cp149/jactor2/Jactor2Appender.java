@@ -3,7 +3,6 @@ package github.com.cp149.jactor2;
 import github.com.cp149.BaseAppender;
 
 import org.agilewiki.jactor2.core.plant.Plant;
-import org.agilewiki.jactor2.core.reactors.IsolationReactor;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
