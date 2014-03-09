@@ -28,7 +28,7 @@ public class DisruptorAppender extends BaseAppender {
 		// event will eventually be recycled by the Disruptor after it wraps
 		public void onEvent(final ValueEvent event, final long sequence, final boolean endOfBatch) throws Exception {
 			aai.appendLoopOnAppenders(event.getEvent());		
-			
+			event.setEvent(null);
 		}			
 	}
 
