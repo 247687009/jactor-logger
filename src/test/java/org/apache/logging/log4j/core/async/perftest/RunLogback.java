@@ -18,7 +18,7 @@ package org.apache.logging.log4j.core.async.perftest;
 
 import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.Logger;
+import org.slf4j.Logger;
 import ch.qos.logback.core.spi.LifeCycle;
 
 import com.lmax.disruptor.collections.Histogram;
