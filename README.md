@@ -4,7 +4,7 @@ Logger is very important,there are two issue in logger system,first is performan
 second is data lost,because logger is in same jvm,so when jvm is crash,logger messages may lost if the writing speed is slow.  
 
 
-logback appender use jactor,another Async appender
+logback appender use jactor2,another Async appender
 
 on my pc
 
@@ -12,10 +12,7 @@ RollingFile test
 FileAppenderTest total  time=24227 total lines=500100
 
 and this three appender is 
-DisruptorTest total  time=7539 total lines=500100
- 
-JactorAppenderTest total  time=8892 total lines=500100
- 
+DisruptorTest total  time=7539 total lines=500100 
 Jactor2AppenderTest total  time=6140 total lines=500100
 
 and The most import is logging is asynchronous,which means main program can run much faster
@@ -29,7 +26,7 @@ and downlaod jactor disruptor from maven
 and jactor2 from http://laforge49.github.io/JActor2/
 This three appender are independent,So ,if you wish only one appender,you just need down one jar,such as jactor.jar
 ```html
-<appender name="ASYNC" class="github.com.cp149.jactor.JactorAppender">
+<appender name="ASYNC" class="github.com.cp149.jactor2.Jactor2Appender">
 		<appender-ref ref="STDOUT" />
 </appender>
 ```

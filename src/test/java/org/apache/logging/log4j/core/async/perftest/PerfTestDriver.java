@@ -226,7 +226,7 @@ public class PerfTestDriver {
 		// tests.add(s("perf3PlainNoLoc.xml", LOG20, "Sync"));
 		// tests.add(s("perf-logback-async.xml", LOGBK, "Async Appender"));
 		// tests.add(s("perf-log4j12-async.xml", LOG12, "Async Appender"));
-//		tests.add(s("perf-logback-jactor2.xml", LOGBK, "Async jactor2 Appender"));
+		tests.add(s("perf-logback-jactor2.xml", LOGBK, "Async jactor2 Appender"));
 		tests.add(s("perf3PlainNoLoc.xml", LOG20, "Loggers all async", ALL_ASYNC, SYSCLOCK));
 ////		tests.add(s("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender"));
 		tests.add(s("perf-logback-disruptor.xml", LOGBK, "Async disruptor Appender"));
@@ -252,7 +252,7 @@ public class PerfTestDriver {
 		// tests.add(s("perf2syncRollFastFile.xml", LOG20,
 		// "RollFastFileAppender"));
 
-		final int MAX_THREADS =8; // 64 takes a LONG time
+		final int MAX_THREADS =1; // 64 takes a LONG time
 		for (int i = 2; i <= MAX_THREADS; i *= 2) {
 			// includeLocation = false
 			// tests.add(m("perf-logback.xml", LOGBK, "Sync", i));
