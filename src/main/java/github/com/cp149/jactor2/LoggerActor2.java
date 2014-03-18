@@ -1,6 +1,9 @@
 package github.com.cp149.jactor2;
 
 import org.agilewiki.jactor2.core.blades.NonBlockingBladeBase;
+import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
+import org.agilewiki.jactor2.core.requests.AsyncRequest;
+import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.SyncRequest;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -12,20 +15,34 @@ public class LoggerActor2 extends NonBlockingBladeBase {
 		super();
 
 	}
-	
 
-
-    
-
-	public SyncRequest<Void> printReq(final AppenderAttachableImpl<ILoggingEvent> aai,
+	public SyncRequest<Void> printReq(
+			final AppenderAttachableImpl<ILoggingEvent> aai,
 			final ILoggingEvent eventObject) {
-		return new SyncBladeRequest<Void>() {			
+
+		return new SyncBladeRequest<Void>() {	
+
 
 			@Override
 			public Void processSyncRequest() throws Exception {
 				aai.appendLoopOnAppenders(eventObject);
 				return null;
 			}
+		};
+	}
+	
+	public AsyncRequest<Void> printAReq(
+			final AppenderAttachableImpl<ILoggingEvent> aai,
+			final ILoggingEvent eventObject) {
+
+		return new AsyncBladeRequest<Void>() {
+			@Override
+			public void processAsyncRequest() throws Exception {				
+				aai.appendLoopOnAppenders(eventObject);
+				processAsyncResponse(null);
+				
+			}
+
 		};
 	}
 

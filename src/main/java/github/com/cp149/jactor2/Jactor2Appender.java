@@ -40,7 +40,7 @@ public class Jactor2Appender extends BaseAppender {
 			}			
 					
 			try {				
-				actor1.printReq(aai, eventObject).call();
+				actor1.printAReq( aai, eventObject).call();
 			} catch (Exception e) {
 				addError(e.getMessage());
 			}

@@ -34,7 +34,7 @@ public class AppenderBaseTest {
 	private String filename;
 
 	// log per thread
-	public static int loglines = 10000;
+	public static int loglines = 50000;
 
 	public AppenderBaseTest() {
 		super();
@@ -68,7 +68,7 @@ public class AppenderBaseTest {
 		configurator.doConfigure(configFile);
 	}
 
-	@AfterClass(timeOut = 20000, alwaysRun = true)
+	@AfterClass(timeOut = 40000, alwaysRun = true)
 	public void afteclass() throws Exception {
 		// get total test run time
 		long runtime = System.nanoTime() - starttime;
