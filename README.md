@@ -12,7 +12,7 @@ RollingFile with LinkedBlockingQueue test
 FileAppenderTest total  time=54077 total lines=5000500
 
 and this three appender is 
-Jactor2AppenderTest total  time=34863 total lines=5000500 
+Jactor2AppenderTest total  time=34863 total lines=5000500
 DisruptorTest total  time=41997 total lines=5000500
 
 and The most import is logging is asynchronous,which means main program can run much faster
