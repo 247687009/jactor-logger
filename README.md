@@ -28,7 +28,7 @@ and The most import is logging is asynchronous,which means main program can run 
 easy to use,such as add append in logback.xml
 just down https://raw.github.com/cp149/jactor-logger/master/dist/jactor-logger-0.9.jar
 
-and downlaod jactor disruptor from maven
+and downlaod disruptor from maven
 and jactor2 from http://laforge49.github.io/JActor2/
 This three appender are independent,So ,if you wish only one appender,you just need down one jar,such as jactor.jar
 ```html
