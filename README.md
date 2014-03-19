@@ -8,12 +8,12 @@ logback appender use jactor2,another Async appender
 
 on my pc
 
-RollingFile test 
-FileAppenderTest total  time=24227 total lines=500100
+RollingFile with LinkedBlockingQueue test 
+FileAppenderTest total  time=54077 total lines=5000500
 
 and this three appender is 
-DisruptorTest total  time=7539 total lines=500100 
-Jactor2AppenderTest total  time=6140 total lines=500100
+Jactor2AppenderTest total  time=34863 total lines=5000500 
+DisruptorTest total  time=41997 total lines=5000500
 
 and The most import is logging is asynchronous,which means main program can run much faster
 

@@ -3,6 +3,7 @@ package github.com.cp149.jactor2;
 import github.com.cp149.BaseAppender;
 
 import org.agilewiki.jactor2.core.plant.Plant;
+import org.agilewiki.jactor2.core.requests.AsyncRequest;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
@@ -39,8 +40,9 @@ public class Jactor2Appender extends BaseAppender {
 				eventObject.getCallerData();
 			}			
 					
-			try {				
-				actor1.printAReq( aai, eventObject).call();
+			try {			
+				
+				actor1.printReq(aai, eventObject).call();
 			} catch (Exception e) {
 				addError(e.getMessage());
 			}

@@ -31,19 +31,7 @@ public class LoggerActor2 extends NonBlockingBladeBase {
 		};
 	}
 	
-	public AsyncRequest<Void> printAReq(
-			final AppenderAttachableImpl<ILoggingEvent> aai,
-			final ILoggingEvent eventObject) {
-
-		return new AsyncBladeRequest<Void>() {
-			@Override
-			public void processAsyncRequest() throws Exception {				
-				aai.appendLoopOnAppenders(eventObject);
-				processAsyncResponse(null);
-				
-			}
-
-		};
-	}
+	
+	
 
 }
