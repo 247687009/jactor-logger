@@ -1,10 +1,8 @@
 package github.com.cp149.jactor2;
 
+import org.agilewiki.jactor2.core.impl.Plant;
+
 import github.com.cp149.BaseAppender;
-
-import org.agilewiki.jactor2.core.plant.Plant;
-import org.agilewiki.jactor2.core.requests.AsyncRequest;
-
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
 public class Jactor2Appender extends BaseAppender {	
@@ -13,8 +11,13 @@ public class Jactor2Appender extends BaseAppender {
 	public void start() {
 
 		super.start();
-		new Plant(1);		
-		actor1= new LoggerActor2();	
+		try {
+			new Plant();		
+			actor1= new LoggerActor2();
+		} catch (Exception e) {			
+			e.printStackTrace();
+			addError(e.getMessage());
+		}	
 		
 	}
 
@@ -22,7 +25,6 @@ public class Jactor2Appender extends BaseAppender {
 	public void stop() {
 		
 		detachAndStopAllAppenders();
-		super.stop();
 		try {
 			actor1.getReactor().close();
 			actor1=null;
@@ -30,6 +32,8 @@ public class Jactor2Appender extends BaseAppender {
 		} catch (Exception e) {
 
 		}
+		super.stop();
+		
 	}
 
 	@Override
