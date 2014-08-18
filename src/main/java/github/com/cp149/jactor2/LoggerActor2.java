@@ -16,7 +16,7 @@ public class LoggerActor2 extends NonBlockingBladeBase {
 
 	public LoggerActor2(final AppenderAttachableImpl<ILoggingEvent> aai)
 			throws Exception {
-		super(new NonBlockingReactor(10000, 25000));
+		super(new NonBlockingReactor());
 		this.aai = aai;
 
 	}
@@ -32,6 +32,7 @@ public class LoggerActor2 extends NonBlockingBladeBase {
 				arg1.processAsyncResponse(null);
 				
 			}
+			
 		};
 
 	}
