@@ -28,7 +28,7 @@ public class RunLogback implements IPerfTestRunner {
     @Override
     public void runThroughputTest(final int lines, final Histogram histogram) {
         final long s1 = System.nanoTime();
-        final org.slf4j.helpers.SubstituteLogger logger = (org.slf4j.helpers.SubstituteLogger) LoggerFactory.getLogger(getClass());
+        final Logger logger = (Logger) LoggerFactory.getLogger(getClass());
         for (int j = 0; j < lines; j++) {
             logger.info(THROUGHPUT_MSG);
         }
