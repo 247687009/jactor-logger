@@ -41,27 +41,27 @@ public class PerfTestDriver {
      * Defines the setup for a java process running a performance test.
      */
     static class Setup implements Comparable<Setup> {
-        private final Class<?> _class;
-        private final String _log4jConfig;
-        private final String _name;
-        private final String[] _systemProperties;
-        private final int _threadCount;
-        private final File _temp;
-        public Stats _stats;
-        private final WaitStrategy _wait;
-        private final String _runner;
+        private final Class<?> klass;
+        private final String log4jConfig;
+        private final String name;
+        private final String[] systemProperties;
+        private final int threadCount;
+        private final File temp;
+        public Stats stats;
+        private final WaitStrategy wait;
+        private final String runner;
 
         public Setup(final Class<?> klass, final String runner, final String name,
                 final String log4jConfig, final int threadCount, final WaitStrategy wait,
                 final String... systemProperties) throws IOException {
-            _class = klass;
-            _runner = runner;
-            _name = name;
-            _log4jConfig = log4jConfig;
-            _threadCount = threadCount;
-            _systemProperties = systemProperties;
-            _wait = wait;
-            _temp = File.createTempFile("log4jperformance", ".txt");
+            this.klass = klass;
+            this.runner = runner;
+            this.name = name;
+            this.log4jConfig = log4jConfig;
+            this.threadCount = threadCount;
+            this.systemProperties = systemProperties;
+            this.wait = wait;
+            this.temp = File.createTempFile("log4jperformance", ".txt");
         }
 
         List<String> processArguments(final String java) {
@@ -80,27 +80,27 @@ public class PerfTestDriver {
             // args.add("-XX:+PrintGCApplicationConcurrentTime");
             // args.add("-XX:+PrintSafepointStatistics");
 
-            args.add("-Dlog4j.configuration=" + _log4jConfig); // log4j 1.2
-            args.add("-Dlog4j.configurationFile=" + _log4jConfig); // log4j 2
-            args.add("-Dlogback.configurationFile=" + _log4jConfig);// logback
+            args.add("-Dlog4j.configuration=" + log4jConfig); // log4j 1.2
+            args.add("-Dlog4j.configurationFile=" + log4jConfig); // log4j 2
+            args.add("-Dlogback.configurationFile=" + log4jConfig);// logback
 
             final int ringBufferSize = getUserSpecifiedRingBufferSize();
             if (ringBufferSize >= 128) {
                 args.add("-DAsyncLoggerConfig.RingBufferSize=" + ringBufferSize);
                 args.add("-DAsyncLogger.RingBufferSize=" + ringBufferSize);
             }
-            args.add("-DAsyncLoggerConfig.WaitStrategy=" + _wait);
-            args.add("-DAsyncLogger.WaitStrategy=" + _wait);
-            if (_systemProperties != null) {
-                Collections.addAll(args, _systemProperties);
+            args.add("-DAsyncLoggerConfig.WaitStrategy=" + wait);
+            args.add("-DAsyncLogger.WaitStrategy=" + wait);
+            if (systemProperties != null) {
+                Collections.addAll(args, systemProperties);
             }
             args.add("-cp");
             args.add(System.getProperty("java.class.path"));
-            args.add(_class.getName());
-            args.add(_runner);
-            args.add(_name);
-            args.add(_temp.getAbsolutePath());
-            args.add(String.valueOf(_threadCount));
+            args.add(klass.getName());
+            args.add(runner);
+            args.add(name);
+            args.add(temp.getAbsolutePath());
+            args.add(String.valueOf(threadCount));
             return args;
         }
 
@@ -126,19 +126,18 @@ public class PerfTestDriver {
         @Override
         public int compareTo(final Setup other) {
             // largest ops/sec first
-            return (int) Math.signum(other._stats._averageOpsPerSec
-                    - _stats._averageOpsPerSec);
+            return Long.signum(other.stats.averageOpsPerSec - stats.averageOpsPerSec);
         }
 
         public String description() {
-            String detail = _class.getSimpleName();
-            if (PerfTest.class == _class) {
+            String detail = klass.getSimpleName();
+            if (PerfTest.class == klass) {
                 detail = "single thread";
-            } else if (MTPerfTest.class == _class) {
-                detail = _threadCount + " threads";
+            } else if (MTPerfTest.class == klass) {
+                detail = threadCount + " threads";
             }
-            final String target = _runner.substring(_runner.indexOf(".Run") + 4);
-            return target + ": " + _name + " (" + detail + ")";
+            final String target = runner.substring(runner.indexOf(".Run") + 4);
+            return target + ": " + name + " (" + detail + ')';
         }
     }
 
@@ -146,13 +145,13 @@ public class PerfTestDriver {
      * Results of a performance test.
      */
     static class Stats {
-        int _count;
-        long _average;
-        long _pct99;
-        long _pct99_99;
-        double _latencyRowCount;
-        int _throughputRowCount;
-        private long _averageOpsPerSec;
+        int count;
+        long average;
+        long pct99;
+        long pct99_99;
+        double latencyRowCount;
+        int throughputRowCount;
+        private long averageOpsPerSec;
 
         // example line: avg=828 99%=1118 99.99%=5028 Count=3125
         public Stats(final String raw) {
@@ -160,31 +159,31 @@ public class PerfTestDriver {
             long totalOps = 0;
             for (final String line : lines) {
                 if (line.startsWith("avg")) {
-                    _latencyRowCount++;
+                    latencyRowCount++;
                     final String[] parts = line.split(" ");
                     int i = 0;
-                    _average += Long.parseLong(parts[i++].split("=")[1]);
-                    _pct99 += Long.parseLong(parts[i++].split("=")[1]);
-                    _pct99_99 += Long.parseLong(parts[i++].split("=")[1]);
-                    _count += Integer.parseInt(parts[i].split("=")[1]);
+                    average += Long.parseLong(parts[i++].split("=")[1]);
+                    pct99 += Long.parseLong(parts[i++].split("=")[1]);
+                    pct99_99 += Long.parseLong(parts[i++].split("=")[1]);
+                    count += Integer.parseInt(parts[i].split("=")[1]);
                 } else {
-                    _throughputRowCount++;
+                    throughputRowCount++;
                     final String number = line.substring(0, line.indexOf(' '));
                     final long opsPerSec = Long.parseLong(number);
                     totalOps += opsPerSec;
                 }
             }
-            _averageOpsPerSec = totalOps / _throughputRowCount;
+            averageOpsPerSec = totalOps / throughputRowCount;
         }
 
         @Override
         public String toString() {
             final String fmt = "throughput: %,d ops/sec. latency(ns): avg=%.1f 99%% < %.1f 99.99%% < %.1f (%d samples)";
-            return String.format(fmt, _averageOpsPerSec, //
-                    _average / _latencyRowCount, // mean latency
-                    _pct99 / _latencyRowCount, // 99% observations less than
-                    _pct99_99 / _latencyRowCount,// 99.99% observs less than
-                    _count);
+            return String.format(fmt, averageOpsPerSec, //
+                    average / latencyRowCount, // mean latency
+                    pct99 / latencyRowCount, // 99% observations less than
+                    pct99_99 / latencyRowCount,// 99.99% observs less than
+                    count);
         }
     }
 
@@ -215,88 +214,78 @@ public class PerfTestDriver {
         final String LOG20 = RunLog4j2.class.getName();
         final String LOGBK = RunLogback.class.getName();
 
+        final String THREADNAME = "-DAsyncLogger.ThreadNameStrategy=" //
+                + System.getProperty("AsyncLogger.ThreadNameStrategy", "CACHED");
+
         final long start = System.nanoTime();
         final List<Setup> tests = new ArrayList<PerfTestDriver.Setup>();
-	// includeLocation=false
-		
-		// tests.add(s("perf7MixedNoLoc.xml", LOG20,
-		// "Loggers mixed sync/async"));
-		// tests.add(s("perf-logback.xml", LOGBK, "Sync"));
-		// tests.add(s("perf-log4j12.xml", LOG12, "Sync"));
-		// tests.add(s("perf3PlainNoLoc.xml", LOG20, "Sync"));
-		// tests.add(s("perf-logback-async.xml", LOGBK, "Async Appender"));
-		// tests.add(s("perf-log4j12-async.xml", LOG12, "Async Appender"));
-		tests.add(s("perf-logback-jactor2.xml", LOGBK, "Async jactor2 Appender"));
-		tests.add(s("perf3PlainNoLoc.xml", LOG20, "Loggers all async", ALL_ASYNC, SYSCLOCK));
-////		tests.add(s("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender"));
-		tests.add(s("perf-logback-disruptor.xml", LOGBK, "Async disruptor Appender"));
-////		tests.add(s("perf-logback-jactor.xml", LOGBK, "Async jactor Appender"));
-		
-		// includeLocation=true
-		// tests.add(s("perf6AsyncApndLoc.xml", LOG20,
-		// "Async Appender includeLocation"));
-		// tests.add(s("perf8MixedLoc.xml", LOG20,
-		// "Mixed sync/async includeLocation"));
-		// tests.add(s("perf4PlainLocation.xml", LOG20,
-		// "Loggers all async includeLocation", ALL_ASYNC));
-		// tests.add(s("perf4PlainLocation.xml", LOG20,
-		// "Loggers all async includeLocation CachedClock", ALL_ASYNC,
-		// CACHEDCLOCK));
-		// tests.add(s("perf4PlainLocation.xml", LOG20,
-		// "Sync includeLocation"));
+        // includeLocation=false
+//        tests.add(s("perf3PlainNoLoc.xml", LOG20, "Loggers all async",
+//                ALL_ASYNC, SYSCLOCK, THREADNAME));
+//        tests.add(s("perf7MixedNoLoc.xml", LOG20, "Loggers mixed sync/async"));
+        tests.add(s("perf-logback-jactor2.xml", LOGBK, "jacctor2 Sync"));
+        tests.add(s("perf-logback-disruptor.xml", LOGBK, "disruptor Sync"));
+//        tests.add(s("perf3PlainNoLoc.xml", LOG20, "Sync"));
+//        tests.add(s("perf-logback-async.xml", LOGBK, "Async Appender"));
+//        tests.add(s("perf-log4j12-async.xml", LOG12, "Async Appender"));
+        tests.add(s("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender",ALL_ASYNC));
 
-		// appenders
-		// tests.add(s("perf1syncFile.xml", LOG20, "FileAppender"));
-		// tests.add(s("perf1syncFastFile.xml", LOG20, "FastFileAppender"));
-		// tests.add(s("perf2syncRollFile.xml", LOG20, "RollFileAppender"));
-		// tests.add(s("perf2syncRollFastFile.xml", LOG20,
-		// "RollFastFileAppender"));
+        // includeLocation=true
+        // tests.add(s("perf6AsyncApndLoc.xml", LOG20,
+        // "Async Appender includeLocation"));
+        // tests.add(s("perf8MixedLoc.xml", LOG20,
+        // "Mixed sync/async includeLocation"));
+//         tests.add(s("perf4PlainLocation.xml", LOG20,
+//         "Loggers all async includeLocation", ALL_ASYNC));
+        // tests.add(s("perf4PlainLocation.xml", LOG20,
+        // "Loggers all async includeLocation CachedClock", ALL_ASYNC,
+        // CACHEDCLOCK));
+        // tests.add(s("perf4PlainLocation.xml", LOG20,
+        // "Sync includeLocation"));
 
-		final int MAX_THREADS =1; // 64 takes a LONG time
-		for (int i = 2; i <= MAX_THREADS; i *= 2) {
-			// includeLocation = false
-			// tests.add(m("perf-logback.xml", LOGBK, "Sync", i));
-			// tests.add(m("perf-log4j12.xml", LOG12, "Sync", i));
-			
-			// tests.add(m("perf-logback-async.xml", LOGBK, "Async Appender",
-			// i));
-			// tests.add(m("perf-log4j12-async.xml", LOG12, "Async Appender",
-			// i));
-			 tests.add(m("perf3PlainNoLoc.xml", LOG20, "Loggers all  Sync", i,ALL_ASYNC, SYSCLOCK));
-//			tests.add(m("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender", i));
-//			tests.add(m("perf-logback-jactor2.xml", LOGBK, "Async jactor2 Appender", i));
-//			tests.add(m("perf-logback-jactor.xml", LOGBK, "Async jactor Appender", i));
-			tests.add(m("perf-logback-disruptor.xml", LOGBK, "Async disruptor Appender", i));
-			// tests.add(m("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender",
-			// i));
+        // appenders
+        // tests.add(s("perf1syncFile.xml", LOG20, "FileAppender"));
+        // tests.add(s("perf1syncRandomAccessFile.xml", LOG20, "RandomAccessFileAppender"));
+        // tests.add(s("perf2syncRollFile.xml", LOG20, "RollFileAppender"));
+        // tests.add(s("perf2syncRollRandomAccessFile.xml", LOG20,
+        // "RollRandomAccessFileAppender"));
 
-			// tests.add(m("perf3PlainNoLoc.xml", LOG20, "Loggers all async", i,
-			// ALL_ASYNC, SYSCLOCK));
-			// tests.add(m("perf7MixedNoLoc.xml", LOG20,
-			// "Loggers mixed sync/async", i));
+        final int MAX_THREADS = 4; // 64 takes a LONG time
+        for (int i = 2; i <= MAX_THREADS; i *= 2) {
+            // includeLocation = false
+            tests.add(m("perf-logback-jactor2.xml", LOGBK, "jacctor2", i));
+            tests.add(m("perf-logback-disruptor.xml", LOGBK, "disruptor", i));
+//            tests.add(m("perf3PlainNoLoc.xml", LOG20, "Sync", i));
+//            tests.add(m("perf-logback-async.xml", LOGBK, "Async Appender", i));
+//            tests.add(m("perf-log4j12-async.xml", LOG12, "Async Appender", i));
+            tests.add(m("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender", i,ALL_ASYNC));
+//            tests.add(m("perf3PlainNoLoc.xml", LOG20, "Loggers all async", i,
+//                    ALL_ASYNC, SYSCLOCK, THREADNAME));
+//            tests.add(m("perf7MixedNoLoc.xml", LOG20,
+//                    "Loggers mixed sync/async", i));
 
-			// includeLocation=true
-			// tests.add(m("perf6AsyncApndLoc.xml", LOG20,
-			// "Async Appender includeLocation", i));
-			// tests.add(m("perf8MixedLoc.xml", LOG20,
-			// "Mixed sync/async includeLocation", i));
-			// tests.add(m("perf4PlainLocation.xml", LOG20,
-			// "Loggers all async includeLocation", i, ALL_ASYNC));
-			// tests.add(m("perf4PlainLocation.xml", LOG20,
-			// "Loggers all async includeLocation CachedClock", i,
-			// ALL_ASYNC, CACHEDCLOCK));
-			// tests.add(m("perf4PlainLocation.xml", LOG20,
-			// "Sync includeLocation", i));
+            // includeLocation=true
+            // tests.add(m("perf6AsyncApndLoc.xml", LOG20,
+            // "Async Appender includeLocation", i));
+            // tests.add(m("perf8MixedLoc.xml", LOG20,
+            // "Mixed sync/async includeLocation", i));
+//             tests.add(m("perf4PlainLocation.xml", LOG20,
+//             "Loggers all async includeLocation", i, ALL_ASYNC));
+            // tests.add(m("perf4PlainLocation.xml", LOG20,
+            // "Loggers all async includeLocation CachedClock", i,
+            // ALL_ASYNC, CACHEDCLOCK));
+            // tests.add(m("perf4PlainLocation.xml", LOG20,
+            // "Sync includeLocation", i));
 
-			// appenders
-			// tests.add(m("perf1syncFile.xml", LOG20, "FileAppender", i));
-			// tests.add(m("perf1syncFastFile.xml", LOG20, "FastFileAppender",
-			// i));
-			// tests.add(m("perf2syncRollFile.xml", LOG20, "RollFileAppender",
-			// i));
-			// tests.add(m("perf2syncRollFastFile.xml", LOG20,
-			// "RollFastFileAppender", i));
-		}
+            // appenders
+            // tests.add(m("perf1syncFile.xml", LOG20, "FileAppender", i));
+            // tests.add(m("perf1syncRandomAccessFile.xml", LOG20, "RandomAccessFileAppender",
+            // i));
+            // tests.add(m("perf2syncRollFile.xml", LOG20, "RollFileAppender",
+            // i));
+            // tests.add(m("perf2syncRollRandomAccessFile.xml", LOG20,
+            // "RollRandomAccessFileAppender", i));
+        }
 
         final String java = args.length > 0 ? args[0] : "java";
         final int repeat = args.length > 1 ? Integer.parseInt(args[1]) : 5;
@@ -306,16 +295,16 @@ public class PerfTestDriver {
             final ProcessBuilder pb = config.throughputTest(java);
             pb.redirectErrorStream(true); // merge System.out and System.err
             final long t1 = System.nanoTime();
-            // int count = config._threadCount >= 16 ? 2 : repeat;
-            runPerfTest(repeat, x++, config, pb);
+            final int count = config.threadCount >= 4 ? 3 : repeat;
+            runPerfTest(count, x++, config, pb);
             System.out.printf(" took %.1f seconds%n", (System.nanoTime() - t1)
                     / (1000.0 * 1000.0 * 1000.0));
 
-            final FileReader reader = new FileReader(config._temp);
+            final FileReader reader = new FileReader(config.temp);
             final CharBuffer buffer = CharBuffer.allocate(256 * 1024);
             reader.read(buffer);
             reader.close();
-            config._temp.delete();
+            config.temp.delete();
             buffer.flip();
 
             final String raw = buffer.toString();
@@ -323,7 +312,7 @@ public class PerfTestDriver {
             final Stats stats = new Stats(raw);
             System.out.println(stats);
             System.out.println("-----");
-            config._stats = stats;
+            config.stats = stats;
         }
         new File("perftest.log").delete();
         System.out
@@ -341,14 +330,14 @@ public class PerfTestDriver {
         for (int i = 0; i < tests.length; i++) {
             final Setup setup = tests[i];
             System.out.println((i + 1) + ". " + setup.description() + ": "
-                    + setup._stats);
+                    + setup.stats);
         }
     }
 
     private static void runPerfTest(final int repeat, final int setupIndex, final Setup config,
             final ProcessBuilder pb) throws IOException, InterruptedException {
         for (int i = 0; i < repeat; i++) {
-            System.out.print(" (" + (i + 1) + "/" + repeat + ")...");
+            System.out.print(" (" + (i + 1) + '/' + repeat + ")...");
             final Process process = pb.start();
 
             final boolean[] stop = { false };
@@ -356,8 +345,8 @@ public class PerfTestDriver {
             process.waitFor();
             stop[0] = true;
 
-            final File gc = new File("gc" + setupIndex + "_" + i
-                    + config._log4jConfig + ".log");
+            final File gc = new File("gc" + setupIndex + '_' + i
+                    + config.log4jConfig + ".log");
             if (gc.exists()) {
                 gc.delete();
             }

@@ -15,8 +15,13 @@ public class Testutils {
 	 */
 	public static int countlines(String filename) throws IOException {
 		LineNumberReader lnr = new LineNumberReader(new FileReader(new File(filename)));
-		lnr.skip(Long.MAX_VALUE);
+		try {
+			lnr.skip(Long.MAX_VALUE);
+		} catch (Exception e) {
+			
+		}finally{
 		lnr.close();
+		}
 		return (lnr.getLineNumber());
 	}
 

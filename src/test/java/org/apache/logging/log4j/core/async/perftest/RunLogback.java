@@ -18,7 +18,7 @@ package org.apache.logging.log4j.core.async.perftest;
 
 import org.slf4j.LoggerFactory;
 
-import org.slf4j.Logger;
+import ch.qos.logback.classic.Logger;
 import ch.qos.logback.core.spi.LifeCycle;
 
 import com.lmax.disruptor.collections.Histogram;
@@ -28,7 +28,7 @@ public class RunLogback implements IPerfTestRunner {
     @Override
     public void runThroughputTest(final int lines, final Histogram histogram) {
         final long s1 = System.nanoTime();
-        final Logger logger = (Logger) LoggerFactory.getLogger(getClass());
+        final org.slf4j.helpers.SubstituteLogger logger = (org.slf4j.helpers.SubstituteLogger) LoggerFactory.getLogger(getClass());
         for (int j = 0; j < lines; j++) {
             logger.info(THROUGHPUT_MSG);
         }

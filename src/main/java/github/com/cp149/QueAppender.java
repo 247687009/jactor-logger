@@ -7,7 +7,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
 public class QueAppender extends BaseAppender {
-	private LinkedBlockingQueue<ILoggingEvent> storeCache = new LinkedBlockingQueue<ILoggingEvent>();
+	private LinkedBlockingQueue<ILoggingEvent> storeCache = new LinkedBlockingQueue<ILoggingEvent>( );
 	ExecutorService exec = Executors.newSingleThreadExecutor();
 
 	@Override
