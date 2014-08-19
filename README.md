@@ -26,16 +26,18 @@ and The most import is logging is asynchronous,which means main program can run 
  
 
 easy to use,such as add append in logback.xml
-just down https://raw.github.com/cp149/jactor-logger/master/dist/jactor-logger-0.9.jar
+just down https://raw.github.com/cp149/jactor-logger/master/dist/jactor-logger-0.11.0.jar
 
-and downlaod disruptor from maven
-and jactor2 from http://laforge49.github.io/JActor2/
-This three appender are independent,So ,if you wish only one appender,you just need down one jar,such as jactor.jar
+
+down jactor2 from http://laforge49.github.io/JActor2/
+
 ```html
 <appender name="ASYNC" class="github.com.cp149.jactor2.Jactor2Appender">
 		<appender-ref ref="STDOUT" />
 </appender>
 ```
+
+if use disruptor, downlaod disruptor from maven
 ```html	
 <appender name="ASYNCFile" class="github.com.cp149.disruptor.DisruptorAppender">		
 		<appender-ref ref="STDOUT" />
@@ -67,16 +69,7 @@ Ranking:
 13. Logback: Async jactor Appender (2 threads): throughput: 1,486,585 ops/sec. latency(ns): avg=930.7 99% < 2048.0 99.99% < 36044.8 (49685633 samples)
 14. Logback: Async jactor2 Appender (4 threads): throughput: 1,340,977 ops/sec. latency(ns): avg=1253.6 99% < 1587.2 99.99% < 80281.6 (87902519 samples)
 15. Logback: Async jactor Appender (4 threads): throughput: 1,159,258 ops/sec. latency(ns): avg=1020.1 99% < 1587.2 99.99% < 77004.8 (99564074 samples)
-```
-Done. Total duration: 162.0 minutes
 
-Ranking:
-1. Log4j2: Loggers all async (single thread): throughput: 19,795,014 ops/sec. latency(ns): avg=1249.2 99% < 8192.0 99.99% < 2097152.0 (523610 samples)
-2. Logback: Async disruptor Appender (single thread): throughput: 14,593,016 ops/sec. latency(ns): avg=540.4 99% < 8192.0 99.99% < 39321.6 (1454392 samples)
-3. Log4j2: Loggers all  Sync (4 threads): throughput: 5,919,328 ops/sec. latency(ns): avg=818.6 99% < 2969.6 99.99% < 1838284.8 (5325795 samples)
-4. Log4j2: Loggers all  Sync (2 threads): throughput: 4,760,546 ops/sec. latency(ns): avg=685.2 99% < 6348.8 99.99% < 357171.2 (2255905 samples)
-5. Logback: Async disruptor Appender (8 threads): throughput: 4,643,907 ops/sec. latency(ns): avg=92761.9 99% < 1817.6 99.99% < 496399155.2 (44306684 samples)
-6. Logback: Async disruptor Appender (4 threads): throughput: 4,590,619 ops/sec. latency(ns): avg=450.3 99% < 1177.6 99.99% < 36044.8 (20317563 samples)
-7. Logback: Async disruptor Appender (2 threads): throughput: 3,758,147 ops/sec. latency(ns): avg=455.0 99% < 1740.8 99.99% < 16384.0 (9798171 samples)
-8. Log4j2: Loggers all  Sync (8 threads): throughput: 2,727,329 ops/sec. latency(ns): avg=1464.7 99% < 2099.2 99.99% < 3496345.6 (12974688 samples)
+Done. Total duration: 162.0 minutes
+```
 

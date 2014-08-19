@@ -228,7 +228,7 @@ public class PerfTestDriver {
 //        tests.add(s("perf3PlainNoLoc.xml", LOG20, "Sync"));
 //        tests.add(s("perf-logback-async.xml", LOGBK, "Async Appender"));
 //        tests.add(s("perf-log4j12-async.xml", LOG12, "Async Appender"));
-        tests.add(s("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender",ALL_ASYNC));
+        tests.add(s("perf5AsyncApndNoLoc.xml", LOG20, "Loggers all async",ALL_ASYNC));
 
         // includeLocation=true
         // tests.add(s("perf6AsyncApndLoc.xml", LOG20,
@@ -258,7 +258,7 @@ public class PerfTestDriver {
 //            tests.add(m("perf3PlainNoLoc.xml", LOG20, "Sync", i));
 //            tests.add(m("perf-logback-async.xml", LOGBK, "Async Appender", i));
 //            tests.add(m("perf-log4j12-async.xml", LOG12, "Async Appender", i));
-            tests.add(m("perf5AsyncApndNoLoc.xml", LOG20, "Async Appender", i,ALL_ASYNC));
+            tests.add(m("perf5AsyncApndNoLoc.xml", LOG20, "Loggers all async", i,ALL_ASYNC));
 //            tests.add(m("perf3PlainNoLoc.xml", LOG20, "Loggers all async", i,
 //                    ALL_ASYNC, SYSCLOCK, THREADNAME));
 //            tests.add(m("perf7MixedNoLoc.xml", LOG20,

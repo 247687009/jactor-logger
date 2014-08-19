@@ -48,12 +48,12 @@ public class Jactor2Appender extends BaseAppender {
 			}			
 					
 			try {			
-//				if(count++>=10000){					
-//					count=0;					
+				if(count++>=8000){					
+					count=0;					
 					actor1.printReq( eventObject).call();
-//				}
-//				else
-//				actor1.printReq( eventObject).signal();
+				}
+				else
+				actor1.printReq( eventObject).signal();
 			} catch (Exception e) {
 				addError(e.getMessage());
 			}
