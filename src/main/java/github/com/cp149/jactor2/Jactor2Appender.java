@@ -8,7 +8,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 
 public class Jactor2Appender extends BaseAppender {	
 	LoggerActor2 actor1 ;
-	int count=0;
+	
 	@Override
 	public void start() {
 
@@ -48,12 +48,7 @@ public class Jactor2Appender extends BaseAppender {
 			}			
 					
 			try {			
-				if(count++>=8000){					
-					count=0;					
 					actor1.printReq( eventObject).call();
-				}
-				else
-				actor1.printReq( eventObject).signal();
 			} catch (Exception e) {
 				addError(e.getMessage());
 			}
