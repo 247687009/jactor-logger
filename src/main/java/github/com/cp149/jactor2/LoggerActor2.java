@@ -1,11 +1,9 @@
 package github.com.cp149.jactor2;
 
 import org.agilewiki.jactor2.core.blades.NonBlockingBladeBase;
+import org.agilewiki.jactor2.core.messages.AsyncResponseProcessor;
+import org.agilewiki.jactor2.core.messages.impl.AsyncRequestImpl;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
-import org.agilewiki.jactor2.core.requests.AOp;
-import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
-import org.agilewiki.jactor2.core.requests.SAOp;
-import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.spi.AppenderAttachableImpl;
@@ -21,9 +19,8 @@ public class LoggerActor2 extends NonBlockingBladeBase {
 
 	}
 
-	public AOp<Void> printReq(final ILoggingEvent eventObject) {
-		return new AOp<Void>("log4jappend", getReactor()) {
-			
+	public AReq<Void> printReq(final ILoggingEvent eventObject) {
+		return new AReq<Void>("log4jappend") {			
 
 			@Override
 			protected void processAsyncOperation(AsyncRequestImpl arg0,
